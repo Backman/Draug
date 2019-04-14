@@ -1,7 +1,7 @@
 #pragma once
 
-#include <bitset>
-#include "../Types.h"
+#include "draugpch.h"
+#include "Core/Types.h"
 
 namespace Draug {
 	namespace ECS {

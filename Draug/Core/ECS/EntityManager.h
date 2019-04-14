@@ -1,11 +1,8 @@
 #pragma once
 
-#include <algorithm>
-#include <vector>
-#include <tuple>
+#include "draugpch.h"
 #include "Types.h"
 #include "Component.h"
-#include "Entity.h"
 
 namespace Draug {
 	namespace ECS {
@@ -22,13 +19,9 @@ namespace Draug {
 
 			inline EntityId id() const { return m_id; }
 
-			uint64 index() const {
-				return m_id & details::ENTITY_INDEX_MASK;
-			}
+			inline uint64 index() const { return m_id & details::ENTITY_INDEX_MASK; }
 
-			uint64 generation() const {
-				return (m_id >> details::ENTITY_INDEX_BITS) & details::ENTITY_GENERATION_MASK;;
-			}
+			inline uint64 generation() const { return (m_id >> details::ENTITY_INDEX_BITS) & details::ENTITY_GENERATION_MASK; }
 
 			template<typename TComponent, typename... Args>
 			void addComponent(Args && ...args) {
@@ -44,6 +37,7 @@ namespace Draug {
 			bool operator!=(const Entity & lhs) { return (*this == lhs) == false; }
 			bool operator<(const Entity & lhs) { return m_id < lhs.m_id; }
 		};
+
 		class DRAUG_API EntityManager {
 		public:
 			struct EntityCollection {

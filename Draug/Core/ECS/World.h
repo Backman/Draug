@@ -12,41 +12,15 @@ namespace Draug {
 
 		public:
 			World() = default;
-			~World() {
-				shutdown();
-			}
-			inline void initialize() {
-				m_entity_mgr = new EntityManager();
-				m_system_mgr = new SystemManager(m_entity_mgr);
-			}
+			~World();
 
-			inline void shutdown() {
-				if (m_entity_mgr != nullptr) {
-					delete m_entity_mgr;
-				}
-				if (m_system_mgr != nullptr) {
-					delete m_system_mgr;
-				}
-				m_entity_mgr = nullptr;
-				m_system_mgr = nullptr;
-			}
+			inline EntityManager* getEntityMgr() const { return m_entity_mgr; }
+			inline SystemManager* getSystemMgr() const { return m_system_mgr; }
 
-			EntityManager* getEntityMgr() const {
-				return m_entity_mgr;
-			}
-
-			SystemManager* getSystemMgr() const {
-				return m_system_mgr;
-			}
-
-			void update() {
-				m_system_mgr->tick(0);
-			}
-
-			Entity createEntity() {
-				Entity e = m_entity_mgr->create();
-				return e;
-			}
+			void initialize();
+			void shutdown();
+			void update();
+			Entity createEntity();
 
 			template<typename TSystem, typename... Args>
 			inline void addSystem(Args&& ... args) {

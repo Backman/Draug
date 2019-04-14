@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef DRAUG_PLATFORM_WINDOWS
+#ifdef DRAUG_WINDOWS
 
 extern Draug::App* Draug::createApp();
 

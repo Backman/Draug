@@ -1,7 +1,5 @@
 
 #include <iostream>
-#include <Draug.h>
-#include <Core/ECS/World.h>
 #include <Core/Core.h>
 
 struct position {
@@ -24,7 +22,7 @@ class PlaygroundApp : public Draug::App {
 public:
 	PlaygroundApp() : m_world() {
 	}
-	~PlaygroundApp() = default;
+	~PlaygroundApp() {}
 
 	void initialize() override {
 		m_world.initialize();

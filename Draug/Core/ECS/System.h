@@ -1,7 +1,6 @@
 #pragma once
 
-#include <vector>
-#include "types.h"
+#include "draugpch.h"
 #include "EntityManager.h"
 
 namespace Draug {

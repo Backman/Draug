@@ -7,7 +7,11 @@ function draugPlayground(_projectDir, _draugDir, _depDir)
 			_projectDir .. "**.h",
 			_projectDir .. "**.cpp",
 		}
-		
+
+		links {
+			"Draug"
+		}
+
         includedirs {
 			_depDir,
 			_draugDir,

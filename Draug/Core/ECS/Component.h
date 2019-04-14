@@ -1,9 +1,6 @@
 #pragma once
 
-#include <bitset>
-#include <unordered_map>
-#include <vector>
-#include "Draug.h"
+#include "draugpch.h"
 #include "Types.h"
 
 namespace Draug {

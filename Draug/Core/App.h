@@ -5,15 +5,12 @@
 namespace Draug {
 	class DRAUG_API App {
 	public:
-		App() {
-		}
+		App() = default;
+		virtual ~App() = default;
 
-		virtual ~App() {
-		}
-
-		virtual void initialize() {}
-		virtual void run() {}
-		virtual void shutdown() {}
+		virtual void initialize();
+		virtual void run();
+		virtual void shutdown();
 	};
 
 	App* createApp();

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <stdint.h>
+#include "draugpch.h"
 
 namespace Draug {
 	typedef int8_t int8;

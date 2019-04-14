@@ -21,10 +21,10 @@ solution "Draug"
 dofile "toolchain.lua"
 draugToolchain(BUILDS_DIR, PROJECTS_DIR, DEPS_DIR)
 
-dofile "draug.lua"
-group "Draug"
-draugProject(DRAUG_DIR, DEPS_DIR)
-
 group "Playground"
 dofile "draug_playground.lua"
 draugPlayground(DRAUG_PLAYGROUND_DIR, DRAUG_DIR, DEPS_DIR)
+
+dofile "draug.lua"
+group "Draug"
+draugProject(DRAUG_DIR, DEPS_DIR)
