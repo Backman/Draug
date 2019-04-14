@@ -1,13 +1,13 @@
 #pragma once
 
-#ifdef CREO_DYNAMIC_LIB
-	#ifdef CREO_PLATFORM_WINDOWS
-		#ifdef CREO_BUILD_DLL
-			#define CREO_API __declspec(dllexport)
+#ifdef DRAUG_DYNAMIC_LIB
+	#ifdef DRAUG_PLATFORM_WINDOWS
+		#ifdef DRAUG_BUILD_DLL
+			#define DRAUG_API __declspec(dllexport)
 		#else 
-			#define CREO_API __declspec(dllimport)
+			#define DRAUG_API __declspec(dllimport)
 		#endif
 	#endif
 #else
-	#define CREO_API 
+	#define DRAUG_API 
 #endif

@@ -3,7 +3,7 @@
 #include "Types.h"
 #include "EntityManager.h"
 
-namespace Creo {
+namespace Draug {
 	namespace ECS {
 		
 	}

@@ -4,15 +4,15 @@
 #include "types.h"
 #include "EntityManager.h"
 
-namespace Creo {
+namespace Draug {
 	namespace ECS {
-		class CREO_API BaseSystem {
+		class DRAUG_API BaseSystem {
 		public:
 			virtual void tick(EntityManager* em, float32 dt) {};
 		};
 
 		template<typename TSystem>
-		class CREO_API System : public BaseSystem {
+		class DRAUG_API System : public BaseSystem {
 		};
 
 		class SystemManager {

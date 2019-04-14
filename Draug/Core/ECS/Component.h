@@ -5,10 +5,10 @@
 #include <vector>
 #include "Types.h"
 
-namespace Creo {
+namespace Draug {
 	namespace ECS {
 		template<typename TComponent>
-		struct CREO_API Component {
+		struct DRAUG_API Component {
 			inline static ComponentId getId() {
 				static ComponentId id = m_id++;
 				return id;

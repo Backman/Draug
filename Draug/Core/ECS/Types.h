@@ -3,7 +3,7 @@
 #include <bitset>
 #include "../Types.h"
 
-namespace Creo {
+namespace Draug {
 	namespace ECS {
 		namespace details {
 			const uint32 ENTITY_INDEX_BITS = 32;

@@ -1,5 +1,5 @@
 #pragma once
 
-#ifdef CREO_PLATFORM_WINDOWS
+#ifdef DRAUG_PLATFORM_WINDOWS
 
 #endif

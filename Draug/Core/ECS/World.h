@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Creo.h"
+#include "Draug.h"
 #include "System.h"
 #include "EntityManager.h"
 
-namespace Creo {
+namespace Draug {
 	namespace ECS {
-		class CREO_API World {
+		class DRAUG_API World {
 			EntityManager* m_entity_mgr;
 			SystemManager* m_system_mgr;
 

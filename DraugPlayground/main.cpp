@@ -6,8 +6,8 @@ struct position {
 	int x, y;
 };
 
-class MoveSystem : public Creo::ECS::System<MoveSystem> {
-	void tick(Creo::ECS::EntityManager* em, Creo::float32 dt) {
+class MoveSystem : public Draug::ECS::System<MoveSystem> {
+	void tick(Draug::ECS::EntityManager* em, Draug::float32 dt) {
 		for (auto e : em->entities<position>()) {
 			auto p = e.getComponent<position>();
 			std::cout << "Position (" << p->x << ", " << p->y << ")" << std::endl;
@@ -18,9 +18,9 @@ class MoveSystem : public Creo::ECS::System<MoveSystem> {
 };
 
 int main() {
-	Creo::ECS::World world;
+	Draug::ECS::World world;
 	world.initialize();
-	Creo::ECS::Entity e = world.createEntity();
+	Draug::ECS::Entity e = world.createEntity();
 	e.addComponent<position>(12, 12);
 
 	world.addSystem<MoveSystem>();

@@ -7,10 +7,10 @@
 #include "Component.h"
 #include "Entity.h"
 
-namespace Creo {
+namespace Draug {
 	namespace ECS {
-		class CREO_API EntityManager;
-		struct CREO_API Entity {
+		class DRAUG_API EntityManager;
+		struct DRAUG_API Entity {
 		private:
 			EntityId m_id;
 			EntityManager* m_mgr;
@@ -44,7 +44,7 @@ namespace Creo {
 			bool operator!=(const Entity & lhs) { return (*this == lhs) == false; }
 			bool operator<(const Entity & lhs) { return m_id < lhs.m_id; }
 		};
-		class CREO_API EntityManager {
+		class DRAUG_API EntityManager {
 		public:
 			struct EntityCollection {
 				struct Iterator {
