@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include <Core/Log.h>
 #include <Core/Core.h>
 
 struct position {
@@ -25,6 +26,7 @@ public:
 	~PlaygroundApp() {}
 
 	void initialize() override {
+
 		m_world.initialize();
 		m_world.addSystem<MoveSystem>();
 
