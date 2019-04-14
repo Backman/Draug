@@ -1,5 +1,5 @@
 
-function draugProject(_projectDir, _depsDir)
+function draugProject(_projectDir, ...)
 	project "Draug"
 		uuid (os.uuid("Draug"))
 		kind "StaticLib"
@@ -13,7 +13,8 @@ function draugProject(_projectDir, _depsDir)
 		}
 		
         includedirs {
-			_depsDir,
 			_projectDir,
 		}
+
+		includeDeps(...)
 end

@@ -1,11 +1,13 @@
 
 local ROOT_DIR = (path.getabsolute("..") .. "/")
-local DRAUG_DIR = (ROOT_DIR .. "Draug/")
-local DRAUG_PLAYGROUND_DIR = (ROOT_DIR .. "DraugPlayground/")
+local DRAUG_SRC_DIR = (ROOT_DIR .. "src/")
+local DRAUG_PLAYGROUND_SRC_DIR = (ROOT_DIR .. "playground/")
 
-local BUILDS_DIR = (ROOT_DIR .. "_builds/")
-local PROJECTS_DIR = (ROOT_DIR .. "_projects/")
+local BUILDS_DIR = (ROOT_DIR .. ".bin/")
+local PROJECTS_DIR = (ROOT_DIR .. ".projects/")
 local DEPS_DIR = (ROOT_DIR .. "deps/")
+
+local SPDLOG_DIR = (DEPS_DIR .. "spdlog/include/")
 
 solution "Draug"
 	configurations {
@@ -19,12 +21,12 @@ solution "Draug"
 	startproject "DraugPlayground"
 
 dofile "toolchain.lua"
-draugToolchain(BUILDS_DIR, PROJECTS_DIR, DEPS_DIR)
-
-group "Playground"
-dofile "draug_playground.lua"
-draugPlayground(DRAUG_PLAYGROUND_DIR, DRAUG_DIR, DEPS_DIR)
+draugToolchain(BUILDS_DIR, PROJECTS_DIR)
 
 dofile "draug.lua"
 group "Draug"
-draugProject(DRAUG_DIR, DEPS_DIR)
+draugProject(DRAUG_SRC_DIR, SPDLOG_DIR)
+
+group "Playground"
+dofile "draug_playground.lua"
+draugPlayground(DRAUG_PLAYGROUND_SRC_DIR, DRAUG_SRC_DIR, SPDLOG_DIR)

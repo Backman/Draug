@@ -1,6 +1,11 @@
 
+
+_bin
+.bin
 _builds
+.builds
 _projects
+.projects
 
 # Created by https://www.gitignore.io/api/visualstudio,visualstudiocode,c,c++
 # Edit at https://www.gitignore.io/?templates=visualstudio,visualstudiocode,c,c++

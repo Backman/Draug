@@ -2,8 +2,15 @@
 function copyLib()
 end
 
+function includeDeps(...) 
+	for _, depDir in ipairs({...}) do
+		includedirs {
+			depDir
+		}
+	end
+end
 
-function draugToolchain(_buildsDir, _projectDir, _libDir)
+function draugToolchain(_buildsDir, _projectDir)
 
     if (_ACTION == nil) then return false end
 

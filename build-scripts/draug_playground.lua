@@ -1,5 +1,5 @@
 
-function draugPlayground(_projectDir, _draugDir, _depDir)
+function draugPlayground(_projectDir, _draugDir, ...)
 	project "DraugPlayground"
 		uuid (os.uuid("DraugPlayground"))
 		kind "ConsoleApp"
@@ -13,8 +13,9 @@ function draugPlayground(_projectDir, _draugDir, _depDir)
 		}
 
         includedirs {
-			_depDir,
 			_draugDir,
 			_projectDir,
 		}
+
+		includeDeps(...)
 end
