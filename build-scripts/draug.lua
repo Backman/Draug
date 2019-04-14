@@ -8,10 +8,13 @@ function draugProject(_projectDir, _depsDir)
 	end
 	project "Draug"
 		uuid (os.uuid("Draug"))
-		kind (KIND)
-		if KIND == "SharedLib" then
+		if _OPTIONS["static-lib"] then
+			kind "StaticLib"
+		else
+			kind "SharedLib"
 			defines {
 				"DRAUG_DYNAMIC_LIB",
+				"HELLO"
 			}
 		end
 		files {

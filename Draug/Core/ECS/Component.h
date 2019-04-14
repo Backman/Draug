@@ -3,6 +3,7 @@
 #include <bitset>
 #include <unordered_map>
 #include <vector>
+#include "Draug.h"
 #include "Types.h"
 
 namespace Draug {

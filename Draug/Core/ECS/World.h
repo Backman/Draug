@@ -11,14 +11,24 @@ namespace Draug {
 			SystemManager* m_system_mgr;
 
 		public:
+			World() = default;
+			~World() {
+				shutdown();
+			}
 			inline void initialize() {
 				m_entity_mgr = new EntityManager();
 				m_system_mgr = new SystemManager(m_entity_mgr);
 			}
 
 			inline void shutdown() {
-				delete m_entity_mgr;
-				delete m_system_mgr;
+				if (m_entity_mgr != nullptr) {
+					delete m_entity_mgr;
+				}
+				if (m_system_mgr != nullptr) {
+					delete m_system_mgr;
+				}
+				m_entity_mgr = nullptr;
+				m_system_mgr = nullptr;
 			}
 
 			EntityManager* getEntityMgr() const {

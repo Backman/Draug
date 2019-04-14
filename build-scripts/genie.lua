@@ -16,7 +16,7 @@ solution "Draug"
 		"x64"
 	}
 	language "C++"
-	startproject "DraugSample"
+	startproject "DraugPlayground"
 
 dofile "toolchain.lua"
 draugToolchain(BUILDS_DIR, PROJECTS_DIR, DEPS_DIR)
