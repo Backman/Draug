@@ -35,7 +35,7 @@ public:
 
 	void run() override {
 		Draug::ECS::Entity e = m_world.createEntity();
-		m_world.getEntityMgr()->addComponent<Position>(12, 12);
+		m_world.getEntityMgr()->addComponent<Position>(e, 12, 12);
 
 		m_world.update();
 		m_world.update();
