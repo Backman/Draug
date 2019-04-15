@@ -9,6 +9,7 @@ std::unordered_map<std::string, std::shared_ptr<spdlog::logger>> Log::s_loggers;
 void Log::initialize() {
 	Log::setPattern("%^[%T](%n): %v%$");
 	Draug::Log::addLogger(Draug::Log::createLogger("Draug", spdlog::level::trace));
+	Draug::Log::addLogger(Draug::Log::createLogger("App", spdlog::level::trace));
 }
 
 void Log::setPattern(std::string pattern) {

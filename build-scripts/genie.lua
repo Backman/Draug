@@ -7,7 +7,8 @@ local BUILDS_DIR = (ROOT_DIR .. ".bin/")
 local PROJECTS_DIR = (ROOT_DIR .. ".projects/")
 local DEPS_DIR = (ROOT_DIR .. "deps/")
 
-local SPDLOG_DIR = (DEPS_DIR .. "spdlog/include/")
+local SPDLOG_INCLUDE_DIR = (DEPS_DIR .. "spdlog/include/")
+local SFML_INCLUDE_DIR = (DEPS_DIR .. "SFML/include/")
 
 solution "Draug"
 	configurations {
@@ -23,10 +24,12 @@ solution "Draug"
 dofile "toolchain.lua"
 draugToolchain(BUILDS_DIR, PROJECTS_DIR)
 
+include (DEPS_DIR .. "SFML")
+
 dofile "draug.lua"
 group "Draug"
-draugProject(DRAUG_SRC_DIR, SPDLOG_DIR)
+draugProject(DRAUG_SRC_DIR, SPDLOG_INCLUDE_DIR, SFML_INCLUDE_DIR)
 
 group "Playground"
 dofile "draug_playground.lua"
-draugPlayground(DRAUG_PLAYGROUND_SRC_DIR, DRAUG_SRC_DIR, SPDLOG_DIR)
+draugPlayground(DRAUG_PLAYGROUND_SRC_DIR, DRAUG_SRC_DIR, SPDLOG_INCLUDE_DIR, SFML_INCLUDE_DIR)

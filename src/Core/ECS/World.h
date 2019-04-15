@@ -20,7 +20,6 @@ namespace Draug {
 			void initialize();
 			void shutdown();
 			void update();
-			Entity createEntity();
 
 			template<typename TSystem, typename... Args>
 			inline void addSystem(Args&& ... args) {

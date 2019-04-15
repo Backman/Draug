@@ -17,5 +17,5 @@ function draugPlayground(_projectDir, _draugDir, ...)
 			_projectDir,
 		}
 
-		includeDeps(...)
+		includeDeps({...})
 end

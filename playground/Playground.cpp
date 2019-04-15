@@ -2,6 +2,7 @@
 #include <iostream>
 #include <Core/Log.h>
 #include <Core/Core.h>
+#include <Core/Core.h>
 
 struct Position {
 	int x, y;
@@ -19,36 +20,43 @@ class MoveSystem : public Draug::ECS::System<MoveSystem> {
 };
 
 class PlaygroundApp : public Draug::App {
-	Draug::ECS::World m_world;
 public:
-	PlaygroundApp() : m_world() {
+	Draug::ECS::World world;
+	Draug::Window window;
+
+	PlaygroundApp() : world() {
 	}
 	~PlaygroundApp() {}
 
 	void initialize() override {
 
-		m_world.initialize();
-		m_world.addSystem<MoveSystem>();
+		window.initialize(Draug::WindowConfig::createWindowed("Playground", 800, 600));
+		world.initialize();
+		world.addSystem<MoveSystem>();
 
 		std::cout << "Initialize" << std::endl;
 	}
 
 	void run() override {
-		Draug::ECS::Entity e = m_world.createEntity();
-		m_world.getEntityMgr()->addComponent<Position>(e, 12, 12);
+		Draug::ECS::Entity e = world.getEntityMgr()->create();
+		world.getEntityMgr()->addComponent<Position>(e, 12, 12);
 
-		m_world.update();
-		m_world.update();
-		m_world.update();
-		m_world.update();
-		m_world.update();
+		world.update();
+		world.update();
+		world.update();
+		world.update();
+		world.update();
 
 		std::cout << "Run" << std::endl;
+
+		while (true) {
+			window.display();
+		}
 	}
 
 	void shutdown() override {
 		std::cout << "Shutdown" << std::endl;
-		m_world.shutdown();
+		world.shutdown();
 	}
 };
 

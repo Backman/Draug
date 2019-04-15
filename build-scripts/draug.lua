@@ -16,5 +16,9 @@ function draugProject(_projectDir, ...)
 			_projectDir,
 		}
 
-		includeDeps(...)
+		defines {
+			"DRAUG_SFML"
+		}
+
+		includeDeps({...})
 end

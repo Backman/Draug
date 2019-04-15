@@ -3,7 +3,7 @@
 #include "draugpch.h"
 #include "Core/Types.h"
 #include "Draug.h"
-#include "spdlog/spdlog.h"
+#include <spdlog/spdlog.h>
 
 namespace Draug {
 	class DRAUG_API Log {

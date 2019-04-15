@@ -8,7 +8,6 @@ extern Draug::App* Draug::createApp();
 
 int main(int argc, char** argv) {
 	Draug::Log::initialize();
-	Draug::Log::addLogger(Draug::Log::createLogger("App", spdlog::level::trace));
 
 	Draug::App* app = Draug::createApp();
 	app->initialize();
