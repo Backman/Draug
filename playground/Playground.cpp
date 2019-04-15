@@ -3,14 +3,14 @@
 #include <Core/Log.h>
 #include <Core/Core.h>
 
-struct position {
+struct Position {
 	int x, y;
 };
 
 class MoveSystem : public Draug::ECS::System<MoveSystem> {
 	void tick(Draug::ECS::EntityManager* em, Draug::float32 dt) {
-		for (auto e : em->entities<position>()) {
-			auto p = e.getComponent<position>();
+		for (auto e : em->entities<Position>()) {
+			Position* p = em->getComponent<Position>(e);
 			std::cout << "Position (" << p->x << ", " << p->y << ")" << std::endl;
 			p->x++;
 			p->y++;
@@ -35,7 +35,7 @@ public:
 
 	void run() override {
 		Draug::ECS::Entity e = m_world.createEntity();
-		e.addComponent<position>(12, 12);
+		m_world.getEntityMgr()->addComponent<Position>(12, 12);
 
 		m_world.update();
 		m_world.update();

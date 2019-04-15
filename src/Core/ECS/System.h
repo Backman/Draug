@@ -30,7 +30,7 @@ namespace Draug {
 
 			template<typename TSystem>
 			inline void addSystem(TSystem* s) {
-				m_systems.push_back(s);
+				m_systems.emplace_back(s);
 			}
 
 			template<typename TSystem, typename... Args>

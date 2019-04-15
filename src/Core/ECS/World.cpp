@@ -26,8 +26,3 @@ void World::shutdown() {
 void World::update() {
 	m_system_mgr->tick(0);
 }
-
-Entity World::createEntity() {
-	Entity e = m_entity_mgr->create();
-	return e;
-}

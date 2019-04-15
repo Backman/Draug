@@ -6,36 +6,11 @@
 
 namespace Draug {
 	namespace ECS {
-		class DRAUG_API EntityManager;
 		struct DRAUG_API Entity {
-		private:
-			EntityId m_id;
-			EntityManager* m_mgr;
-
 		public:
-			Entity(EntityManager* mgr, uint64 index, uint64 generation) :
-				m_mgr(mgr), m_id(index | (generation << details::ENTITY_INDEX_BITS)) {
-			}
-
-			inline EntityId id() const { return m_id; }
-
-			inline uint64 index() const { return m_id & details::ENTITY_INDEX_MASK; }
-
-			inline uint64 generation() const { return (m_id >> details::ENTITY_INDEX_BITS) & details::ENTITY_GENERATION_MASK; }
-
-			template<typename TComponent, typename... Args>
-			void addComponent(Args && ...args) {
-				m_mgr->addComponent<TComponent>(*this, args...);
-			}
-
-			template<typename TComponent>
-			TComponent* getComponent() {
-				return m_mgr->getComponent<TComponent>(*this);
-			}
-
-			bool operator==(const Entity & lhs) { return m_id == lhs.m_id; }
-			bool operator!=(const Entity & lhs) { return (*this == lhs) == false; }
-			bool operator<(const Entity & lhs) { return m_id < lhs.m_id; }
+			EntityId id;
+			inline uint64 index() const { return id & details::ENTITY_INDEX_MASK; }
+			inline uint64 generation() const { return (id >> details::ENTITY_INDEX_BITS) & details::ENTITY_GENERATION_MASK; }
 		};
 
 		class DRAUG_API EntityManager {
@@ -61,8 +36,8 @@ namespace Draug {
 						return *this;
 					}
 
-					value_type operator*() { return entity_mgr->makeEntity(index); }
-					const value_type operator*() const { return entity_mgr->makeEntity(index); }
+					value_type operator*() { return entity_mgr->create(index); }
+					const value_type operator*() const { return entity_mgr->create(index); }
 
 					void nextIndex() {
 						while (index < entity_mgr->getCapacity() && (entity_mgr->m_component_masks[index] & component_mask) != component_mask) {
@@ -92,20 +67,20 @@ namespace Draug {
 					m_free_list.pop_back();
 				}
 				else {
-					m_generations.push_back(0);
+					m_generations.emplace_back(0);
 					index = m_generations.size() - 1;
 					if (m_component_masks.size() <= index) {
 						m_component_masks.resize(index + 1);
 					}
 				}
 
-				return makeEntity(index, m_generations[index]);
+				return create(index);
 			}
 
 			inline void destroy(const Entity e) {
 				const uint64 index = e.index();
 				m_generations[index]++;
-				m_free_list.push_back(index);
+				m_free_list.emplace_back(index);
 			}
 
 			inline bool isAlive(const Entity e) const {
@@ -163,14 +138,11 @@ namespace Draug {
 				return EntityCollection{ this, getComponentMask<TComponents...>() };
 			}
 		private:
-			inline Entity makeEntity(const uint64 index, const uint64 generation) {
-				return Entity(this, index, generation);
+			inline Entity create(uint64 index) {
+				return Entity { index | (m_generations[index] << details::ENTITY_INDEX_BITS) };
 			}
 
-			inline Entity makeEntity(const uint64 index) {
-				return makeEntity(index, m_generations[index]);
-			}
-
+			std::vector<uint64> m_entities;
 			std::vector<uint64> m_generations;
 			std::vector<uint64> m_free_list;
 			std::vector<ComponentMask> m_component_masks;
