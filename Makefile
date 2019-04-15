@@ -4,10 +4,8 @@ VS2019_DEVENV_DIR=C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\
 ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 GENIE = $(ROOT_DIR)/build-scripts/genie.exe
 
-PROJECTS_DIR_NAME = _projects
-BUILDS_DIR_NAME = _builds
-PROJECTS_PATH = $(ROOT_DIR)/$(PROJECTS_DIR_NAME)
-BUILDS_PATH = $(ROOT_DIR)/$(BUILDS_DIR_NAME)
+PROJECTS_DIR_NAME = .projects
+BUILDS_DIR_NAME = .builds
 
 .PHONY: all
 all: vs2017
