@@ -458,3 +458,6 @@ _projects
 .projects
 
 !build-scripts/genie.exe
+!deps/libs/SFML/*.lib
+!deps/libs/SFML/Debug/*.lib
+!deps/libs/SFML/Release/*.lib
