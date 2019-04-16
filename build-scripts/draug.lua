@@ -12,13 +12,9 @@ function draugProject(_projectDir, ...)
 			_projectDir .. "**.cpp"
 		}
 		
-        includedirs {
-			_projectDir,
-		}
-
 		defines {
-			"DRAUG_SFML"
+			"DRAUG_SFML",
 		}
 
-		includeDeps({...})
+		includeDirs(_projectDir, {...})
 end

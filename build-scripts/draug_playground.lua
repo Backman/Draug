@@ -12,10 +12,5 @@ function draugPlayground(_projectDir, _draugDir, ...)
 			"Draug"
 		}
 
-        includedirs {
-			_draugDir,
-			_projectDir,
-		}
-
-		includeDeps({...})
+		includeDirs(_draugDir, _projectDir, {...})
 end
