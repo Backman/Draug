@@ -16,8 +16,8 @@ namespace Draug {
 			sf::VideoMode videoMode(config.width, config.height);
 			sf::ContextSettings contextSettings;
 
-			uint32 windowStyle;
-			if (config.fullscreen) {
+			uint32 windowStyle = sf::Style::Default;
+			if (config.fullscreen == false) {
 				windowStyle = sf::Style::Fullscreen;
 			}
 

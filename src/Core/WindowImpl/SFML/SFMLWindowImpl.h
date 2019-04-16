@@ -4,7 +4,7 @@
 #include "Core/WindowImpl/IWindowImpl.h"
 
 namespace sf {
-	struct RenderWindow;
+	class RenderWindow;
 }
 
 namespace Draug {
