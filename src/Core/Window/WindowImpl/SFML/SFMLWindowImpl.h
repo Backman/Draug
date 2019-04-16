@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Core/Window.h"
-#include "Core/WindowImpl/IWindowImpl.h"
+#include "Core/Window/WindowImpl/BaseWindowImpl.h"
 
 namespace sf {
 	class RenderWindow;
@@ -9,15 +8,16 @@ namespace sf {
 
 namespace Draug {
 	namespace details {
-		class SFMLWindowImpl : public IWindowImpl {
+		class SFMLWindowImpl : public BaseWindowImpl {
 		public:
-			static sf::RenderWindow* window;
+			sf::RenderWindow* window;
 
 			SFMLWindowImpl();
 			~SFMLWindowImpl();
 
 			void initialize(const Draug::WindowConfig& config) override;
-			void display() override;
+			void update() override;
+			void processEvents() override;
 			void shutdown() override;
 		};
 	}
