@@ -3,7 +3,13 @@
 #include "draugpch.h"
 #include "Core/Types.h"
 #include "Draug.h"
-#include <spdlog/spdlog.h>
+
+namespace spdlog {
+	class logger;
+	namespace level {
+		enum level_enum;
+	}
+}
 
 namespace Draug {
 	class DRAUG_API Log {

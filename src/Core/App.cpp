@@ -1,13 +1,13 @@
 #include "draugpch.h"
 #include "App.h"
 
-using namespace Draug;
+namespace Draug {
+	void App::initialize() {
+	}
 
-void App::initialize() {
-}
+	void App::run() {
+	}
 
-void App::run() {
-}
-
-void App::shutdown() {
+	void App::shutdown() {
+	}
 }
