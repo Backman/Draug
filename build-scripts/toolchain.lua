@@ -46,6 +46,10 @@ function draugToolchain(_buildsDir, _projectDir, _libDirs)
 		libdirs {
 			(_libDirs .. "**"),
 		}
+		
+		defines {
+			"DRAUG_SFML",
+		}
 
 	configuration "windows"
 		links { 

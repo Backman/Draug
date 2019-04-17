@@ -32,4 +32,4 @@ draugProject(DRAUG_SRC_DIR, SPDLOG_INCLUDE_DIR, SFML_INCLUDE_DIR)
 
 group "Playground"
 dofile "draug_playground.lua"
-draugPlayground(DRAUG_PLAYGROUND_SRC_DIR, DRAUG_SRC_DIR)
+draugPlayground(DRAUG_PLAYGROUND_SRC_DIR, BUILDS_DIR, DRAUG_SRC_DIR, SFML_INCLUDE_DIR)

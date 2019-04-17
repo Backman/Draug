@@ -11,10 +11,6 @@ function draugProject(_projectDir, ...)
 			_projectDir .. "**.h",
 			_projectDir .. "**.cpp"
 		}
-		
-		defines {
-			"DRAUG_SFML",
-		}
 
 		includeDirs(_projectDir, {...})
 end
