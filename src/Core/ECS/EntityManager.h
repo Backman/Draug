@@ -77,13 +77,33 @@ namespace Draug {
 				return create(index);
 			}
 
-			inline void destroy(const Entity e) {
+			template<typename T, typename... Args>
+			inline Entity create(Args&&... args) {
+				Entity e = create();
+				addComponent<T>(e, args...);
+				return e;
+			}
+
+			inline void create(uint32 count) {
+				for (size_t i = 0; i < count; i++) {
+					create();
+				}
+			}
+
+			template<typename T, typename... Args>
+			inline void create(uint32 count, Args&&... args) {
+				for (size_t i = 0; i < count; i++) {
+					create<T>(args...);
+				}
+			}
+
+			inline void destroy(const Entity& e) {
 				const uint64 index = e.index();
 				m_generations[index]++;
 				m_free_list.emplace_back(index);
 			}
 
-			inline bool isAlive(const Entity e) const {
+			inline bool isAlive(const Entity& e) const {
 				const uint64 index = e.index();
 				return index < m_generations.size() && m_generations[index] == e.generation();
 			}
@@ -92,32 +112,32 @@ namespace Draug {
 			inline size_t getAliveCount() const { return m_component_masks.size() - m_free_list.size(); }
 
 			template<typename TComponent>
-			inline TComponent* getComponent(const Entity e) {
-				return &Component<TComponent>::getInstance(e.index());
+			inline TComponent& getComponent(const Entity& e) {
+				return Component<TComponent>::getInstance(e.index());
 			}
 
 			template<typename TComponent>
-			inline void addComponent(const Entity e, TComponent c) {
+			inline void addComponent(const Entity& e, TComponent c) {
 				m_component_masks[e.index()].set(Component<TComponent>::getId());
 			}
 
 			template<typename TComponent, typename... Args>
-			inline void addComponent(const Entity e, Args && ... args) {
+			inline void addComponent(const Entity& e, Args && ... args) {
 				TComponent& c = Component<TComponent>::createInstance(e.index(), args...);
 				addComponent<TComponent>(e, c);
 			}
 
 			template<typename TComponent>
-			inline void removeComponent(const Entity e) {
+			inline void removeComponent(const Entity& e) {
 				m_component_masks[e.index()].reset(Component<TComponent>::getId());
 			}
 
 			template<typename TComponent>
-			inline bool hasComponent(const Entity e) const {
+			inline bool hasComponent(const Entity& e) const {
 				return m_component_masks[e.index()].test(Component<TComponent>::getId());
 			}
 
-			inline ComponentMask getComponentMask(const Entity e) const {
+			inline ComponentMask getComponentMask(const Entity& e) const {
 				return m_component_masks[e.index()];
 			}
 

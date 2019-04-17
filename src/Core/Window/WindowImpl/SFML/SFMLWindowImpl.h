@@ -12,7 +12,8 @@ namespace Draug {
 		public:
 			sf::RenderWindow* window;
 
-			SFMLWindowImpl();
+			SFMLWindowImpl() = default;
+			SFMLWindowImpl(const SFMLWindowImpl& other) = delete;
 			~SFMLWindowImpl();
 
 			void initialize(const Draug::WindowConfig& config) override;

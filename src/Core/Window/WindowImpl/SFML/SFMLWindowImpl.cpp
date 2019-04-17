@@ -16,9 +16,6 @@ namespace Draug {
 			window = nullptr;
 		}
 
-		SFMLWindowImpl::SFMLWindowImpl() {
-		}
-
 		SFMLWindowImpl::~SFMLWindowImpl() {
 		}
 

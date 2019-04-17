@@ -1,31 +1,29 @@
 #pragma once
 
 #include "draugpch.h"
-#include "EntityManager.h"
 
 namespace Draug {
 	namespace ECS {
-		class DRAUG_API BaseSystem {
+		class Scene;
+		class DRAUG_API System {
 		public:
-			virtual void tick(EntityManager* em, float32 dt) {};
-		};
-
-		template<typename TSystem>
-		class DRAUG_API System : public BaseSystem {
+			virtual void init(Scene* scene) {}
+			virtual void tick(Scene* scene, float32 dt) {}
+			virtual void shutdown(Scene* scene) {}
 		};
 
 		class SystemManager {
-			EntityManager* m_entity_mgr;
-			std::vector<BaseSystem*> m_systems;
-
+			std::vector<System*> m_systems;
 		public:
-			SystemManager(EntityManager* em) : m_entity_mgr(em) {
-			}
+			SystemManager() = default;
 			~SystemManager() {
 				while (m_systems.empty() == false) {
 					delete m_systems.back();
 					m_systems.pop_back();
 				}
+			}
+
+			void initialize() {
 			}
 
 			template<typename TSystem>
@@ -39,9 +37,9 @@ namespace Draug {
 				return addSystem(s);
 			}
 
-			void tick(float32 dt) {
+			void tick(Scene* scene, float32 dt) {
 				for (size_t i = 0; i < m_systems.size(); i++) {
-					m_systems[i]->tick(m_entity_mgr, dt);
+					m_systems[i]->tick(scene, dt);
 				}
 			}
 		};

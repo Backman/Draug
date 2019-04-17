@@ -2,6 +2,10 @@
 #include "App.h"
 
 namespace Draug {
+	App::~App() {
+		images.releaseAll();
+	}
+
 	void App::initialize() {
 	}
 
@@ -9,5 +13,6 @@ namespace Draug {
 	}
 
 	void App::shutdown() {
+
 	}
 }
