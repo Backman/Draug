@@ -33,3 +33,8 @@ draugProject(DRAUG_SRC_DIR, SPDLOG_INCLUDE_DIR, SFML_INCLUDE_DIR)
 group "Playground"
 dofile "draug_playground.lua"
 draugPlayground(DRAUG_PLAYGROUND_SRC_DIR, BUILDS_DIR, DRAUG_SRC_DIR, SFML_INCLUDE_DIR)
+
+postbuildcommands {
+	"robocopy \"" .. DRAUG_PLAYGROUND_SRC_DIR .. "Assets\" \"" .. path.join(PROJECTS_DIR, _ACTION .. "/Assets") .. "\" /S /XO",
+	"robocopy \"" .. DRAUG_PLAYGROUND_SRC_DIR .. "Assets\" \"" .. path.join(BUILDS_DIR, "win64_" .. _ACTION, "bin/Assets") .. "\" /S /XO"
+}
