@@ -5,25 +5,25 @@
 #include "Draug.h"
 
 namespace spdlog {
-	class logger;
-	namespace level {
-		enum level_enum;
-	}
+class logger;
+namespace level {
+enum level_enum;
+}
 }
 
 namespace Draug {
-	class DRAUG_API Log {
-		static std::unordered_map<std::string, std::shared_ptr<spdlog::logger>> s_loggers;
-	public:
-		static void initialize();
-		static void setPattern(std::string pattern);
+class DRAUG_API Log {
+	static std::unordered_map<std::string, std::shared_ptr<spdlog::logger>> s_loggers;
+public:
+	static void initialize();
+	static void setPattern(std::string pattern);
 
-		static void addLogger(std::shared_ptr<spdlog::logger> logger);
-		static std::shared_ptr<spdlog::logger> getLogger(const std::string& name);
-		static uint32 getLoggerCount();
+	static void addLogger(std::shared_ptr<spdlog::logger> logger);
+	static std::shared_ptr<spdlog::logger> getLogger(const std::string& name);
+	static uint32 getLoggerCount();
 
-		static std::shared_ptr<spdlog::logger> createLogger(const std::string& name, spdlog::level::level_enum log_level);
-	};
+	static std::shared_ptr<spdlog::logger> createLogger(const std::string& name, spdlog::level::level_enum log_level);
+};
 }
 
 #define INTERNAL_DRAUG_TRACE(name, ...) ::Draug::Log::getLogger(name)->trace(__VA_ARGS__)

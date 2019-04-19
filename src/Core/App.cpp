@@ -2,17 +2,17 @@
 #include "App.h"
 
 namespace Draug {
-	App::~App() {
-		images.releaseAll();
-	}
+App::~App() {
+	images.releaseAll();
+}
 
-	void App::initialize() {
-	}
+void App::initialize() {
+}
 
-	void App::run() {
-	}
+void App::run() {
+}
 
-	void App::shutdown() {
+void App::shutdown() {
 
-	}
+}
 }
