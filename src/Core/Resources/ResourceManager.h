@@ -1,35 +1,38 @@
 #pragma once
 
 #include "draugpch.h"
+#include "ResourceLoader.h"
 
 namespace Draug {
 namespace Resources {
-template<typename T>
+template<typename T, typename Id>
 class ResourceManager {
-	std::unordered_map<std::string, T*> m_resources;
+	std::unordered_map<Id, T*> m_resources;
 public:
 	ResourceManager() = default;
 	ResourceManager(const ResourceManager& other) = delete;
 	~ResourceManager() = default;
 
+	void initialize() {
+	}
+
 	template<typename... Args>
-	inline T& get(const std::string& filename) {
-		auto it = m_resources.find(filename);
+	inline T& get(const Id& id, ResourceLoader<T> loader) {
+		auto it = m_resources.find(id);
 		if (it == m_resources.end()) {
-			return load(filename);
+			return load(id, loader);
 		}
 		return *it->second;
 	}
 
-	inline void release(const std::string& filename) {
-		if (m_resources.find(filename) == m_resources.end()) {
+	inline void release(const Id& id) {
+		if (m_resources.find(id) == m_resources.end()) {
 			return;
 		}
-
-		T* resource = m_resources.at(filename);
+		T* resource = m_resources.at(id);
 		delete resource;
 		resource = nullptr;
-		m_resources.erase(filename);
+		m_resources.erase(id);
 	}
 
 	inline void releaseAll() {
@@ -46,11 +49,10 @@ public:
 	}
 
 private:
-	inline T& load(const std::string& filename) {
-		T* instance = new T();
-		instance->loadFromFile(filename);
-		m_resources.emplace(filename, instance);
-		return *instance;
+	inline T& load(const Id& id, ResourceLoader<T> loader) {
+		T* resource = loader.load();
+		m_resources.emplace(id, instance);
+		return instance;
 	}
 };
 }
