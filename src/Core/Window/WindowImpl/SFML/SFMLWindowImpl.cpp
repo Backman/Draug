@@ -3,7 +3,7 @@
 #include "Core/Types.h"
 #include "Core/Window/WindowConfig.h"
 #include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/Window/Event.hpp>
+#include <SFML/Graphics.hpp>
 
 namespace Draug {
 namespace details {

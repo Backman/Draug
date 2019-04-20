@@ -9,8 +9,6 @@ namespace details {
 class BaseWindowImpl {
 protected:
 	std::unordered_map<EventHandlerId, EventHandler> m_event_handlers;
-	//std::vector<Event> m_pending_events;
-
 public:
 	BaseWindowImpl();
 	virtual ~BaseWindowImpl();

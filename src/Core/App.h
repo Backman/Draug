@@ -2,12 +2,12 @@
 
 #include "Draug.h"
 #include "Resources/ResourceManager.h"
-#include <SFML/Graphics/Image.hpp>
 
 namespace Draug {
 class DRAUG_API App {
+protected:
+	Window m_window;
 public:
-	Resources::ResourceManager<sf::Image> images;
 	App() = default;
 	App(const App& other) = default;
 	virtual ~App();
@@ -15,6 +15,10 @@ public:
 	virtual void initialize();
 	virtual void run();
 	virtual void shutdown();
+
+	inline Window* getWindow() {
+		return &m_window;
+	};
 };
 
 App* createApp();

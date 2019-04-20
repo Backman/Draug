@@ -16,11 +16,6 @@ public:
 		for (auto e : entities) {
 			SpriteComponent& sprite = scene->getComponent<SpriteComponent>(e);
 			PositionComponent& pos = scene->getComponent<PositionComponent>(e);
-
-			sf::Image& image = scene->getApp()->images.get(sprite.filename);
-
-			int i = 0;
-			i++;
 		}
 	}
 

@@ -3,7 +3,6 @@
 
 namespace Draug {
 App::~App() {
-	images.releaseAll();
 }
 
 void App::initialize() {

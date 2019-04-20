@@ -17,7 +17,6 @@ public:
 	Window();
 	~Window();
 
-
 	void initialize(const WindowConfig& config);
 	void update();
 	void shutdown();
