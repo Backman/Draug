@@ -8,6 +8,7 @@
 #include <Core/Renderer/Texture.h>
 #include <Core/Renderer/Renderer.h>
 #include <Core/ECS/System.h>
+#include <Input/Input.h>
 #include "Components/ComponentTypes.h"
 #include "Systems/SystemTypes.h"
 #include <SDL/SDL.h>
@@ -23,18 +24,37 @@ struct TextureComponent {
 	Draug::Texture* texture;
 };
 
+struct PlayerComponent {
+};
+
 class MoveSystem : public Draug::ECS::System {
 public:
 	virtual void tick(Draug::ECS::Scene* scene, Draug::float32 dt) {
 		auto mgr = scene->getEntityMgr();
-		for (auto e : mgr->entities<PositionComponent>()) {
+		for (auto e : mgr->entities<PositionComponent, PlayerComponent>()) {
 			auto& pos = scene->getComponent<PositionComponent>(e);
-			pos.x++;
-			pos.y++;
-			if (pos.x >= 1024) {
+			if (Draug::Input::Input::keyboard.isKeyPressed(SDL_SCANCODE_LEFT)) {
+				pos.x--;
+			}
+			if (Draug::Input::Input::keyboard.isKeyPressed(SDL_SCANCODE_RIGHT)) {
+				pos.x++;
+			}
+			if (Draug::Input::Input::keyboard.isKeyPressed(SDL_SCANCODE_UP)) {
+				pos.y--;
+			}
+			if (Draug::Input::Input::keyboard.isKeyPressed(SDL_SCANCODE_DOWN)) {
+				pos.y++;
+			}
+			if (pos.x > 1024) {
+				pos.x = 1024;
+			}
+			else if (pos.x < 0) {
 				pos.x = 0;
 			}
-			if (pos.y >= 720) {
+			if (pos.y > 720) {
+				pos.y = 720;
+			}
+			else if (pos.y < 0) {
 				pos.y = 0;
 			}
 		}
@@ -45,7 +65,6 @@ class RenderSystem : public Draug::ECS::System {
 public:
 	virtual void tick(Draug::ECS::Scene* scene, Draug::float32 dt) {
 		auto mgr = scene->getEntityMgr();
-		Draug::uint32 ticks = SDL_GetTicks();
 		Draug::Renderer::beginPass();
 		for (auto e : mgr->entities<PositionComponent, TextureComponent>()) {
 			auto& pos = scene->getComponent<PositionComponent>(e);
@@ -53,7 +72,6 @@ public:
 			Draug::Renderer::draw(*texture.texture, pos.x, pos.y);
 		}
 		Draug::Renderer::endPass();
-		DRAUG_DEBUG("Render system ticks: {0}", (SDL_GetTicks() - ticks));
 	}
 };
 
@@ -72,23 +90,26 @@ public:
 		scene.initialize(this);
 		scene.addSystem<RenderSystem>();
 		scene.addSystem<MoveSystem>();
-		for (size_t i = 0; i < 50; i++) {
-			createEntity();
-		}
+		createPlayer();
 	}
 
-	void createEntity() {
+	void createPlayer() {
 		auto e = scene.createEntity();
 		scene.addComponent<PositionComponent>(e, rand() % 1024, rand() % 720);
-		Draug::TextureData tex_data;
-		tex_data.format = Draug::TextureFormat::RGBA;
-		tex_data.type = Draug::TextureType::Tex2D;
-		tex_data.width = 32;
-		tex_data.height = 32;
-		scene.addComponent<TextureComponent>(e, Draug::Renderer::getTexture(tex_data, ".\\Assets\\test.png"));
+		scene.addComponent<TextureComponent>(e, Draug::Renderer::getTexture(".\\Assets\\test.png"));
+		scene.addComponent<PlayerComponent>(e);
 	}
 
 	void onUpdate() override {
+		if (Draug::Input::Input::keyboard.isKeyPressed(SDL_SCANCODE_SPACE)) {
+			DRAUG_DEBUG("Space is down");
+		}
+		if (Draug::Input::Input::keyboard.isKeyDown(SDL_SCANCODE_SPACE)) {
+			DRAUG_DEBUG("Space is pressed");
+		}
+		if (Draug::Input::Input::keyboard.isKeyUp(SDL_SCANCODE_SPACE)) {
+			DRAUG_DEBUG("Space is released");
+		}
 		scene.update();
 	}
 
