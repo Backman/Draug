@@ -1,27 +1,33 @@
 #pragma once
 
-#include "draugpch.h"
-#include "Core/Window/WindowConfig.h"
+#include "Draug.h"
 #include "Core/Event/Event.h"
 
 namespace Draug {
-namespace details {
-class WindowImpl;
-}
+struct WindowConfig;
 class Window {
-	details::WindowImpl* m_impl;
-	std::vector<Event> m_pending_events;
 public:
-	WindowConfig config;
+	static Window* createWindow(const WindowConfig& config);
 
-	Window();
-	~Window();
+	Window() = default;
+	Window(const Window& other) = delete;
+	virtual ~Window() = default;
 
-	void initialize(const WindowConfig& config);
+	virtual bool initialize(const WindowConfig& config) = 0;
+	virtual void shutdown() = 0;
+
 	void update();
-	void shutdown();
 
-	EventHandlerId registerEventHandler(EventHandler handler);
-	void unregisterEventHandler(EventHandlerId id);
+	EventCallbackId subscribeEvent(EventCallback callback);
+	void unsibscribEvent(EventCallbackId id);
+	inline EventDispatcher* getEventDispatcher() { return &m_event_dispatcher; }
+
+	virtual void* getNativeWindow() = 0;
+
+protected:
+	virtual void pollEvents() = 0;
+	void dispatchEvent(const Event& event);
+private:
+	EventDispatcher m_event_dispatcher;
 };
 }

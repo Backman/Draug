@@ -1,13 +1,11 @@
 #pragma once
 
-#include "draugpch.h"
+#include "Draug.h"
 #include "ResourceLoader.h"
 
 namespace Draug {
-namespace Resources {
 template<typename T, typename Id>
 class ResourceManager {
-	std::unordered_map<Id, T*> m_resources;
 public:
 	ResourceManager() = default;
 	ResourceManager(const ResourceManager& other) = delete;
@@ -54,6 +52,7 @@ private:
 		m_resources.emplace(id, instance);
 		return instance;
 	}
+
+	std::unordered_map<Id, T*> m_resources;
 };
-}
 }

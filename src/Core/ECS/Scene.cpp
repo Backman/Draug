@@ -1,4 +1,3 @@
-#include "draugpch.h"
 #include "Scene.h"
 #include "Core/App.h"
 

@@ -1,8 +1,9 @@
 #pragma once
 
-#include "draugpch.h"
+#include "Draug.h"
 #include "Core/Types.h"
 #include "Draug.h"
+#include <spdlog/logger.h>
 
 namespace spdlog {
 class logger;
@@ -13,7 +14,6 @@ enum level_enum;
 
 namespace Draug {
 class DRAUG_API Log {
-	static std::unordered_map<std::string, std::shared_ptr<spdlog::logger>> s_loggers;
 public:
 	static void initialize();
 	static void setPattern(std::string pattern);
@@ -23,26 +23,22 @@ public:
 	static uint32 getLoggerCount();
 
 	static std::shared_ptr<spdlog::logger> createLogger(const std::string& name, spdlog::level::level_enum log_level);
+
+private:
+	static std::unordered_map<std::string, std::shared_ptr<spdlog::logger>> s_loggers;
 };
 }
 
-#define INTERNAL_DRAUG_TRACE(name, ...) ::Draug::Log::getLogger(name)->trace(__VA_ARGS__)
-#define INTERNAL_DRAUG_DEBUG(name, ...) ::Draug::Log::getLogger(name)->debug(__VA_ARGS__)
-#define INTERNAL_DRAUG_INFO(name, ...) ::Draug::Log::getLogger(name)->info(__VA_ARGS__)
-#define INTERNAL_DRAUG_WARN(name, ...) ::Draug::Log::getLogger(name)->warn(__VA_ARGS__)
-#define INTERNAL_DRAUG_ERROR(name, ...) ::Draug::Log::getLogger(name)->error(__VA_ARGS__)
-#define INTERNAL_DRAUG_FATAL(name, ...) ::Draug::Log::getLogger(name)->fatal(__VA_ARGS__)
+#define DRAUG_CORE_TRACE(...) Draug::Log::getLogger("Draug")->trace(__VA_ARGS__)
+#define DRAUG_CORE_DEBUG(...) Draug::Log::getLogger("Draug")->debug(__VA_ARGS__)
+#define DRAUG_CORE_INFO(...) Draug::Log::getLogger("Draug")->info(__VA_ARGS__)
+#define DRAUG_CORE_WARN(...) Draug::Log::getLogger("Draug")->warn(__VA_ARGS__)
+#define DRAUG_CORE_ERROR(...) Draug::Log::getLogger("Draug")->error(__VA_ARGS__)
+#define DRAUG_CORE_CRITICAL(...) Draug::Log::getLogger("Draug")->critical(__VA_ARGS__)
 
-#define DRAUG_CORE_TRACE(...) INTERNAL_DRAUG_TRACE("Draug", __VA_ARGS__)
-#define DRAUG_CORE_DEBUG(...) INTERNAL_DRAUG_DEBUG("Draug", __VA_ARGS__)
-#define DRAUG_CORE_INFO(...) INTERNAL_DRAUG_INFO("Draug", __VA_ARGS__)
-#define DRAUG_CORE_WARN(...) INTERNAL_DRAUG_WARN("Draug", __VA_ARGS__)
-#define DRAUG_CORE_ERROR(...) INTERNAL_DRAUG_ERROR("Draug", __VA_ARGS__)
-#define DRAUG_CORE_FATAL(...) INTERNAL_DRAUG_FATAL("Draug", __VA_ARGS__)
-
-#define DRAUG_TRACE(...) INTERNAL_DRAUG_TRACE("App", __VA_ARGS__)
-#define DRAUG_DEBUG(...) INTERNAL_DRAUG_DEBUG("App", __VA_ARGS__)
-#define DRAUG_INFO(...) INTERNAL_DRAUG_INFO("App", __VA_ARGS__)
-#define DRAUG_WARN(...) INTERNAL_DRAUG_WARN("App", __VA_ARGS__)
-#define DRAUG_ERROR(...) INTERNAL_DRAUG_ERROR("App", __VA_ARGS__)
-#define DRAUG_FATAL(...) INTERNAL_DRAUG_FATAL("App", __VA_ARGS__)
+#define DRAUG_TRACE(...) Draug::Log::getLogger("App")->trace(__VA_ARGS__)
+#define DRAUG_DEBUG(...) Draug::Log::getLogger("App")->debug(__VA_ARGS__)
+#define DRAUG_INFO(...) Draug::Log::getLogger("App")->info(__VA_ARGS__)
+#define DRAUG_WARN(...) Draug::Log::getLogger("App")->warn(__VA_ARGS__)
+#define DRAUG_ERROR(...) Draug::Log::getLogger("App")->error(__VA_ARGS__)
+#define DRAUG_CRITICAL(...) Draug::Log::getLogger("App")->critical(__VA_ARGS__)

@@ -5,8 +5,13 @@
 #include <Core/Core.h>
 #include <Core/Event/Event.h>
 #include <Core/Resources/ResourceLoader.h>
+#include <Core/Renderer/Texture.h>
+#include <Core/Renderer/Renderer.h>
+#include <Core/ECS/System.h>
+#include <Input/Input.h>
 #include "Components/ComponentTypes.h"
 #include "Systems/SystemTypes.h"
+#include <SDL/SDL.h>
 
 namespace Textures {
 enum Type {
@@ -15,59 +20,100 @@ enum Type {
 };
 }
 
+struct TextureComponent {
+	Draug::Texture* texture;
+};
+
+struct PlayerComponent {
+};
+
+class MoveSystem : public Draug::ECS::System {
+public:
+	virtual void tick(Draug::ECS::Scene* scene, Draug::float32 dt) {
+		auto mgr = scene->getEntityMgr();
+		for (auto e : mgr->entities<PositionComponent, PlayerComponent>()) {
+			auto& pos = scene->getComponent<PositionComponent>(e);
+			if (Draug::Input::Input::keyboard.isKeyPressed(SDL_SCANCODE_LEFT)) {
+				pos.x--;
+			}
+			if (Draug::Input::Input::keyboard.isKeyPressed(SDL_SCANCODE_RIGHT)) {
+				pos.x++;
+			}
+			if (Draug::Input::Input::keyboard.isKeyPressed(SDL_SCANCODE_UP)) {
+				pos.y--;
+			}
+			if (Draug::Input::Input::keyboard.isKeyPressed(SDL_SCANCODE_DOWN)) {
+				pos.y++;
+			}
+			if (pos.x > 1024) {
+				pos.x = 1024;
+			}
+			else if (pos.x < 0) {
+				pos.x = 0;
+			}
+			if (pos.y > 720) {
+				pos.y = 720;
+			}
+			else if (pos.y < 0) {
+				pos.y = 0;
+			}
+		}
+	}
+};
+
+class RenderSystem : public Draug::ECS::System {
+public:
+	virtual void tick(Draug::ECS::Scene* scene, Draug::float32 dt) {
+		auto mgr = scene->getEntityMgr();
+		Draug::Renderer::beginPass();
+		for (auto e : mgr->entities<PositionComponent, TextureComponent>()) {
+			auto& pos = scene->getComponent<PositionComponent>(e);
+			auto& texture = scene->getComponent<TextureComponent>(e);
+			Draug::Renderer::draw(*texture.texture, pos.x, pos.y);
+		}
+		Draug::Renderer::endPass();
+	}
+};
+
 class PlaygroundApp : public Draug::App {
 public:
-#define BIND_FN(fn) std::bind(&PlaygroundApp::fn, this, std::placeholders::_1)
 	Draug::ECS::Scene scene{};
 	bool running = false;
-
-	Draug::Resources::ResourceManager<sf::Texture, Textures::Type> textures;
 
 	PlaygroundApp() = default;
 	~PlaygroundApp() = default;
 
-	void initialize() override {
-
-		m_window.initialize(Draug::WindowConfig::createWindowed("Playground", 800, 600));
-		m_window.registerEventHandler(BIND_FN(onEvent));
-
+	void onInitialize() override {
+		srand(time(NULL));
 		std::cout << "Initialize" << std::endl;
-	}
 
-	void onEvent(const Draug::Event& evt) {
-		Draug::Event::dispatchEvent<Draug::WindowResizeEvent>(evt, BIND_FN(onResize));
-		Draug::Event::dispatchEvent<Draug::WindowCloseEvent>(evt, BIND_FN(onClosed));
-	}
-
-	bool onResize(const Draug::WindowResizeEvent& evt) {
-		std::cout << "On resize" << std::endl;
-		return true;
-	}
-
-	bool onClosed(const Draug::WindowCloseEvent& evt) {
-		std::cout << "On close" << std::endl;
-		running = false;
-		return true;
-	}
-
-	void run() override {
 		scene.initialize(this);
-		scene.addSystem<SpriteRenderSystem>();
-		auto e = scene.createEntity();
-		scene.addComponent<PositionComponent>(e, 0, 0);
-		scene.addComponent<SpriteComponent>(e, textures.get(Textures::Test, Draug::Resources::fromFile<sf::Texture>(".\\Assets\\test.png")));
-		scene.addComponent<DrawableComponent>(e));
-
-		std::cout << "Run" << std::endl;
-		running = true;
-		while (running) {
-			m_window.update();
-			scene.update();
-		}
+		scene.addSystem<RenderSystem>();
+		scene.addSystem<MoveSystem>();
+		createPlayer();
 	}
 
-	void shutdown() override {
-		std::cout << "Shutdown" << std::endl;
+	void createPlayer() {
+		auto e = scene.createEntity();
+		scene.addComponent<PositionComponent>(e, rand() % 1024, rand() % 720);
+		scene.addComponent<TextureComponent>(e, Draug::Renderer::getTexture(".\\Assets\\test.png"));
+		scene.addComponent<PlayerComponent>(e);
+	}
+
+	void onUpdate() override {
+		if (Draug::Input::Input::keyboard.isKeyPressed(SDL_SCANCODE_SPACE)) {
+			DRAUG_DEBUG("Space is down");
+		}
+		if (Draug::Input::Input::keyboard.isKeyDown(SDL_SCANCODE_SPACE)) {
+			DRAUG_DEBUG("Space is pressed");
+		}
+		if (Draug::Input::Input::keyboard.isKeyUp(SDL_SCANCODE_SPACE)) {
+			DRAUG_DEBUG("Space is released");
+		}
+		scene.update();
+	}
+
+	void onShutdown() override {
 		scene.shutdown();
 	}
 };
