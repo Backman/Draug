@@ -6,7 +6,6 @@ function draugToolchain(_buildDir, _projDir, _libDir)
 	location (path.join(_projDir, _ACTION))
 	includedirs {
 		SDL_INCLUDE_DIR,
-		(SDL_INCLUDE_DIR .. "/SDL/"),
 		SDL_IMAGE_INCLUDE_DIR,
 	}
 	links {
@@ -30,10 +29,18 @@ function draugToolchain(_buildDir, _projDir, _libDir)
 		local output_dir = path.join(_buildDir, "x64_" .. _ACTION, "Debug")
         targetdir (path.join(output_dir, "bin"))
         objdir (path.join(output_dir, "obj"))
+        libdirs {
+			path.join(SDL_LIB_DIR, "x64", "Debug"),
+			path.join(SDL_IMAGE_LIB_DIR, "x64", "Debug"),
+		}
 	configuration { "Release", "x64" }
 		local output_dir = path.join(_buildDir, "x64_" .. _ACTION, "Release")
         targetdir (path.join(output_dir, "bin"))
         objdir (path.join(output_dir, "obj"))
+        libdirs {
+			path.join(SDL_LIB_DIR, "x64", "Release"),
+			path.join(SDL_IMAGE_LIB_DIR, "x64", "Release"),
+		}
 	
 	configuration { "vs*" }
 		defines {
@@ -54,8 +61,6 @@ function draugToolchain(_buildDir, _projDir, _libDir)
 	configuration { "x64", "vs*" }
 		defines { "_WIN64" }
         libdirs {
-			path.join(SDL_LIB_DIR, "x64"),
-			path.join(SDL_IMAGE_LIB_DIR, "x64"),
             "$(DXSDK_DIR)/lib/x64",
 		}
 
