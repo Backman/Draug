@@ -1,5 +1,6 @@
-#include "draugpch.h"
+#include "Draug.h"
 #include "Log.h"
+#include <iostream>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
 
@@ -8,6 +9,10 @@ std::unordered_map<std::string, std::shared_ptr<spdlog::logger>> Log::s_loggers;
 
 void Log::initialize() {
 	Log::setPattern("%^[%T](%n): %v%$");
+	spdlog::set_error_handler([](const std::string & msg)
+		{
+			std::cerr << "Logger error: " << msg << std::endl;
+		});
 	Draug::Log::addLogger(Draug::Log::createLogger("Draug", spdlog::level::trace));
 	Draug::Log::addLogger(Draug::Log::createLogger("App", spdlog::level::trace));
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "draugpch.h"
+#include "Draug.h"
 #include "Core/Types.h"
 
 namespace Draug {

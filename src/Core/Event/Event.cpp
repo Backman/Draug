@@ -1,4 +1,3 @@
-#include "draugpch.h"
 #include "Event.h"
 
 namespace Draug {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "draugpch.h"
+#include "Draug.h"
 
 namespace Draug {
 namespace ECS {
@@ -13,7 +13,6 @@ public:
 };
 
 class SystemManager {
-	std::vector<System*> m_systems;
 public:
 	SystemManager() = default;
 	~SystemManager() {
@@ -42,6 +41,8 @@ public:
 			m_systems[i]->tick(scene, dt);
 		}
 	}
+private:
+	std::vector<System*> m_systems;
 };
 }
 }

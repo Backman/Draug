@@ -9,9 +9,6 @@ namespace Draug {
 class App;
 namespace ECS {
 class DRAUG_API Scene {
-	App* m_app;
-	EntityManager* m_entity_mgr;
-	SystemManager* m_system_mgr;
 public:
 	Scene() = default;
 	~Scene();
@@ -44,7 +41,7 @@ public:
 	}
 
 	template<typename T>
-	inline T getComponent(const Entity& e) {
+	inline T& getComponent(const Entity& e) {
 		return m_entity_mgr->getComponent<T>(e);
 	}
 
@@ -56,6 +53,10 @@ public:
 	template<typename TSystem>
 	inline void getSystem() {
 	};
+private:
+	App* m_app;
+	EntityManager* m_entity_mgr;
+	SystemManager* m_system_mgr;
 };
 }
 }

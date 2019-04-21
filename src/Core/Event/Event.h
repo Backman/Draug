@@ -26,11 +26,11 @@ struct Event {
 	};
 
 	template<typename T>
-	static bool dispatchEvent(const Event& e, DispatchCallback<T> callback) {
-		EventType t = e.getType();
+	static bool dispatch(const Event& event, DispatchCallback<T> callback) {
+		EventType t = event.getType();
 		EventType s_t = T::s_getType();
-		if (e.getType() == T::s_getType()) {
-			return callback(*(T*)& e);
+		if (event.getType() == T::s_getType()) {
+			return callback(*(T*)& event);
 		}
 		return false;
 	}
