@@ -1,13 +1,14 @@
 
 #include <iostream>
-#include <Core/Log.h>
+#include <Log/Log.h>
+#include <Core/App.h>
 #include <Core/Window/Window.h>
-#include <Core/Core.h>
 #include <Core/Event/Event.h>
 #include <Core/Resources/ResourceLoader.h>
-#include <Core/Renderer/Texture.h>
-#include <Core/Renderer/Renderer.h>
-#include <Core/ECS/System.h>
+#include <Renderer/Texture.h>
+#include <Renderer/Renderer.h>
+#include <ECS/Scene.h>
+#include <ECS/System.h>
 #include <Input/Input.h>
 #include "Components/ComponentTypes.h"
 #include "Systems/SystemTypes.h"

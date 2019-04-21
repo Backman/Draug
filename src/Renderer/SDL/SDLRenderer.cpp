@@ -1,8 +1,8 @@
 #include "SDLRenderer.h"
 #include "Core/Window/Window.h"
-#include "Core/Renderer/Renderer.h"
-#include "Core/Renderer/Texture.h"
-#include "Core/Log.h"
+#include "Renderer/Renderer.h"
+#include "Renderer/Texture.h"
+#include "Log/Log.h"
 #include <SDL/SDL.h>
 #include <SDL/SDL_render.h>
 #include <SDL/SDL_image.h>

@@ -20,10 +20,10 @@ function draugToolchain(_buildDir, _projDir, _libDir)
 	}
 	configuration { "Debug" }
 		defines { "DEBUG", "_DEBUG" }
-		flags { "Symbols", "WinMain" }
+		flags { "Symbols" }
 	configuration { "Release" }
 		defines { "NDEBUG" }
-		flags { "Optimize", "WinMain" }
+		flags { "Optimize" }
 
 	configuration { "Debug", "x64" }
 		local output_dir = path.join(_buildDir, "x64_" .. _ACTION, "Debug")

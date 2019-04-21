@@ -82,14 +82,13 @@ createProject("DraugPlayground", "ConsoleApp", DRAUG_PLAYGROUND_SRC_DIR, {
 
 postbuildcommands {
 	"robocopy \"" .. DRAUG_PLAYGROUND_SRC_DIR .. "/Assets\" \"" .. path.join(PROJECT_DIR, _ACTION, "Assets") .. "\" /S /XO",
-	"robocopy \"" .. DRAUG_PLAYGROUND_SRC_DIR .. "/Assets\" \"" .. path.join(BUILD_DIR, "x64_" .. _ACTION, "bin/Assets") .. "\" /S /XO"
 }
 
-configurations { "Debug" }
+configuration { "Debug" }
 	postbuildcommands {
 		"robocopy \"" .. DRAUG_PLAYGROUND_SRC_DIR .. "/Assets\" \"" .. path.join(BUILD_DIR, "x64_" .. _ACTION, "Debug/bin/Assets") .. "\" /S /XO"
 	}
-configurations { "Release" }
+configuration { "Release" }
 	postbuildcommands {
 		"robocopy \"" .. DRAUG_PLAYGROUND_SRC_DIR .. "/Assets\" \"" .. path.join(BUILD_DIR, "x64_" .. _ACTION, "Release/bin/Assets") .. "\" /S /XO"
 	}

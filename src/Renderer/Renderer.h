@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Core/Renderer/Texture.h"
-#include "Core/Renderer/SDL/SDLRenderer.h"
+#include "Renderer/Texture.h"
+#include "Renderer/SDL/SDLRenderer.h"
 
 namespace Draug {
 class Window;

@@ -1,5 +1,5 @@
 #include "SDLWindow.h"
-#include "Core/Log.h"
+#include "Log/Log.h"
 #include "Core/Window/WindowConfig.h"
 #include "Input/InputTypes.h"
 #include <SDL/SDL.h>

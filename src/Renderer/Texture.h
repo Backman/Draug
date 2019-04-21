@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include "Core/Renderer/SDL/SDLTexture.h"
+#include "SDL/SDLTexture.h"
 
 namespace Draug {
 
