@@ -61,23 +61,43 @@ draugToolchain(BUILD_DIR, PROJECT_DIR, DEPS_DIR)
 group "Draug"
 createProject("Draug", "StaticLib", DRAUG_SRC_DIR, {
 	"SDL2",
-	"SDL2main",
+	"bz2",
+	"freetype",
+	"jpeg",
+	"libpng16",
+	"lzma",
 	"SDL2_image",
+	"SDL2_ttf",
+	"tiff",
+	"tiffxx",
+	"turbojpeg",
+	"zlib",
 }, {
 	DRAUG_SRC_DIR,
 	SPDLOG_INCLUDE_DIR,
+	SDL_INCLUDE_DIR,
 })
 
 group "Playground"
 createProject("DraugPlayground", "ConsoleApp", DRAUG_PLAYGROUND_SRC_DIR, {
 	"Draug",
 	"SDL2",
-	"SDL2main",
+	"bz2",
+	"freetype",
+	"jpeg",
+	"libpng16",
+	"lzma",
 	"SDL2_image",
+	"SDL2_ttf",
+	"tiff",
+	"tiffxx",
+	"turbojpeg",
+	"zlib",
 },{
 	DRAUG_PLAYGROUND_SRC_DIR,
 	DRAUG_SRC_DIR,
 	SPDLOG_INCLUDE_DIR,
+	SDL_INCLUDE_DIR,
 })
 
 postbuildcommands {

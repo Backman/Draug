@@ -1,4 +1,5 @@
 
+#include <Core/Entry.h>
 #include <iostream>
 #include <Log/Log.h>
 #include <Core/App.h>
@@ -12,7 +13,6 @@
 #include <Input/Input.h>
 #include "Components/ComponentTypes.h"
 #include "Systems/SystemTypes.h"
-#include <SDL/SDL.h>
 
 namespace Textures {
 enum Type {
@@ -119,6 +119,4 @@ public:
 	}
 };
 
-Draug::App* Draug::createApp() {
-	return new PlaygroundApp();
-};
+DRAUG_ENTRY(PlaygroundApp);

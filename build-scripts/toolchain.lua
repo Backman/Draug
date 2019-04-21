@@ -4,20 +4,6 @@ function draugToolchain(_buildDir, _projDir, _libDir)
 	if (_ACTION == nil) then return false end
 
 	location (path.join(_projDir, _ACTION))
-	includedirs {
-		SDL_INCLUDE_DIR,
-		SDL_IMAGE_INCLUDE_DIR,
-	}
-	links {
-		"SDL2",
-		"SDL2_image",
-		"turbojpeg",
-		"libpng16",
-		"zlib",
-		"SDL2_ttf",
-		"tiff",
-		"lzma",
-	}
 	configuration { "Debug" }
 		defines { "DEBUG", "_DEBUG" }
 		flags { "Symbols" }
@@ -74,7 +60,8 @@ function draugToolchain(_buildDir, _projDir, _libDir)
 			"winmm",
 		}
 		defines {
-			"DRAUG_WINDOWS"
+			"DRAUG_WINDOWS",
+			"NOMINMAX",
 		}
 
 	configuration {}

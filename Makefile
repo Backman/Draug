@@ -5,7 +5,7 @@ ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 GENIE = $(ROOT_DIR)/build-scripts/genie.exe
 
 PROJECTS_DIR_NAME = .projects
-BUILDS_DIR_NAME = .builds
+BUILDS_DIR_NAME = .bin
 
 .PHONY: all
 all: vs2017
