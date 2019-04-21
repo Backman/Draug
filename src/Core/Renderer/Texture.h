@@ -23,10 +23,10 @@ struct TextureType {
 };
 
 struct TextureData {
-	TextureFormat::Type format = TextureFormat::Invalid;
-	TextureType::Type type = TextureType::Invalid;
-	uint32 width;
-	uint32 height;
+	TextureFormat::Type format = TextureFormat::RGBA;
+	TextureType::Type type = TextureType::Tex2D;
+	uint32 width = 0;
+	uint32 height = 0;
 };
 
 class Texture : public SDLTexture {

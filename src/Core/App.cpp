@@ -2,9 +2,9 @@
 #include "Renderer/Renderer.h"
 #include "Window/Window.h"
 #include "Window/WindowConfig.h"
+#include "Input/Input.h"
 
 namespace Draug {
-#define BIND_FN(fn) std::bind(&App::fn, this, std::placeholders::_1)
 
 App* App::s_instance = nullptr;
 
@@ -19,19 +19,23 @@ void App::run() {
 		m_window->update();
 		Renderer::render();
 		onUpdate();
+
+		Input::Input::reset();
 	}
 	shutdown();
 }
 
 void App::onEvent(const Event& event) {
-	Event::dispatch<WindowCloseEvent>(event, BIND_FN(onWindowClose));
+	Event::dispatch<WindowCloseEvent>(event, BIND_FN(App, onWindowClose));
 }
 
 void App::initialize() {
 	s_instance = this;
 	WindowConfig window_config = WindowConfig::createWindowed("Draug", 0, 0, 1024, 720);
 	m_window = Window::createWindow(window_config);
-	m_window->registerEventHandler(BIND_FN(onEvent));
+	m_window->subscribeEvent(BIND_FN(App, onEvent));
+
+	Input::Input::init(m_window);
 
 	RendererConfig renderer_config;
 	renderer_config.window = m_window;

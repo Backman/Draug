@@ -18,15 +18,16 @@ public:
 
 	void update();
 
-	EventHandlerId registerEventHandler(EventHandler handler);
-	void unregisterEventHandler(EventHandlerId id);
+	EventCallbackId subscribeEvent(EventCallback callback);
+	void unsibscribEvent(EventCallbackId id);
+	inline EventDispatcher* getEventDispatcher() { return &m_event_dispatcher; }
 
 	virtual void* getNativeWindow() = 0;
 
 protected:
 	virtual void pollEvents() = 0;
-	void onEvent(const Event& event);
+	void dispatchEvent(const Event& event);
 private:
-	std::unordered_map<EventHandlerId, EventHandler> m_event_handlers;
+	EventDispatcher m_event_dispatcher;
 };
 }

@@ -29,7 +29,7 @@ void Renderer::draw(const Texture& texture, const int32 x_pos, const int32 y_pos
 	m_impl.draw(texture, x_pos, y_pos);
 }
 
-Texture* Renderer::getTexture(const TextureData& data, const std::string& path) {
-	return m_impl.createTexture(data, path);
+Texture* Renderer::getTexture(const std::string& path, const TextureData& data) {
+	return m_impl.createTexture(path, data);
 }
 }

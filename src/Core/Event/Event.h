@@ -1,29 +1,28 @@
 #pragma once
 
 
-#include <functional>
+#include "Draug.h"
 #include "Core/Types.h"
 
 namespace Draug {
-typedef uint32 EventHandlerId;
 
 enum EventType {
-	Unknown,
 	WindowResized,
 	WindowClosed,
+	Key,
+	Mouse,
 
 	Count,
+	Invalid = 0xFFFFFFFF,
 };
-
 #define DRAUG_EVENT_CLASS(type) static EventType s_getType() { return type; }\
 								virtual EventType getType() const override { return s_getType(); }
+#define BIND_FN(clazz, fn) std::bind(&clazz::fn, this, std::placeholders::_1)
+#define BIND_STATIC_FN(clazz, fn) std::bind(&clazz::fn, std::placeholders::_1)
 
 struct Event {
 	template<typename T>
 	using DispatchCallback = std::function<bool(const T&)>;
-	inline static EventHandlerId getNextId() {
-		return ++s_id;
-	};
 
 	template<typename T>
 	static bool dispatch(const Event& event, DispatchCallback<T> callback) {
@@ -38,9 +37,33 @@ struct Event {
 
 	virtual EventType getType() const = 0;
 private:
-	static EventHandlerId s_id;
 };
-typedef std::function<void(const Event&)> EventHandler;
+
+using EventCallback = std::function<void(const Event&)>;
+typedef uint32 EventCallbackId;
+
+class EventDispatcher {
+public:
+	inline EventCallbackId subscribe(EventCallback callback) {
+		const EventCallbackId id = ++s_id;
+		m_callbacks[id] = callback;
+		return id;
+	}
+
+	inline void unsubscribe(const EventCallbackId& id) {
+		m_callbacks.erase(id);
+	}
+
+	void dispatch(const Event& event) {
+		for (const auto& it : m_callbacks) {
+			it.second(event);
+		}
+	}
+
+private:
+	static EventCallbackId s_id;
+	std::unordered_map<EventCallbackId, EventCallback> m_callbacks;
+};
 
 struct WindowResizeEvent : Event {
 	uint32 width;

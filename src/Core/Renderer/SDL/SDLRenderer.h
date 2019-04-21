@@ -20,7 +20,7 @@ public:
 	void endPass();
 	void draw(const Texture& texture, const int32 x_pos, const int32 y_pos);
 
-	Texture* createTexture(const TextureData& data, const std::string& path);
+	Texture* createTexture(const std::string& path, const TextureData& data);
 private:
 	SDL_Renderer* m_renderer;
 	SDL_Window* m_window;
