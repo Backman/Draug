@@ -76,46 +76,49 @@ public:
 	}
 };
 
-class PlaygroundApp : public Draug::App {
+class GameState : public Draug::AppState {
 public:
-	Draug::ECS::Scene scene{};
-	bool running = false;
-
-	PlaygroundApp() = default;
-	~PlaygroundApp() = default;
-
-	void onInitialize() override {
-		srand(time(NULL));
-		std::cout << "Initialize" << std::endl;
-
-		scene.initialize(this);
-		scene.addSystem<RenderSystem>();
-		scene.addSystem<MoveSystem>();
-		createPlayer();
+	GameState(const Draug::AppStateContext& context) :
+		Draug::AppState(context, "game_state") {
 	}
 
-	void createPlayer() {
+	inline void init() override {
+		scene.initialize(context.app);
+		scene.addSystem<RenderSystem>();
+		scene.addSystem<MoveSystem>();
+
 		auto e = scene.createEntity();
 		scene.addComponent<PositionComponent>(e, rand() % 1024, rand() % 720);
 		scene.addComponent<TextureComponent>(e, Draug::Renderer::getTexture(".\\Assets\\test.png"));
 		scene.addComponent<PlayerComponent>(e);
 	}
 
-	void onUpdate() override {
-		if (Draug::Input::Input::keyboard.isKeyPressed(SDL_SCANCODE_SPACE)) {
-			DRAUG_DEBUG("Space is down");
-		}
-		if (Draug::Input::Input::keyboard.isKeyDown(SDL_SCANCODE_SPACE)) {
-			DRAUG_DEBUG("Space is pressed");
-		}
-		if (Draug::Input::Input::keyboard.isKeyUp(SDL_SCANCODE_SPACE)) {
-			DRAUG_DEBUG("Space is released");
-		}
+	inline void shutdown() override {
+		scene.shutdown();
+	}
+
+	inline void tick() override {
 		scene.update();
 	}
 
+	Draug::ECS::Scene scene;
+};
+
+class PrioState : public Draug::AppState {
+};
+
+class PlaygroundApp : public Draug::App {
+public:
+	bool running = false;
+
+	PlaygroundApp() = default;
+	~PlaygroundApp() = default;
+
+	void onInitialize() override {
+		addState(new GameState(Draug::AppStateContext{ this }));
+	}
+
 	void onShutdown() override {
-		scene.shutdown();
 	}
 };
 

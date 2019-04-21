@@ -2,6 +2,8 @@
 
 #include "Draug.h"
 #include "Resources/ResourceManager.h"
+#include "AppState.h"
+#include "AppStateStack.h"
 
 namespace Draug {
 class Window;
@@ -17,22 +19,28 @@ public:
 
 	void run();
 
+	void addState(AppState* state);
+	void removeState(AppState* state);
+
+	void addPriorityState(AppState* state);
+	void removePriorityState(AppState* state);
+
 	inline Window* getWindow() { return m_window; }
 
 protected:
 	virtual void onInitialize() {}
-	virtual void onUpdate() {}
 	virtual void onShutdown() {}
-	virtual void onEvent(const Event& event);
+
 private:
+	void onEvent(const Event& event);
 	void initialize();
 	void shutdown();
 	bool onWindowClose(const WindowCloseEvent& event);
 
 	static App* s_instance;
+
+	AppStateStack m_states;
 	Window* m_window;
 	bool m_running = true;
 };
-
-App* createApp();
 }
