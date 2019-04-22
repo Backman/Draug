@@ -3,6 +3,7 @@
 #include "Core/Window/WindowConfig.h"
 #include "Input/InputTypes.h"
 #include <SDL/SDL.h>
+#include <SDL/SDL_opengl.h>
 
 namespace Draug {
 
@@ -27,7 +28,7 @@ bool SDLWindow::initialize(const WindowConfig& config) {
 		return false;
 	}
 
-	uint32 window_flags = SDL_WINDOW_SHOWN;
+	uint32 window_flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL;
 	if (config.fullscreen) {
 		window_flags |= SDL_WINDOW_FULLSCREEN;
 	}

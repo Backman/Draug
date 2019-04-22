@@ -66,13 +66,11 @@ class RenderSystem : public Draug::ECS::System {
 public:
 	virtual void tick(Draug::ECS::Scene* scene, Draug::float32 dt) {
 		auto mgr = scene->getEntityMgr();
-		Draug::Renderer::beginPass();
 		for (auto e : mgr->entities<PositionComponent, TextureComponent>()) {
 			auto& pos = scene->getComponent<PositionComponent>(e);
 			auto& texture = scene->getComponent<TextureComponent>(e);
 			Draug::Renderer::draw(*texture.texture, pos.x, pos.y);
 		}
-		Draug::Renderer::endPass();
 	}
 };
 

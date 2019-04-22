@@ -9,16 +9,16 @@ void Renderer::init(const RendererConfig& config) {
 	m_impl.init(config);
 }
 
-void Renderer::render() {
-	m_impl.render();
-}
-
 void Renderer::shutdown() {
 	m_impl.shutdown();
 }
 
 void Renderer::beginPass() {
 	m_impl.beginPass();
+}
+
+void Renderer::render() {
+	m_impl.render();
 }
 
 void Renderer::endPass() {

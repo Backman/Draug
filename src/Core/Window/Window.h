@@ -2,9 +2,9 @@
 
 #include "Draug.h"
 #include "Core/Event/Event.h"
+#include "Core/Window/WindowConfig.h"
 
 namespace Draug {
-struct WindowConfig;
 class Window {
 public:
 	static Window* createWindow(const WindowConfig& config);
@@ -24,9 +24,17 @@ public:
 
 	virtual void* getNativeWindow() = 0;
 
+	inline uint32 getWidth() const { return m_config.width; }
+	inline uint32 getHeight() const { return m_config.height; }
+	inline const char* getTitle() const { return m_config.title; }
+	inline bool isFullscreen() const { return m_config.fullscreen; }
+
 protected:
 	virtual void pollEvents() = 0;
 	void dispatchEvent(const Event& event);
+
+protected:
+	WindowConfig m_config;
 private:
 	EventDispatcher m_event_dispatcher;
 };

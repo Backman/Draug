@@ -17,11 +17,15 @@ void App::run() {
 	m_running = true;
 	while (m_running) {
 		m_window->update();
-		Renderer::render();
+
+		Draug::Renderer::beginPass();
 
 		for (auto& it = m_states.begin(); it != m_states.end(); it++) {
 			(*it)->tick();
 		}
+
+		Draug::Renderer::render();
+		Draug::Renderer::endPass();
 
 		Input::Input::reset();
 	}
