@@ -17,16 +17,48 @@ void App::run() {
 	m_running = true;
 	while (m_running) {
 		m_window->update();
-		Renderer::render();
-		onUpdate();
+		Draug::Renderer::beginPass();
 
+		for (auto& it = m_states.begin(); it != m_states.end(); it++) {
+			(*it)->tick();
+		}
 		Input::Input::reset();
+
+		Renderer::render();
+		Draug::Renderer::endPass();
 	}
 	shutdown();
 }
 
+void App::addState(AppState* state) {
+	m_states.addState(state);
+	state->init();
+}
+
+void App::removeState(AppState* state) {
+	m_states.removeState(state);
+	state->shutdown();
+	delete state;
+}
+
+void App::addPriorityState(AppState* state) {
+	m_states.addPriorityState(state);
+	state->init();
+}
+
+void App::removePriorityState(AppState* state) {
+	m_states.removePriorityState(state);
+	state->shutdown();
+	delete state;
+}
+
 void App::onEvent(const Event& event) {
 	Event::dispatch<WindowCloseEvent>(event, BIND_FN(App, onWindowClose));
+	for (auto& it = m_states.end() - 1; it != m_states.begin(); it--) {
+		if ((*it)->onEvent(event)) {
+			break;
+		}
+	}
 }
 
 void App::initialize() {
@@ -45,13 +77,19 @@ void App::initialize() {
 }
 
 void App::shutdown() {
+	onShutdown();
+
+	for (auto& it = m_states.begin(); it != m_states.end(); it++) {
+		(*it)->shutdown();
+	}
+	m_states.deleteAll();
+
+	Renderer::shutdown();
 	if (m_window != nullptr) {
 		m_window->shutdown();
 		delete m_window;
 		m_window = nullptr;
 	}
-	Renderer::shutdown();
-	onShutdown();
 }
 
 bool App::onWindowClose(const WindowCloseEvent& event) {

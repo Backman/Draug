@@ -457,6 +457,7 @@ _builds
 _projects
 .projects
 
+!*/Log/
 !build-scripts/genie.exe
 !deps/SDL2/lib/**
 !deps/SDL2_Image/lib/**

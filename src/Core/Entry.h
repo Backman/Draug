@@ -1,16 +1,15 @@
 #pragma once
 
-#include "Core/Core.h"
+#include "Log/Log.h"
+#include "Core/App.h"
 
-#ifdef DRAUG_WINDOWS
-
-extern Draug::App* Draug::createApp();
-
-int main(int argc, char** argv) {
-	Draug::Log::initialize();
-	Draug::App* app = Draug::createApp();
-	app->run();
-	delete app;
+#if DRAUG_WINDOWS
+#define DRAUG_ENTRY(app_class) \
+int main(int argc, const char** argv) { \
+	Draug::Log::initialize(); \
+	app_class* app = new app_class(); \
+	app->run(); \
+	delete app; \
+	return 0; \
 }
-
 #endif

@@ -1,5 +1,5 @@
 #include "SDLWindow.h"
-#include "Core/Log.h"
+#include "Log/Log.h"
 #include "Core/Window/WindowConfig.h"
 #include "Input/InputTypes.h"
 #include <SDL/SDL.h>
@@ -16,6 +16,7 @@ Window* Window::createWindow(const WindowConfig& config) {
 }
 
 bool SDLWindow::initialize(const WindowConfig& config) {
+	m_config = config;
 	if (m_window != nullptr) {
 		DRAUG_CORE_ERROR("Window has already been initialized");
 		return false;

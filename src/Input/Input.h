@@ -3,8 +3,8 @@
 #include "Draug.h"
 #include "Core/Event/Event.h"
 #include "InputTypes.h"
-#include "InputDevice/Keyboard.h"
-#include "InputDevice/Mouse.h"
+#include "InputDevices/Keyboard.h"
+#include "InputDevices/Mouse.h"
 #include "Core/Window/Window.h"
 
 namespace Draug {
