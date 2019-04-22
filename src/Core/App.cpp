@@ -17,13 +17,15 @@ void App::run() {
 	m_running = true;
 	while (m_running) {
 		m_window->update();
-		Renderer::render();
+		Draug::Renderer::beginPass();
 
 		for (auto& it = m_states.begin(); it != m_states.end(); it++) {
 			(*it)->tick();
 		}
-
 		Input::Input::reset();
+
+		Renderer::render();
+		Draug::Renderer::endPass();
 	}
 	shutdown();
 }
@@ -75,17 +77,19 @@ void App::initialize() {
 }
 
 void App::shutdown() {
+	onShutdown();
+
+	for (auto& it = m_states.begin(); it != m_states.end(); it++) {
+		(*it)->shutdown();
+	}
+	m_states.deleteAll();
+
+	Renderer::shutdown();
 	if (m_window != nullptr) {
 		m_window->shutdown();
 		delete m_window;
 		m_window = nullptr;
 	}
-	for (auto& it = m_states.begin(); it != m_states.end(); it++) {
-		(*it)->shutdown();
-	}
-	m_states.deleteAll();
-	Renderer::shutdown();
-	onShutdown();
 }
 
 bool App::onWindowClose(const WindowCloseEvent& event) {

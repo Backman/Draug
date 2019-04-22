@@ -1,29 +1,31 @@
-#pragma once 
+#pragma once
 
 #include "Core/Types.h"
-#include <string>
+#include <bgfx/bgfx.h>
 
-struct SDL_Renderer;
 struct SDL_Window;
 
 namespace Draug {
 struct RendererConfig;
 class Texture;
+class Window;
 struct TextureData;
 
-class SDLRenderer {
+class bgfxRenderer {
 public:
 	void init(const RendererConfig& config);
 	void shutdown();
-	void render();
 
 	void beginPass();
+	void render();
 	void endPass();
 	void draw(const Texture& texture, const int32 x_pos, const int32 y_pos);
 
 	Texture* createTexture(const std::string& path, const TextureData& data);
 private:
-	SDL_Renderer* m_renderer;
-	SDL_Window* m_window;
+
+	Window* m_window;
+	SDL_Window* m_sdl_window;
+	bgfx::ViewId m_view_id;
 };
 }

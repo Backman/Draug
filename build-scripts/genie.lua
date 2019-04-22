@@ -39,6 +39,9 @@ function createProject(_name, _kind, _projectDir, _libs, _includes)
 			"NoExceptions",
 			"NoRTTI",
 		}
+		defines {
+			"DRAUG_BGFX_RENDERER"
+		}
 		files {
 			_projectDir .. "**.h",
 			_projectDir .. "**.cpp",

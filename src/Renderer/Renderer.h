@@ -1,16 +1,24 @@
 #pragma once
 
-#include "Renderer/Texture.h"
+#if DRAUG_SDL_RENDERER
 #include "Renderer/SDL/SDLRenderer.h"
+namespace Draug {
+class RendererImpl : public SDLRenderer {};
+}
+#elif DRAUG_BGFX_RENDERER
+#include "Renderer/bgfx/bgfxRenderer.h"
+namespace Draug {
+class RendererImpl : public bgfxRenderer {};
+}
+#endif
+
+#include "Renderer/Texture.h"
 
 namespace Draug {
 class Window;
 
 struct RendererConfig {
 	Window* window;
-};
-
-class RendererImpl : public SDLRenderer {
 };
 
 class Renderer {

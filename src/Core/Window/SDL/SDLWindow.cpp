@@ -16,6 +16,7 @@ Window* Window::createWindow(const WindowConfig& config) {
 }
 
 bool SDLWindow::initialize(const WindowConfig& config) {
+	m_config = config;
 	if (m_window != nullptr) {
 		DRAUG_CORE_ERROR("Window has already been initialized");
 		return false;
