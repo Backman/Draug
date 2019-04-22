@@ -2,7 +2,7 @@
 VS2019_DEVENV_DIR=C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE
 
 ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
-GENIE = $(ROOT_DIR)/build-scripts/genie.exe
+GENIE = ./build-scripts/genie.exe
 
 PROJECTS_DIR_NAME = .projects
 BUILDS_DIR_NAME = .bin
