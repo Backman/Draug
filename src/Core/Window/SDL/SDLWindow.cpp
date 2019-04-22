@@ -4,28 +4,28 @@
 #include "Input/InputTypes.h"
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
+#include <SDL/SDL_syswm.h>
 
 namespace Draug {
 
 Window* Window::createWindow(const WindowConfig& config) {
 	SDLWindow* window = new SDLWindow();
-	if (window->initialize(config) == false) {
+	if (window->init(config) == false) {
 		delete window;
 		return nullptr;
 	}
 	return window;
 }
 
-bool SDLWindow::initialize(const WindowConfig& config) {
-	m_config = config;
+bool SDLWindow::init(const WindowConfig& config) {
 	if (m_window != nullptr) {
-		DRAUG_CORE_ERROR("Window has already been initialized");
+		DRAUG_LOG_CORE_ERROR("Window has already been initialized");
 		return false;
 	}
 
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
 		SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
-		DRAUG_CORE_ERROR("Failed to initialize SDL window: {0}", SDL_GetError());
+		DRAUG_LOG_CORE_ERROR("Failed to initialize SDL window: {0}", SDL_GetError());
 		return false;
 	}
 
@@ -39,16 +39,33 @@ bool SDLWindow::initialize(const WindowConfig& config) {
 
 	m_window = SDL_CreateWindow(config.title, pos_x, pos_y, config.width, config.height, window_flags);
 	if (m_window == nullptr) {
-		DRAUG_CORE_ERROR("Failed to create SDL window: {0}", SDL_GetError());
+		DRAUG_LOG_CORE_ERROR("Failed to create SDL window: {0}", SDL_GetError());
 		return false;
 	}
 
-	return true;
+	SDL_SysWMinfo wmi;
+	SDL_VERSION(&wmi.version);
+	if (SDL_GetWindowWMInfo(m_window, &wmi) == false) {
+		DRAUG_LOG_CORE_ERROR("Failed to get native window: {0}", SDL_GetError());
+		return false;
+	}
+	m_native_window = wmi.info.win.window;
+	return Window::init(config);
 }
 
 void SDLWindow::shutdown() {
 	SDL_DestroyWindow(m_window);
 	SDL_Quit();
+}
+
+void SDLWindow::beginFrame() {
+	pollEvents();
+}
+
+void SDLWindow::render() {
+}
+
+void SDLWindow::endFrame() {
 }
 
 void SDLWindow::pollEvents() {

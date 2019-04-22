@@ -5,6 +5,7 @@
 #include "AppStateStack.h"
 
 namespace Draug {
+class Renderer;
 class Window;
 struct Event;
 struct WindowCloseEvent;
@@ -24,7 +25,8 @@ public:
 	void addPriorityState(AppState* state);
 	void removePriorityState(AppState* state);
 
-	inline Window* getWindow() { return m_window; }
+	inline Window* const getWindow() { return m_window; }
+	inline Renderer* const getRenderer() { return m_renderer; }
 
 protected:
 	virtual void onInitialize() {}
@@ -40,6 +42,7 @@ private:
 
 	AppStateStack m_states;
 	Window* m_window;
+	Renderer* m_renderer;
 	bool m_running = true;
 };
 }

@@ -1,41 +1,13 @@
 #pragma once
 
-#if DRAUG_SDL_RENDERER
-#include "Renderer/SDL/SDLRenderer.h"
-namespace Draug {
-class RendererImpl : public SDLRenderer {};
-}
-#elif DRAUG_BGFX_RENDERER
-#include "Renderer/bgfx/bgfxRenderer.h"
-namespace Draug {
-class RendererImpl : public bgfxRenderer {};
-}
-#endif
-
-#include "Renderer/Texture.h"
+#include "RenderAPI.h"
+#include "Resources/Texture.h"
 
 namespace Draug {
-class Window;
-struct TextureData;
-
-struct RendererConfig {
-	Window* window;
-};
-
-class Renderer {
+class Renderer : public RenderAPI {
 public:
-	static void init(const RendererConfig& config);
-	static void shutdown();
+	virtual void init(Window* window) override;
 
-	static void beginPass();
-	static void render();
-	static void endPass();
-
-	static void draw(const Texture& texture, const int32 x_pos, const int32 y_pos);
-
-	static Texture* getTexture(const std::string& path, const TextureData& data);
-
-private:
-	static RendererImpl m_impl;
+	TextureManager textures;
 };
 }

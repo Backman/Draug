@@ -84,7 +84,16 @@ group "Deps"
 dofile(BGFX_SCRIPTS_DIR .. "/bgfx.lua")
 dofile(BX_SCRIPTS_DIR .. "/bx.lua")
 dofile(BIMG_SCRIPTS_DIR .. "/bimg.lua")
+dofile(BIMG_SCRIPTS_DIR .. "/bimg_encode.lua")
+dofile(BIMG_SCRIPTS_DIR .. "/bimg_decode.lua")
 bgfxProject("", "StaticLib", {})
+project "bimg_encode"
+	configuration { "vs*", "not asmjs" }
+        buildoptions {
+            "/wd4244", -- warning C4244: '=': conversion from 'int' to 'vtype', possible loss of data
+        }
+
+	configuration {}
 
 group "Draug"
 createProject("Draug", "StaticLib", DRAUG_SRC_DIR, {
@@ -104,6 +113,8 @@ createProject("Draug", "StaticLib", DRAUG_SRC_DIR, {
 	"bgfx",
 	"bx",
 	"bimg",
+	"bimg_encode",
+	"bimg_decode",
 }, {
 	DRAUG_SRC_DIR,
 	SPDLOG_INCLUDE_DIR,
@@ -111,6 +122,7 @@ createProject("Draug", "StaticLib", DRAUG_SRC_DIR, {
 
 	BGFX_INCLUDE_DIR,
 	BX_INCLUDE_DIR,
+	BIMG_INCLUDE_DIR,
 })
 
 group "Playground"
@@ -132,6 +144,8 @@ createProject("DraugPlayground", "ConsoleApp", DRAUG_PLAYGROUND_SRC_DIR, {
 	"bgfx",
 	"bx",
 	"bimg",
+	"bimg_encode",
+	"bimg_decode",
 },{
 	DRAUG_PLAYGROUND_SRC_DIR,
 	DRAUG_SRC_DIR,
@@ -140,6 +154,7 @@ createProject("DraugPlayground", "ConsoleApp", DRAUG_PLAYGROUND_SRC_DIR, {
 
 	BGFX_INCLUDE_DIR,
 	BX_INCLUDE_DIR,
+	BIMG_INCLUDE_DIR,
 })
 
 postbuildcommands {

@@ -16,8 +16,9 @@ function draugToolchain(_buildDir, _projDir, _libDir)
 	if (_ACTION == nil) then return false end
 	defines {
 		"SDL_MAIN_HANDLED",
-		"ENTRY_CONFIG_USE_SDL=1",
+		"__STDC_LIMIT_MACROS",
 		"__STDC_FORMAT_MACROS",
+		"__STDC_CONSTANT_MACROS",
 		"_CRT_SECURE_NO_WARNINGS",
 	}
 	setBxCompat()
@@ -27,6 +28,7 @@ function draugToolchain(_buildDir, _projDir, _libDir)
 		defines {
 			"DEBUG",
 			"_DEBUG",
+			"DRAUG_DEBUG",
 			"BGFX_CONFIG_DEBUG=1",
 		}
 		flags {
@@ -34,7 +36,7 @@ function draugToolchain(_buildDir, _projDir, _libDir)
 		}
 	configuration { "Release" }
 		defines {
-			"NDEBUG"
+			"NDEBUG",
 		}
 		flags {
 			"Optimize"

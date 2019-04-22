@@ -13,29 +13,38 @@ public:
 	Window(const Window& other) = delete;
 	virtual ~Window() = default;
 
-	virtual bool initialize(const WindowConfig& config) = 0;
+	inline virtual bool init(const WindowConfig& config) {
+		m_id = s_id_counter++;
+		m_config = config;
+		return true;
+	}
 	virtual void shutdown() = 0;
 
-	void update();
+	virtual void beginFrame() = 0;
+	virtual void render() = 0;
+	virtual void endFrame() = 0;
 
 	EventCallbackId subscribeEvent(EventCallback callback);
-	void unsibscribEvent(EventCallbackId id);
+	void unsubscribEvent(EventCallbackId id);
 	inline EventDispatcher* getEventDispatcher() { return &m_event_dispatcher; }
 
-	virtual void* getNativeWindow() = 0;
+	inline void* getNativeWindow() { return m_native_window; }
 
 	inline uint32 getWidth() const { return m_config.width; }
 	inline uint32 getHeight() const { return m_config.height; }
 	inline const char* getTitle() const { return m_config.title; }
 	inline bool isFullscreen() const { return m_config.fullscreen; }
 
-protected:
-	virtual void pollEvents() = 0;
-	void dispatchEvent(const Event& event);
+	inline uint16 getWindowId() const { return m_id; }
 
 protected:
-	WindowConfig m_config;
+	void dispatchEvent(const Event& event);
+protected:
+	void* m_native_window;
 private:
+	WindowConfig m_config;
 	EventDispatcher m_event_dispatcher;
+	uint16 m_id;
+	static uint16 s_id_counter;
 };
 }

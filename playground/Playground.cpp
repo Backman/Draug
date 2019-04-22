@@ -5,7 +5,7 @@
 #include <Core/App.h>
 #include <Core/Window/Window.h>
 #include <Core/Event/Event.h>
-#include <Renderer/Texture.h>
+#include <Renderer/Resources/Texture.h>
 #include <Renderer/Renderer.h>
 #include <ECS/Scene.h>
 #include <ECS/System.h>
@@ -68,7 +68,6 @@ public:
 		for (auto e : mgr->entities<PositionComponent, TextureComponent>()) {
 			auto& pos = scene->getComponent<PositionComponent>(e);
 			auto& texture = scene->getComponent<TextureComponent>(e);
-			Draug::Renderer::draw(*texture.texture, pos.x, pos.y);
 		}
 	}
 };
@@ -86,8 +85,11 @@ public:
 
 		auto e = scene.createEntity();
 		scene.addComponent<PositionComponent>(e, rand() % 1024, rand() % 720);
-		scene.addComponent<TextureComponent>(e, Draug::Renderer::getTexture(".\\Assets\\test.png", Draug::TextureData()));
+		scene.addComponent<TextureComponent>(e, nullptr);
 		scene.addComponent<PlayerComponent>(e);
+
+		Draug::Texture* test = context.app->getRenderer()->textures.load("D:/workspace/cpp/Draug/.projects/vs2017/Assets", "test.png");
+		Draug::uint32 w = test->width;
 	}
 
 	inline void shutdown() override {

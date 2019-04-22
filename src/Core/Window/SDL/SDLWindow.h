@@ -6,15 +6,14 @@
 namespace Draug {
 class SDLWindow : public Window {
 public:
-	bool initialize(const WindowConfig& config) override;
+	bool init(const WindowConfig& config) override;
 	void shutdown() override;
 
-	void* getNativeWindow() { return m_window; }
-
-protected:
-	void pollEvents() override;
-
+	void beginFrame() override;
+	void render() override;
+	void endFrame() override;
 private:
+	void pollEvents();
 	SDL_Window* m_window;
 };
 }

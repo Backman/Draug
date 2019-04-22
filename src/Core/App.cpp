@@ -16,16 +16,15 @@ void App::run() {
 	initialize();
 	m_running = true;
 	while (m_running) {
-		m_window->update();
-		Draug::Renderer::beginPass();
+		m_renderer->beginFrame();
 
 		for (auto& it = m_states.begin(); it != m_states.end(); it++) {
 			(*it)->tick();
 		}
 		Input::Input::reset();
 
-		Renderer::render();
-		Draug::Renderer::endPass();
+		m_renderer->renderFrame();
+		m_renderer->endFrame();
 	}
 	shutdown();
 }
@@ -65,14 +64,12 @@ void App::initialize() {
 	s_instance = this;
 	WindowConfig window_config = WindowConfig::createWindowed("Draug", 0, 0, 1024, 720);
 	m_window = Window::createWindow(window_config);
-	m_window->subscribeEvent(BIND_FN(App, onEvent));
+	m_renderer = new Renderer();
+	m_renderer->init(m_window);
 
 	Input::Input::init(m_window);
 
-	RendererConfig renderer_config;
-	renderer_config.window = m_window;
-	Renderer::init(renderer_config);
-
+	m_window->subscribeEvent(BIND_FN(App, onEvent));
 	onInitialize();
 }
 
@@ -84,12 +81,11 @@ void App::shutdown() {
 	}
 	m_states.deleteAll();
 
-	Renderer::shutdown();
-	if (m_window != nullptr) {
-		m_window->shutdown();
-		delete m_window;
-		m_window = nullptr;
-	}
+	m_renderer->shutdown();
+	m_window->shutdown();
+
+	delete m_renderer;
+	delete m_window;
 }
 
 bool App::onWindowClose(const WindowCloseEvent& event) {

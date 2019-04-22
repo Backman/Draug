@@ -2,15 +2,13 @@
 
 namespace Draug {
 
-void Window::update() {
-	pollEvents();
-}
+uint16 Window::s_id_counter = 0;
 
 EventCallbackId Window::subscribeEvent(EventCallback callback) {
 	return m_event_dispatcher.subscribe(callback);
 }
 
-void Window::unsibscribEvent(EventCallbackId id) {
+void Window::unsubscribEvent(EventCallbackId id) {
 	m_event_dispatcher.unsubscribe(id);
 }
 
