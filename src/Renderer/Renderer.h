@@ -16,6 +16,7 @@ class RendererImpl : public bgfxRenderer {};
 
 namespace Draug {
 class Window;
+struct TextureData;
 
 struct RendererConfig {
 	Window* window;
@@ -32,7 +33,7 @@ public:
 
 	static void draw(const Texture& texture, const int32 x_pos, const int32 y_pos);
 
-	static Texture* getTexture(const std::string& path, const TextureData& data = TextureData());
+	static Texture* getTexture(const std::string& path, const TextureData& data);
 
 private:
 	static RendererImpl m_impl;

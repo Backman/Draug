@@ -2,7 +2,6 @@
 
 #include "Draug.h"
 #include "Core/Types.h"
-#include "Draug.h"
 #include <spdlog/logger.h>
 
 namespace spdlog {

@@ -329,6 +329,8 @@ void bgfxRenderer::draw(const Texture& texture, const int32 x_pos, const int32 y
 }
 
 Texture* bgfxRenderer::createTexture(const std::string& path, const TextureData& data) {
-	return nullptr;
+	Texture* texture = nullptr;
+
+	return texture;
 }
 }

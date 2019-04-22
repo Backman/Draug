@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Draug.h"
-#include "Resources/ResourceManager.h"
 #include "AppState.h"
 #include "AppStateStack.h"
 

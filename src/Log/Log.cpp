@@ -1,4 +1,3 @@
-#include "Draug.h"
 #include "Log.h"
 #include <iostream>
 #include <spdlog/sinks/stdout_color_sinks.h>

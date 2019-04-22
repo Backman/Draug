@@ -5,7 +5,6 @@
 #include <Core/App.h>
 #include <Core/Window/Window.h>
 #include <Core/Event/Event.h>
-#include <Core/Resources/ResourceLoader.h>
 #include <Renderer/Texture.h>
 #include <Renderer/Renderer.h>
 #include <ECS/Scene.h>
@@ -87,7 +86,7 @@ public:
 
 		auto e = scene.createEntity();
 		scene.addComponent<PositionComponent>(e, rand() % 1024, rand() % 720);
-		scene.addComponent<TextureComponent>(e, Draug::Renderer::getTexture(".\\Assets\\test.png"));
+		scene.addComponent<TextureComponent>(e, Draug::Renderer::getTexture(".\\Assets\\test.png", Draug::TextureData()));
 		scene.addComponent<PlayerComponent>(e);
 	}
 

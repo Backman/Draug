@@ -2,7 +2,6 @@
 #include "Core/Window/Window.h"
 #include "Core/Window/SDL/SDLWindow.h"
 #include "Renderer/Renderer.h"
-#include "Renderer/Texture.h"
 #include "Log/Log.h"
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>

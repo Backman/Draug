@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Draug.h"
+#include "Core/Types.h"
 
 namespace Draug {
 class AppState;

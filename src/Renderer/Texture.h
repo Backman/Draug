@@ -1,8 +1,5 @@
 #pragma once
 
-
-#include "SDL/SDLTexture.h"
-
 namespace Draug {
 
 struct TextureFormat {
@@ -28,8 +25,17 @@ struct TextureData {
 	uint32 width = 0;
 	uint32 height = 0;
 };
+}
 
+//#if DRAUG_SDL_RENDERER
+#include "SDL/SDLTexture.h"
+namespace Draug {
 class Texture : public SDLTexture {
+//#elif DRAUG_BGFX_RENDERER
+//#include "bgfx/bgfxTexture.h"
+//namespace Draug {
+//class Texture : public bgfxTexture {
+//#endif
 public:
 	TextureData data;
 };
