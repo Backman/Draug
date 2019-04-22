@@ -19,6 +19,8 @@ void App::run() {
 		m_window->update();
 		Draug::Renderer::beginPass();
 
+		Draug::Renderer::beginPass();
+
 		for (auto& it = m_states.begin(); it != m_states.end(); it++) {
 			(*it)->tick();
 		}

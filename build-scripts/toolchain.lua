@@ -85,6 +85,7 @@ function draugToolchain(_buildDir, _projDir, _libDir)
 		links { 
 			"user32",
 			"kernel32",
+			"opengl32",
 			"gdi32",
 			"opengl32",
 			"imm32",
@@ -94,6 +95,7 @@ function draugToolchain(_buildDir, _projDir, _libDir)
 		}
 		defines {
 			"DRAUG_WINDOWS",
+			"SDL_MAIN_HANDLED",
 			"NOMINMAX",
 		}
 

@@ -24,11 +24,12 @@ struct RendererConfig {
 class Renderer {
 public:
 	static void init(const RendererConfig& config);
-	static void render();
 	static void shutdown();
 
 	static void beginPass();
+	static void render();
 	static void endPass();
+
 	static void draw(const Texture& texture, const int32 x_pos, const int32 y_pos);
 
 	static Texture* getTexture(const std::string& path, const TextureData& data = TextureData());
