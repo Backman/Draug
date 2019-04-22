@@ -1,15 +1,44 @@
+function setBxCompat()
+	configuration { "vs*" }
+		includedirs {
+			path.join(BX_INCLUDE_DIR, "compat/msvc")
+		}
+	configuration { "windows", "gmake*" }
+		includedirs {
+			path.join(BX_INCLUDE_DIR, "compat/mingw")
+		}
+	configuration {}
+end
+
 
 function draugToolchain(_buildDir, _projDir, _libDir)
 
 	if (_ACTION == nil) then return false end
+	defines {
+		"SDL_MAIN_HANDLED",
+		"ENTRY_CONFIG_USE_SDL=1",
+		"__STDC_FORMAT_MACROS",
+		"_CRT_SECURE_NO_WARNINGS",
+	}
+	setBxCompat()
 
 	location (path.join(_projDir, _ACTION))
 	configuration { "Debug" }
-		defines { "DEBUG", "_DEBUG" }
-		flags { "Symbols" }
+		defines {
+			"DEBUG",
+			"_DEBUG",
+			"BGFX_CONFIG_DEBUG=1",
+		}
+		flags {
+			"Symbols"
+		}
 	configuration { "Release" }
-		defines { "NDEBUG" }
-		flags { "Optimize" }
+		defines {
+			"NDEBUG"
+		}
+		flags {
+			"Optimize"
+		}
 
 	configuration { "Debug", "x64" }
 		local output_dir = path.join(_buildDir, "x64_" .. _ACTION, "Debug")
@@ -45,7 +74,9 @@ function draugToolchain(_buildDir, _projDir, _libDir)
         }
 
 	configuration { "x64", "vs*" }
-		defines { "_WIN64" }
+		defines { 
+			"_WIN64"
+		}
         libdirs {
             "$(DXSDK_DIR)/lib/x64",
 		}
@@ -53,7 +84,9 @@ function draugToolchain(_buildDir, _projDir, _libDir)
 	configuration "windows"
 		links { 
 			"user32",
+			"kernel32",
 			"gdi32",
+			"opengl32",
 			"imm32",
 			"version",
 			"psapi",

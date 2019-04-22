@@ -18,10 +18,27 @@ SDL_IMAGE_DIR = path.join(DEPS_DIR, "SDL2_Image/")
 SDL_IMAGE_INCLUDE_DIR = path.join(SDL_IMAGE_DIR, "include/")
 SDL_IMAGE_LIB_DIR = path.join(SDL_IMAGE_DIR, "lib/")
 
+BGFX_DIR = path.join(DEPS_DIR, "bgfx/")
+BGFX_SCRIPTS_DIR = path.join(BGFX_DIR, "scripts/")
+BGFX_INCLUDE_DIR = path.join(BGFX_DIR, "include/")
+
+BX_DIR = path.join(DEPS_DIR, "bx/")
+BX_SCRIPTS_DIR = path.join(BX_DIR, "scripts/")
+BX_INCLUDE_DIR = path.join(BX_DIR, "include/")
+
+BIMG_DIR = path.join(DEPS_DIR, "bimg/")
+BIMG_SCRIPTS_DIR = path.join(BIMG_DIR, "scripts/")
+BIMG_INCLUDE_DIR = path.join(BIMG_DIR, "include/")
+
 function createProject(_name, _kind, _projectDir, _libs, _includes) 
 	project (_name)
 		uuid (os.uuid(_name))
 		kind (_kind)
+		language "C++"
+		flags {
+			"NoExceptions",
+			"NoRTTI",
+		}
 		files {
 			_projectDir .. "**.h",
 			_projectDir .. "**.cpp",
@@ -38,6 +55,8 @@ function createProject(_name, _kind, _projectDir, _libs, _includes)
 				_dir
 			}
 		end
+
+		configuration {}
 end
 
 -- Required for bgfx
@@ -58,6 +77,12 @@ solution "Draug"
 dofile "toolchain.lua"
 draugToolchain(BUILD_DIR, PROJECT_DIR, DEPS_DIR)
 
+group "Deps"
+dofile(BGFX_SCRIPTS_DIR .. "/bgfx.lua")
+dofile(BX_SCRIPTS_DIR .. "/bx.lua")
+dofile(BIMG_SCRIPTS_DIR .. "/bimg.lua")
+bgfxProject("", "StaticLib", {})
+
 group "Draug"
 createProject("Draug", "StaticLib", DRAUG_SRC_DIR, {
 	"SDL2",
@@ -72,10 +97,17 @@ createProject("Draug", "StaticLib", DRAUG_SRC_DIR, {
 	"tiffxx",
 	"turbojpeg",
 	"zlib",
+
+	"bgfx",
+	"bx",
+	"bimg",
 }, {
 	DRAUG_SRC_DIR,
 	SPDLOG_INCLUDE_DIR,
 	SDL_INCLUDE_DIR,
+
+	BGFX_INCLUDE_DIR,
+	BX_INCLUDE_DIR,
 })
 
 group "Playground"
@@ -93,11 +125,18 @@ createProject("DraugPlayground", "ConsoleApp", DRAUG_PLAYGROUND_SRC_DIR, {
 	"tiffxx",
 	"turbojpeg",
 	"zlib",
+
+	"bgfx",
+	"bx",
+	"bimg",
 },{
 	DRAUG_PLAYGROUND_SRC_DIR,
 	DRAUG_SRC_DIR,
 	SPDLOG_INCLUDE_DIR,
 	SDL_INCLUDE_DIR,
+
+	BGFX_INCLUDE_DIR,
+	BX_INCLUDE_DIR,
 })
 
 postbuildcommands {
