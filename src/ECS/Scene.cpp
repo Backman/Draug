@@ -30,7 +30,7 @@ void Scene::update() {
 Entity Scene::createEntity() {
 	return m_entity_mgr->create();
 }
-void Scene::createEntities(uint32 count) {
+void Scene::createEntities(int count) {
 	m_entity_mgr->create(count);
 }
 }

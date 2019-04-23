@@ -8,7 +8,7 @@
 
 namespace Draug {
 namespace bgfxUtils {
-void* load(bx::FileReaderI* reader, bx::AllocatorI* allocator, const std::string& path, uint32* size) {
+void* load(bx::FileReaderI* reader, bx::AllocatorI* allocator, const std::string& path, uint32_t* size) {
 	bx::Error error;
 	if (bx::open(reader, path.c_str(), &error) == false) {
 		if (size != nullptr) {
@@ -18,7 +18,7 @@ void* load(bx::FileReaderI* reader, bx::AllocatorI* allocator, const std::string
 		return nullptr;
 	}
 
-	uint32 read_size = (uint32)bx::getSize(reader);
+	uint32_t read_size = (uint32_t)bx::getSize(reader);
 	void* data = BX_ALLOC(allocator, read_size);
 	error.reset();
 	bx::read(reader, data, read_size, &error);
@@ -46,8 +46,8 @@ void releaseBgfxImage(void* ptr, void* data) {
 	bimg::imageFree(image);
 }
 
-bgfx::TextureHandle loadTexture(bx::FileReaderI& reader, bx::AllocatorI& allocator, const std::string& path, uint64 flags, bgfx::TextureInfo* info) {
-	uint32 size;
+bgfx::TextureHandle loadTexture(bx::FileReaderI& reader, bx::AllocatorI& allocator, const std::string& path, uint64_t flags, bgfx::TextureInfo* info) {
+	uint32_t size;
 	void* data = bgfxUtils::load(&reader, &allocator, path, &size);
 	if (data == nullptr) {
 		return BGFX_INVALID_HANDLE;
@@ -55,7 +55,7 @@ bgfx::TextureHandle loadTexture(bx::FileReaderI& reader, bx::AllocatorI& allocat
 	return loadTexture(allocator, path, data, size, flags, info);
 }
 
-bgfx::TextureHandle loadTexture(bx::AllocatorI& allocator, const std::string& name, void* data, uint32 size, uint64 flags, bgfx::TextureInfo* info) {
+bgfx::TextureHandle loadTexture(bx::AllocatorI& allocator, const std::string& name, void* data, uint32_t size, uint64_t flags, bgfx::TextureInfo* info) {
 	bx::Error error;
 	bimg::ImageContainer* image = bimg::imageParse(&allocator, data, size);
 	bgfxUtils::unload(&allocator, data);

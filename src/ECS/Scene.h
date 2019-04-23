@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Draug.h"
-#include "Core/Types.h"
 #include "System.h"
 #include "EntityManager.h"
 
@@ -29,10 +28,10 @@ public:
 		return m_entity_mgr->create<T>(args...);
 	}
 
-	void createEntities(uint32 count);
+	void createEntities(int count);
 
 	template<typename T, typename... Args>
-	inline void createEntities(uint32 count, Args&& ... args) {
+	inline void createEntities(int count, Args&& ... args) {
 	}
 
 	template<typename T, typename... Args>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/Types.h"
+#include "Draug.h"
 #include "ResourceManager.h"
 #include <bgfx/bgfx.h>
 #include <bx/bx.h>
@@ -18,10 +18,10 @@ public:
 
 	bgfx::TextureHandle handle;
 	std::string name;
-	uint32 width;
-	uint32 height;
+	uint16_t width;
+	uint16_t height;
 	bgfx::TextureFormat::Enum format;
-	uint32 storage_size;
+	uint32_t storage_size;
 	std::string path;
 };
 

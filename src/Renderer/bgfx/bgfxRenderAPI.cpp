@@ -35,7 +35,7 @@ void bgfxRendererAPI::shutdown() {
 void bgfxRendererAPI::beginFrame() {
 	bgfx::touch(m_window->getWindowId());
 	bgfx::setViewClear(m_window->getWindowId(), BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x303030ff, 1.0f, 0);
-	bgfx::setViewRect(m_window->getWindowId(), 0, 0, (uint16)m_window->getWidth(), (uint16)m_window->getHeight());
+	bgfx::setViewRect(m_window->getWindowId(), 0, 0, (uint16_t)m_window->getWidth(), (uint16_t)m_window->getHeight());
 	m_window->beginFrame();
 }
 

@@ -12,21 +12,21 @@ struct DRAUG_API Component {
 		return id;
 	}
 
-	static inline TComponent& getInstance(const uint64 index) {
+	static inline TComponent& getInstance(const size_t index) {
 		ComponentId id = Component<TComponent>::getId();
 		validateComponent(id, index);
 		return s_component_pool[id][index];
 	}
 
 	template<typename... Args>
-	static inline TComponent& createInstance(const uint64 index, Args&& ... args) {
+	static inline TComponent& createInstance(const size_t index, Args&& ... args) {
 		ComponentId id = Component<TComponent>::getId();
 		validateComponent(id, index);
 		s_component_pool[id][index] = TComponent{ std::forward<Args>(args)... };
 		return s_component_pool[id][index];
 	}
 private:
-	static inline void validateComponent(const ComponentId id, const uint64 index) {
+	static inline void validateComponent(const ComponentId id, const size_t index) {
 		if (s_component_pool.find(id) == s_component_pool.end()) {
 			s_component_pool[id] = std::vector<TComponent>();
 		}

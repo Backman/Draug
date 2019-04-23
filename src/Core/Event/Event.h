@@ -2,7 +2,6 @@
 
 
 #include "Draug.h"
-#include "Core/Types.h"
 
 namespace Draug {
 
@@ -40,7 +39,7 @@ private:
 };
 
 using EventCallback = std::function<void(const Event&)>;
-typedef uint32 EventCallbackId;
+typedef int EventCallbackId;
 
 class EventDispatcher {
 public:
@@ -66,8 +65,8 @@ private:
 };
 
 struct WindowResizeEvent : Event {
-	uint32 width;
-	uint32 height;
+	int width;
+	int height;
 
 	DRAUG_EVENT_CLASS(EventType::WindowResized)
 };

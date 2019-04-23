@@ -29,15 +29,15 @@ bool SDLWindow::init(const WindowConfig& config) {
 		return false;
 	}
 
-	uint32 window_flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL;
+	uint32_t window_flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL;
 	if (config.fullscreen) {
 		window_flags |= SDL_WINDOW_FULLSCREEN;
 	}
 
-	uint32 pos_x = config.pos_x == 0 ? SDL_WINDOWPOS_UNDEFINED : config.pos_x;
-	uint32 pos_y = config.pos_y == 0 ? SDL_WINDOWPOS_UNDEFINED : config.pos_y;
+	int x_pos = config.x_pos == 0 ? SDL_WINDOWPOS_UNDEFINED : config.x_pos;
+	int y_pos = config.y_pos == 0 ? SDL_WINDOWPOS_UNDEFINED : config.y_pos;
 
-	m_window = SDL_CreateWindow(config.title, pos_x, pos_y, config.width, config.height, window_flags);
+	m_window = SDL_CreateWindow(config.title, x_pos, y_pos, config.width, config.height, window_flags);
 	if (m_window == nullptr) {
 		DRAUG_LOG_CORE_ERROR("Failed to create SDL window: {0}", SDL_GetError());
 		return false;

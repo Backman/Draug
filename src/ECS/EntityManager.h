@@ -9,8 +9,8 @@ namespace ECS {
 struct DRAUG_API Entity {
 public:
 	EntityId id;
-	inline uint64 index() const { return id & details::ENTITY_INDEX_MASK; }
-	inline uint64 generation() const { return (id >> details::ENTITY_INDEX_BITS) & details::ENTITY_GENERATION_MASK; }
+	inline size_t index() const { return id & details::ENTITY_INDEX_MASK; }
+	inline size_t generation() const { return (id >> details::ENTITY_INDEX_BITS) & details::ENTITY_GENERATION_MASK; }
 };
 
 class DRAUG_API EntityManager {
@@ -25,7 +25,7 @@ public:
 
 			EntityManager* entity_mgr;
 			ComponentMask component_mask;
-			uint64 index;
+			size_t index;
 
 			bool operator==(const Iterator& rhs) const { return index == rhs.index; }
 			bool operator!=(const Iterator& rhs) const { return (*this == rhs) == false; }
@@ -61,7 +61,7 @@ public:
 	}
 
 	inline Entity create() {
-		uint64 index;
+		size_t index;
 		if (m_free_list.empty() == false) {
 			index = m_free_list.back();
 			m_free_list.pop_back();
@@ -84,27 +84,27 @@ public:
 		return e;
 	}
 
-	inline void create(uint32 count) {
+	inline void create(int count) {
 		for (size_t i = 0; i < count; i++) {
 			create();
 		}
 	}
 
 	template<typename T, typename... Args>
-	inline void create(uint32 count, Args && ... args) {
+	inline void create(int count, Args && ... args) {
 		for (size_t i = 0; i < count; i++) {
 			create<T>(args...);
 		}
 	}
 
 	inline void destroy(const Entity & e) {
-		const uint64 index = e.index();
+		const size_t index = e.index();
 		m_generations[index]++;
 		m_free_list.emplace_back(index);
 	}
 
 	inline bool isAlive(const Entity & e) const {
-		const uint64 index = e.index();
+		const size_t index = e.index();
 		return index < m_generations.size() && m_generations[index] == e.generation();
 	}
 
@@ -158,13 +158,13 @@ public:
 		return EntityCollection{ this, getComponentMask<TComponents...>() };
 	}
 private:
-	inline Entity create(uint64 index) {
+	inline Entity create(size_t index) {
 		return Entity{ index | (m_generations[index] << details::ENTITY_INDEX_BITS) };
 	}
 
-	std::vector<uint64> m_entities;
-	std::vector<uint64> m_generations;
-	std::vector<uint64> m_free_list;
+	std::vector<size_t> m_entities;
+	std::vector<size_t> m_generations;
+	std::vector<size_t> m_free_list;
 	std::vector<ComponentMask> m_component_masks;
 };
 }

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Draug.h"
-#include "Core/Types.h"
 #include <spdlog/logger.h>
 
 namespace spdlog {
@@ -19,7 +18,7 @@ public:
 
 	static void addLogger(std::shared_ptr<spdlog::logger> logger);
 	static std::shared_ptr<spdlog::logger> getLogger(const std::string& name);
-	static uint32 getLoggerCount();
+	static int getLoggerCount();
 
 	static std::shared_ptr<spdlog::logger> createLogger(const std::string& name, spdlog::level::level_enum log_level);
 

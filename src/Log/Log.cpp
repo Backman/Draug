@@ -28,7 +28,7 @@ std::shared_ptr<spdlog::logger> Log::getLogger(const std::string& name) {
 	return s_loggers[name];
 }
 
-uint32 Log::getLoggerCount() {
+int Log::getLoggerCount() {
 	return s_loggers.size();
 }
 

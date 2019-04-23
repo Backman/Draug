@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/Types.h"
+#include "Draug.h"
 #include "Core/Event/Event.h"
 #include <SDL/SDL_scancode.h>
 
@@ -8,7 +8,7 @@ namespace Draug {
 namespace Input {
 
 struct MouseButton {
-	enum Code : uint8 {
+	enum Code : uint8_t {
 		Left = 0,
 		Right,
 		Middle,
@@ -184,16 +184,16 @@ struct MouseEvent : public Event {
 
 	MouseButton::Code button = MouseButton::Invalid;
 
-	int32 x_scroll;
-	int32 y_scroll;
+	int x_scroll;
+	int y_scroll;
 
-	int32 x_pos;
-	int32 y_pos;
+	int x_pos;
+	int y_pos;
 
-	int32 x_move;
-	int32 y_move;
+	int x_move;
+	int y_move;
 
-	inline static MouseEvent createButtonEvent(Type type, MouseButton::Code button, int32 x_pos, int32 y_pos) {
+	inline static MouseEvent createButtonEvent(Type type, MouseButton::Code button, int x_pos, int y_pos) {
 		MouseEvent e;
 		e.type = type;
 		e.button = button;
@@ -203,7 +203,7 @@ struct MouseEvent : public Event {
 		return e;
 	}
 
-	inline static MouseEvent createMoveEvent(int32 x_move, int32 y_move, int32 x_pos, int32 y_pos) {
+	inline static MouseEvent createMoveEvent(int x_move, int y_move, int x_pos, int y_pos) {
 		MouseEvent e;
 		e.type = Type::Move;
 		e.x_move = x_move;
@@ -213,7 +213,7 @@ struct MouseEvent : public Event {
 		return e;
 	}
 
-	inline static MouseEvent createScrollEvent(int32 x_scroll, int32 y_scroll) {
+	inline static MouseEvent createScrollEvent(int x_scroll, int y_scroll) {
 		MouseEvent e;
 		e.type = Type::Scroll;
 		x_scroll = x_scroll;

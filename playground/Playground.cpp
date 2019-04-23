@@ -29,7 +29,7 @@ struct PlayerComponent {
 
 class MoveSystem : public Draug::ECS::System {
 public:
-	virtual void tick(Draug::ECS::Scene* scene, Draug::float32 dt) {
+	virtual void tick(Draug::ECS::Scene* scene, float dt) {
 		auto mgr = scene->getEntityMgr();
 		for (auto e : mgr->entities<PositionComponent, PlayerComponent>()) {
 			auto& pos = scene->getComponent<PositionComponent>(e);
@@ -63,7 +63,7 @@ public:
 
 class RenderSystem : public Draug::ECS::System {
 public:
-	virtual void tick(Draug::ECS::Scene* scene, Draug::float32 dt) {
+	virtual void tick(Draug::ECS::Scene* scene, float dt) {
 		auto mgr = scene->getEntityMgr();
 		for (auto e : mgr->entities<PositionComponent, TextureComponent>()) {
 			auto& pos = scene->getComponent<PositionComponent>(e);
@@ -89,7 +89,6 @@ public:
 		scene.addComponent<PlayerComponent>(e);
 
 		Draug::Texture* test = context.app->getRenderer()->textures.load("D:/workspace/cpp/Draug/.projects/vs2017/Assets", "test.png");
-		Draug::uint32 w = test->width;
 	}
 
 	inline void shutdown() override {

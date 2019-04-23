@@ -2,7 +2,7 @@
 
 namespace Draug {
 
-uint16 Window::s_id_counter = 0;
+uint16_t Window::s_id_counter = 0;
 
 EventCallbackId Window::subscribeEvent(EventCallback callback) {
 	return m_event_dispatcher.subscribe(callback);

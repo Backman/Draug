@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Draug.h"
-#include "Core/Types.h"
 
 namespace Draug {
 class AppState;
@@ -69,6 +68,6 @@ private:
 	}
 
 	std::vector<AppState*> m_states;
-	uint32 m_state_index = 0;
+	int m_state_index = 0;
 };
 }

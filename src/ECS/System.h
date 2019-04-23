@@ -8,7 +8,7 @@ class Scene;
 class DRAUG_API System {
 public:
 	virtual void init(Scene* scene) {}
-	virtual void tick(Scene* scene, float32 dt) {}
+	virtual void tick(Scene* scene, float dt) {}
 	virtual void shutdown(Scene* scene) {}
 };
 
@@ -36,7 +36,7 @@ public:
 		return addSystem(s);
 	}
 
-	void tick(Scene* scene, float32 dt) {
+	void tick(Scene* scene, float dt) {
 		for (size_t i = 0; i < m_systems.size(); i++) {
 			m_systems[i]->tick(scene, dt);
 		}

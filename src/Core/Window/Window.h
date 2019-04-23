@@ -30,12 +30,12 @@ public:
 
 	inline void* getNativeWindow() { return m_native_window; }
 
-	inline uint32 getWidth() const { return m_config.width; }
-	inline uint32 getHeight() const { return m_config.height; }
+	inline int getWidth() const { return m_config.width; }
+	inline int getHeight() const { return m_config.height; }
 	inline const char* getTitle() const { return m_config.title; }
 	inline bool isFullscreen() const { return m_config.fullscreen; }
 
-	inline uint16 getWindowId() const { return m_id; }
+	inline uint16_t getWindowId() const { return m_id; }
 
 protected:
 	void dispatchEvent(const Event& event);
@@ -44,7 +44,7 @@ protected:
 private:
 	WindowConfig m_config;
 	EventDispatcher m_event_dispatcher;
-	uint16 m_id;
-	static uint16 s_id_counter;
+	uint16_t m_id;
+	static uint16_t s_id_counter;
 };
 }

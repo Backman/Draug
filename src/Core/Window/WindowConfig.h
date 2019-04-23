@@ -1,28 +1,28 @@
 #pragma once
 
-#include "Core/Types.h"
+#include "Draug.h"
 
 namespace Draug {
 struct WindowConfig {
 	const char* title;
-	uint32 pos_x = 0;
-	uint32 pos_y = 0;
-	uint32 width = 1024;
-	uint32 height = 720;
+	int x_pos = 0;
+	int y_pos = 0;
+	unsigned int width = 1024;
+	unsigned int height = 720;
 	bool fullscreen = false;
 
-	inline static WindowConfig createWindowed(const char* title, const uint32 pos_x, uint32 pos_y, const uint32 width, const uint32 height) {
+	inline static WindowConfig createWindowed(const char* title, const int x_pos, const int y_pos, const unsigned int width, const unsigned int height) {
 		WindowConfig config;
 		config.title = title;
-		config.pos_x = pos_x;
-		config.pos_y = pos_y;
+		config.x_pos = x_pos;
+		config.y_pos = y_pos;
 		config.width = width;
 		config.height = height;
 		config.fullscreen = false;
 		return config;
 	}
 
-	inline static WindowConfig createFullscreen(const char* title, const uint32 width, const uint32 height) {
+	inline static WindowConfig createFullscreen(const char* title, const unsigned int width, const unsigned int height) {
 		WindowConfig config = createWindowed(title, 0, 0, width, height);
 		config.fullscreen = true;
 		return config;
