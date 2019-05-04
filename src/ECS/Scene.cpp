@@ -1,5 +1,5 @@
 #include "Scene.h"
-#include "Core/App.h"
+#include "Core/App/App.h"
 
 namespace Draug {
 namespace ECS {

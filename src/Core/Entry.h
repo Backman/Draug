@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Log/Log.h"
-#include "Core/App.h"
+#include "Core/App/App.h"
 
 #if DRAUG_WINDOWS
 #define DRAUG_ENTRY(app_class) \

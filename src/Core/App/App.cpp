@@ -1,7 +1,7 @@
 #include "App.h"
 #include "Renderer/Renderer.h"
-#include "Window/Window.h"
-#include "Window/WindowConfig.h"
+#include "Core/Window/Window.h"
+#include "Core/Window/WindowConfig.h"
 #include "Input/Input.h"
 
 namespace Draug {
@@ -54,7 +54,8 @@ void App::removePriorityState(AppState* state) {
 void App::onEvent(const Event& event) {
 	Event::dispatch<WindowCloseEvent>(event, BIND_FN(App, onWindowClose));
 	for (auto it = m_states.end(); it != m_states.begin();) {
-		if ((*--it)->onEvent(event)) {
+		Draug::AppState* state = *--it;
+		if (state->onEvent(event)) {
 			break;
 		}
 	}

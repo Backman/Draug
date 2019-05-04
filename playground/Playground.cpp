@@ -2,7 +2,7 @@
 #include <Core/Entry.h>
 #include <iostream>
 #include <Log/Log.h>
-#include <Core/App.h>
+#include <Core/App/App.h>
 #include <Core/Window/Window.h>
 #include <Core/Event/Event.h>
 #include <Renderer/Resources/Texture.h>
