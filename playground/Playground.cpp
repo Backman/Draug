@@ -79,27 +79,46 @@ public:
 	}
 
 	inline void init() override {
-		scene.initialize(context.app);
-		scene.addSystem<RenderSystem>();
-		scene.addSystem<MoveSystem>();
+		m_scene.initialize(context.app);
+		m_scene.addSystem<RenderSystem>();
+		m_scene.addSystem<MoveSystem>();
 
-		auto e = scene.createEntity();
-		scene.addComponent<PositionComponent>(e, rand() % 1024, rand() % 720);
-		scene.addComponent<TextureComponent>(e, nullptr);
-		scene.addComponent<PlayerComponent>(e);
+		auto e = m_scene.createEntity();
+		m_scene.addComponent<PositionComponent>(e, rand() % 1024, rand() % 720);
+		m_scene.addComponent<TextureComponent>(e, nullptr);
+		m_scene.addComponent<PlayerComponent>(e);
 
 		Draug::Texture* test = context.app->getRenderer()->textures.load("D:/workspace/cpp/Draug/.projects/vs2017/Assets", "test.png");
 	}
 
 	inline void shutdown() override {
-		scene.shutdown();
+		m_scene.shutdown();
 	}
 
 	inline void tick() override {
-		scene.update();
+		m_scene.update();
 	}
 
-	Draug::ECS::Scene scene;
+	inline bool onEvent(const Draug::Event& event) override {
+		return Draug::Event::dispatch<Draug::Input::KeyEvent>(event, BIND_FN(GameState, onKeyEvent));
+	}
+
+private:
+	bool onKeyEvent(const Draug::Input::KeyEvent& event) {
+		switch (event.type) {
+			case Draug::Input::KeyEvent::Down:
+			{
+				if (event.key == SDL_Scancode::SDL_SCANCODE_ESCAPE) {
+					context.app->stop();
+				}
+			}
+			break;
+			default:
+				break;
+		}
+		return true;
+	}
+	Draug::ECS::Scene m_scene;
 };
 
 class PrioState : public Draug::AppState {

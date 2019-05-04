@@ -53,8 +53,8 @@ void App::removePriorityState(AppState* state) {
 
 void App::onEvent(const Event& event) {
 	Event::dispatch<WindowCloseEvent>(event, BIND_FN(App, onWindowClose));
-	for (auto& it = m_states.end() - 1; it != m_states.begin(); it--) {
-		if ((*it)->onEvent(event)) {
+	for (auto it = m_states.end(); it != m_states.begin();) {
+		if ((*--it)->onEvent(event)) {
 			break;
 		}
 	}
@@ -89,7 +89,7 @@ void App::shutdown() {
 }
 
 bool App::onWindowClose(const WindowCloseEvent& event) {
-	m_running = false;
+	stop();
 	return true;
 }
 

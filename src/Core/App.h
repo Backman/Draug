@@ -18,6 +18,7 @@ public:
 	virtual ~App();
 
 	void run();
+	inline void stop() { m_running = false; }
 
 	void addState(AppState* state);
 	void removeState(AppState* state);
