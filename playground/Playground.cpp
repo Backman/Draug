@@ -72,13 +72,45 @@ public:
 	}
 };
 
-class GameState : public Draug::AppState {
+class PausedState : public Draug::State {
 public:
-	GameState(const Draug::AppStateContext& context) :
-		Draug::AppState(context, "game_state") {
+	PausedState() :
+		Draug::State("paused_state") {
 	}
 
-	inline void init() override {
+	inline void onStart() override {
+		DRAUG_LOG_DEBUG("Paused on start");
+	}
+
+	inline void onStop() override {
+		DRAUG_LOG_DEBUG("Paused on stop");
+	}
+
+	inline Draug::StateTransition onEvent(Draug::Event& event) override {
+		Draug::Input::KeyEvent key_event;
+		if (Draug::Event::tryCast<Draug::Input::KeyEvent>(event, &key_event)) {
+			switch (key_event.type) {
+				case Draug::Input::KeyEvent::Down:
+				{
+					if (key_event.key == SDL_Scancode::SDL_SCANCODE_ESCAPE) {
+						return Draug::StateTransition::pop();
+					}
+				}
+				break;
+				default:
+					break;
+			}
+		}
+	}
+};
+
+class TestState : public Draug::State {
+public:
+	TestState(const Draug::StateContext& context) :
+		Draug::State("game_state"), context(context) {
+	}
+
+	inline void onStart() override {
 		m_scene.initialize(context.app);
 		m_scene.addSystem<RenderSystem>();
 		m_scene.addSystem<MoveSystem>();
@@ -91,37 +123,47 @@ public:
 		Draug::Texture* test = context.app->getRenderer()->textures.load("D:/workspace/cpp/Draug/.projects/vs2017/Assets", "test.png");
 	}
 
-	inline void shutdown() override {
+	inline void onStop() override {
 		m_scene.shutdown();
 	}
 
-	inline void tick() override {
+	inline Draug::StateTransition tick(float dt) override {
 		m_scene.update();
+
+		return Draug::State::tick(dt);
 	}
 
-	inline bool onEvent(const Draug::Event& event) override {
-		return Draug::Event::dispatch<Draug::Input::KeyEvent>(event, BIND_FN(GameState, onKeyEvent));
+	inline void onPause() override {
+		DRAUG_LOG_DEBUG("onPause");
+	}
+
+	inline void onResume() override {
+		DRAUG_LOG_DEBUG("onResume");
+	}
+
+	inline Draug::StateTransition onEvent(Draug::Event& event) override {
+		Draug::Input::KeyEvent key_event;
+		if (Draug::Event::tryCast<Draug::Input::KeyEvent>(event, &key_event)) {
+			switch (key_event.type) {
+				case Draug::Input::KeyEvent::Down:
+				{
+					if (key_event.key == SDL_Scancode::SDL_SCANCODE_ESCAPE) {
+						return Draug::StateTransition::quit();
+					}
+					else if (key_event.key == SDL_SCANCODE_P) {
+						return Draug::StateTransition::push(new PausedState());
+					}
+				}
+				break;
+				default:
+					break;
+			}
+		}
 	}
 
 private:
-	bool onKeyEvent(const Draug::Input::KeyEvent& event) {
-		switch (event.type) {
-			case Draug::Input::KeyEvent::Down:
-			{
-				if (event.key == SDL_Scancode::SDL_SCANCODE_ESCAPE) {
-					context.app->stop();
-				}
-			}
-			break;
-			default:
-				break;
-		}
-		return true;
-	}
+	Draug::StateContext context;
 	Draug::ECS::Scene m_scene;
-};
-
-class PrioState : public Draug::AppState {
 };
 
 class PlaygroundApp : public Draug::App {
@@ -132,7 +174,8 @@ public:
 	~PlaygroundApp() = default;
 
 	void onInitialize() override {
-		addState(new GameState(Draug::AppStateContext{ this }));
+		m_state_machine.init(new TestState(Draug::StateContext{ this }));
+		m_state_machine.start();
 	}
 
 	void onShutdown() override {

@@ -14,13 +14,11 @@ App::~App() {
 
 void App::run() {
 	initialize();
-	m_running = true;
-	while (m_running) {
+	while (m_state_machine.isRunning()) {
 		m_renderer->beginFrame();
 
-		for (auto& it = m_states.begin(); it != m_states.end(); it++) {
-			(*it)->tick();
-		}
+		m_state_machine.fixedTick();
+		m_state_machine.tick(0);
 		Input::Input::reset();
 
 		m_renderer->renderFrame();
@@ -29,36 +27,9 @@ void App::run() {
 	shutdown();
 }
 
-void App::addState(AppState* state) {
-	m_states.addState(state);
-	state->init();
-}
-
-void App::removeState(AppState* state) {
-	m_states.removeState(state);
-	state->shutdown();
-	delete state;
-}
-
-void App::addPriorityState(AppState* state) {
-	m_states.addPriorityState(state);
-	state->init();
-}
-
-void App::removePriorityState(AppState* state) {
-	m_states.removePriorityState(state);
-	state->shutdown();
-	delete state;
-}
-
-void App::onEvent(const Event& event) {
+void App::onEvent(Event& event) {
 	Event::dispatch<WindowCloseEvent>(event, BIND_FN(App, onWindowClose));
-	for (auto it = m_states.end(); it != m_states.begin();) {
-		Draug::AppState* state = *--it;
-		if (state->onEvent(event)) {
-			break;
-		}
-	}
+	m_state_machine.onEvent(event);
 }
 
 void App::initialize() {
@@ -77,11 +48,7 @@ void App::initialize() {
 void App::shutdown() {
 	onShutdown();
 
-	for (auto& it = m_states.begin(); it != m_states.end(); it++) {
-		(*it)->shutdown();
-	}
-	m_states.deleteAll();
-
+	m_state_machine.transition(StateTransition::quit());
 	m_renderer->shutdown();
 	m_window->shutdown();
 
@@ -90,7 +57,7 @@ void App::shutdown() {
 }
 
 bool App::onWindowClose(const WindowCloseEvent& event) {
-	stop();
+	m_state_machine.transition(StateTransition::quit());
 	return true;
 }
 

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Draug.h"
-#include "AppState.h"
-#include "AppStateStack.h"
+#include "State.h"
+#include "StateMachine.h"
 
 namespace Draug {
 class Renderer;
@@ -18,13 +18,6 @@ public:
 	virtual ~App();
 
 	void run();
-	inline void stop() { m_running = false; }
-
-	void addState(AppState* state);
-	void removeState(AppState* state);
-
-	void addPriorityState(AppState* state);
-	void removePriorityState(AppState* state);
 
 	inline Window* const getWindow() { return m_window; }
 	inline Renderer* const getRenderer() { return m_renderer; }
@@ -32,18 +25,17 @@ public:
 protected:
 	virtual void onInitialize() {}
 	virtual void onShutdown() {}
+	StateMachine m_state_machine;
 
 private:
-	void onEvent(const Event& event);
+	void onEvent(Event& event);
 	void initialize();
 	void shutdown();
 	bool onWindowClose(const WindowCloseEvent& event);
 
 	static App* s_instance;
 
-	AppStateStack m_states;
 	Window* m_window;
 	Renderer* m_renderer;
-	bool m_running = true;
 };
 }

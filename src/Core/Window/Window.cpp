@@ -12,7 +12,7 @@ void Window::unsubscribEvent(EventCallbackId id) {
 	m_event_dispatcher.unsubscribe(id);
 }
 
-void Window::dispatchEvent(const Event& event) {
+void Window::dispatchEvent(Event& event) {
 	m_event_dispatcher.dispatch(event);
 }
 }

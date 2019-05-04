@@ -25,11 +25,24 @@ struct Event {
 
 	template<typename T>
 	static bool dispatch(const Event& event, DispatchCallback<T> callback) {
-		EventType t = event.getType();
-		EventType s_t = T::s_getType();
 		if (event.getType() == T::s_getType()) {
 			return callback(*(T*)& event);
 		}
+		return false;
+	}
+
+	template<typename T>
+	static bool isOfType(const Event& event) {
+		return event.getType() == T::s_getType();
+	}
+
+	template<typename T>
+	static bool tryCast(Event& event, T* out_event) {
+		if (event.getType() == T::s_getType()) {
+			*out_event = *(T*)&event;
+			return true;
+		}
+		out_event = nullptr;
 		return false;
 	}
 
@@ -38,7 +51,7 @@ struct Event {
 private:
 };
 
-using EventCallback = std::function<void(const Event&)>;
+using EventCallback = std::function<void(Event&)>;
 typedef int EventCallbackId;
 
 class EventDispatcher {
@@ -53,8 +66,8 @@ public:
 		m_callbacks.erase(id);
 	}
 
-	void dispatch(const Event& event) {
-		for (const auto& it : m_callbacks) {
+	void dispatch(Event& event) {
+		for (auto& it : m_callbacks) {
 			it.second(event);
 		}
 	}
