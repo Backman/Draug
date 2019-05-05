@@ -18,6 +18,9 @@ SDL_IMAGE_DIR = path.join(DEPS_DIR, "SDL2_Image/")
 SDL_IMAGE_INCLUDE_DIR = path.join(SDL_IMAGE_DIR, "include/")
 SDL_IMAGE_LIB_DIR = path.join(SDL_IMAGE_DIR, "lib/")
 
+GLFW_DIR = path.join(DEPS_DIR, "glfw/")
+GLFW_INCLUDE_DIR = path.join(GLFW_DIR, "include/")
+
 BGFX_DIR = path.join(DEPS_DIR, "bgfx/")
 BGFX_SCRIPTS_DIR = path.join(BGFX_DIR, "scripts/")
 BGFX_INCLUDE_DIR = path.join(BGFX_DIR, "include/")
@@ -81,6 +84,10 @@ dofile "toolchain.lua"
 draugToolchain(BUILD_DIR, PROJECT_DIR, DEPS_DIR)
 
 group "Deps"
+dofile "glfw.lua"
+glfwProject()
+
+dofile(BGFX_SCRIPTS_DIR .. "/bgfx.lua")
 dofile(BGFX_SCRIPTS_DIR .. "/bgfx.lua")
 dofile(BX_SCRIPTS_DIR .. "/bx.lua")
 dofile(BIMG_SCRIPTS_DIR .. "/bimg.lua")
@@ -110,6 +117,8 @@ createProject("Draug", "StaticLib", DRAUG_SRC_DIR, {
 	"turbojpeg",
 	"zlib",
 
+	"glfw",
+
 	"bgfx",
 	"bx",
 	"bimg",
@@ -120,6 +129,7 @@ createProject("Draug", "StaticLib", DRAUG_SRC_DIR, {
 	SPDLOG_INCLUDE_DIR,
 	SDL_INCLUDE_DIR,
 
+	GLFW_INCLUDE_DIR,
 	BGFX_INCLUDE_DIR,
 	BX_INCLUDE_DIR,
 	BIMG_INCLUDE_DIR,
@@ -128,6 +138,8 @@ createProject("Draug", "StaticLib", DRAUG_SRC_DIR, {
 group "Playground"
 createProject("DraugPlayground", "ConsoleApp", DRAUG_PLAYGROUND_SRC_DIR, {
 	"Draug",
+	"glfw",
+
 	"SDL2",
 	"bz2",
 	"freetype",
@@ -141,6 +153,8 @@ createProject("DraugPlayground", "ConsoleApp", DRAUG_PLAYGROUND_SRC_DIR, {
 	"turbojpeg",
 	"zlib",
 
+	"glfw",
+
 	"bgfx",
 	"bx",
 	"bimg",
@@ -152,6 +166,7 @@ createProject("DraugPlayground", "ConsoleApp", DRAUG_PLAYGROUND_SRC_DIR, {
 	SPDLOG_INCLUDE_DIR,
 	SDL_INCLUDE_DIR,
 
+	GLFW_INCLUDE_DIR,
 	BGFX_INCLUDE_DIR,
 	BX_INCLUDE_DIR,
 	BIMG_INCLUDE_DIR,
