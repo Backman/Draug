@@ -4,6 +4,7 @@
 #include "State.h"
 #include "Core/World/World.h"
 #include "StateMachine.h"
+#include "Core/Timer/Timer.h"
 
 namespace Draug {
 class Renderer;
@@ -39,5 +40,10 @@ private:
 
 	Window* m_window;
 	Renderer* m_renderer;
+	Timer m_timer;
+
+	float m_time_scale = 1;
+	float m_time;
+	float m_unscaled_time;
 };
 }
