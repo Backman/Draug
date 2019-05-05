@@ -68,6 +68,7 @@ function draugToolchain(_buildDir, _projDir, _libDir)
         buildoptions {
 			"/wd 4345", -- Disable 'An object of POD type constructed with an initializer of the form () will be default-initialized'. It's an obsolete warning.
 			"/wd 26495", -- Disable 'Always initialize a member variable'
+			"/EHsc",
         }
         linkoptions {
             "/ignore:4199", -- LNK4199: /DELAYLOAD:*.dll ignored; no imports found from *.dll

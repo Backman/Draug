@@ -5,8 +5,10 @@
 namespace Draug {
 class State;
 class App;
+class World;
 
 struct StateContext {
+	World* world;
 	App* app;
 };
 
@@ -55,31 +57,38 @@ private:
 
 class State {
 public:
-	State(const std::string& name) :
-		name(name) {
+	State(const StateContext& context, const std::string& name) :
+		m_context(context), m_name(name) {
 	}
 	virtual ~State() = default;
 
-	virtual void onStart() {}
-	virtual void onStop() {}
-	virtual void onPause() {}
-	virtual void onResume() {}
+	inline virtual void onStart() {}
+	inline virtual void onStop() {}
+	inline virtual void onPause() {}
+	inline virtual void onResume() {}
 
-	virtual StateTransition onEvent(Draug::Event& event) {
+	inline virtual StateTransition onEvent(Draug::Event& event) {
 		return StateTransition::none();
 	}
 
-	virtual StateTransition fixedTick() {
+	inline virtual StateTransition fixedTick() {
 		return StateTransition::none();
 	}
 
-	virtual StateTransition tick(float dt) {
+	inline virtual StateTransition tick(float dt) {
 		return StateTransition::none();
 	}
 
-	virtual void backgroundFixedTick() {}
-	virtual void backgroundTick(float dt) {}
+	inline virtual void backgroundFixedTick() {}
+	inline virtual void backgroundTick(float dt) {}
 
-	std::string name;
+	inline StateContext& context() { return m_context; }
+	inline App* app() { return m_context.app; }
+	inline World* world() { return m_context.world; }
+	inline std::string& name() { return m_name; }
+
+private:
+	StateContext m_context;
+	std::string m_name;
 };
 }

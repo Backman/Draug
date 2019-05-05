@@ -3,13 +3,21 @@
 #include "Draug.h"
 
 namespace Draug {
+class World;
+class App;
+
 namespace ECS {
-class Scene;
+struct SystemContext {
+	Draug::World* world;
+	Draug::App* app;
+};
+
 class DRAUG_API System {
 public:
-	virtual void init(Scene* scene) {}
-	virtual void tick(Scene* scene, float dt) {}
-	virtual void shutdown(Scene* scene) {}
+	virtual void init(SystemContext& context) {}
+	virtual void tick(SystemContext& context, float dt) {}
+	virtual void fixedTick(SystemContext& context) {}
+	virtual void shutdown(SystemContext& context) {}
 };
 
 class SystemManager {
@@ -36,9 +44,15 @@ public:
 		return addSystem(s);
 	}
 
-	void tick(Scene* scene, float dt) {
+	void tick(SystemContext& context, float dt) {
 		for (size_t i = 0; i < m_systems.size(); i++) {
-			m_systems[i]->tick(scene, dt);
+			m_systems[i]->tick(context, dt);
+		}
+	}
+
+	void fixedTick(SystemContext& context) {
+		for (size_t i = 0; i < m_systems.size(); i++) {
+			m_systems[i]->fixedTick(context);
 		}
 	}
 private:

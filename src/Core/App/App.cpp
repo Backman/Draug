@@ -14,11 +14,14 @@ App::~App() {
 
 void App::run() {
 	initialize();
+	float dt = 0;
 	while (m_state_machine.isRunning()) {
 		m_renderer->beginFrame();
 
 		m_state_machine.fixedTick();
-		m_state_machine.tick(0);
+		m_state_machine.tick(dt);
+		m_world.fixedTick();
+		m_world.tick(dt);
 		Input::Input::reset();
 
 		m_renderer->renderFrame();
@@ -42,12 +45,14 @@ void App::initialize() {
 	Input::Input::init(m_window);
 
 	m_window->subscribeEvent(BIND_FN(App, onEvent));
+	m_world.initialize(this);
 	onInitialize();
 }
 
 void App::shutdown() {
 	onShutdown();
 
+	m_world.shutdown();
 	m_state_machine.transition(StateTransition::quit());
 	m_renderer->shutdown();
 	m_window->shutdown();

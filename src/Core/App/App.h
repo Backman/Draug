@@ -2,6 +2,7 @@
 
 #include "Draug.h"
 #include "State.h"
+#include "Core/World/World.h"
 #include "StateMachine.h"
 
 namespace Draug {
@@ -25,6 +26,7 @@ public:
 protected:
 	virtual void onInitialize() {}
 	virtual void onShutdown() {}
+	World m_world;
 	StateMachine m_state_machine;
 
 private:

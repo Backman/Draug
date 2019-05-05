@@ -7,8 +7,8 @@
 #include <Core/Event/Event.h>
 #include <Renderer/Resources/Texture.h>
 #include <Renderer/Renderer.h>
-#include <ECS/Scene.h>
-#include <ECS/System.h>
+#include <Core/World/World.h>
+#include <Core/ECS/System.h>
 #include <Input/Input.h>
 #include "Components/ComponentTypes.h"
 #include "Systems/SystemTypes.h"
@@ -29,10 +29,10 @@ struct PlayerComponent {
 
 class MoveSystem : public Draug::ECS::System {
 public:
-	virtual void tick(Draug::ECS::Scene* scene, float dt) {
-		auto mgr = scene->getEntityMgr();
-		for (auto e : mgr->entities<PositionComponent, PlayerComponent>()) {
-			auto& pos = scene->getComponent<PositionComponent>(e);
+	virtual void tick(Draug::ECS::SystemContext& context, float dt) {
+		Draug::World* world = context.world;
+		for (auto e : world->entities<PositionComponent, PlayerComponent>()) {
+			auto& pos = world->getComponent<PositionComponent>(e);
 			if (Draug::Input::Input::keyboard.isKeyPressed(SDL_SCANCODE_LEFT)) {
 				pos.x--;
 			}
@@ -63,19 +63,18 @@ public:
 
 class RenderSystem : public Draug::ECS::System {
 public:
-	virtual void tick(Draug::ECS::Scene* scene, float dt) {
-		auto mgr = scene->getEntityMgr();
-		for (auto e : mgr->entities<PositionComponent, TextureComponent>()) {
-			auto& pos = scene->getComponent<PositionComponent>(e);
-			auto& texture = scene->getComponent<TextureComponent>(e);
+	virtual void tick(const Draug::ECS::SystemContext& context, float dt) {
+		for (auto e : context.world->entities<PositionComponent, TextureComponent>()) {
+			auto& pos = context.world->getComponent<PositionComponent>(e);
+			auto& texture = context.world->getComponent<TextureComponent>(e);
 		}
 	}
 };
 
 class PausedState : public Draug::State {
 public:
-	PausedState() :
-		Draug::State("paused_state") {
+	PausedState(const Draug::StateContext& context) :
+		Draug::State(context, "paused_state") {
 	}
 
 	inline void onStart() override {
@@ -107,29 +106,25 @@ public:
 class TestState : public Draug::State {
 public:
 	TestState(const Draug::StateContext& context) :
-		Draug::State("game_state"), context(context) {
+		Draug::State(context, "game_state") {
 	}
 
 	inline void onStart() override {
-		m_scene.initialize(context.app);
-		m_scene.addSystem<RenderSystem>();
-		m_scene.addSystem<MoveSystem>();
+		world()->addSystem<RenderSystem>();
+		world()->addSystem<MoveSystem>();
 
-		auto e = m_scene.createEntity();
-		m_scene.addComponent<PositionComponent>(e, rand() % 1024, rand() % 720);
-		m_scene.addComponent<TextureComponent>(e, nullptr);
-		m_scene.addComponent<PlayerComponent>(e);
+		auto e = world()->createEntity();
+		world()->addComponent<PositionComponent>(e, rand() % 1024, rand() % 720)
+			->addComponent<TextureComponent>(e, nullptr)
+			->addComponent<PlayerComponent>(e);
 
-		Draug::Texture* test = context.app->getRenderer()->textures.load("D:/workspace/cpp/Draug/.projects/vs2017/Assets", "test.png");
+		Draug::Texture* test = app()->getRenderer()->textures.load("D:/workspace/cpp/Draug/.projects/vs2017/Assets", "test.png");
 	}
 
 	inline void onStop() override {
-		m_scene.shutdown();
 	}
 
 	inline Draug::StateTransition tick(float dt) override {
-		m_scene.update();
-
 		return Draug::State::tick(dt);
 	}
 
@@ -151,7 +146,7 @@ public:
 						return Draug::StateTransition::quit();
 					}
 					else if (key_event.key == SDL_SCANCODE_P) {
-						return Draug::StateTransition::push(new PausedState());
+						return Draug::StateTransition::push(new PausedState(context()));
 					}
 				}
 				break;
@@ -160,10 +155,6 @@ public:
 			}
 		}
 	}
-
-private:
-	Draug::StateContext context;
-	Draug::ECS::Scene m_scene;
 };
 
 class PlaygroundApp : public Draug::App {
@@ -174,7 +165,7 @@ public:
 	~PlaygroundApp() = default;
 
 	void onInitialize() override {
-		m_state_machine.init(new TestState(Draug::StateContext{ this }));
+		m_state_machine.init(new TestState(Draug::StateContext{ &m_world, this }));
 		m_state_machine.start();
 	}
 
