@@ -18,21 +18,21 @@ public:
 	inline float timeSinceStart() {
 		LARGE_INTEGER curr_tick;
 		QueryPerformanceCounter(&curr_tick);
-		float dt = static_cast<float>((m_first_tick.QuadPart - m_last_tick.QuadPart) / m_freq.QuadPart);
+		float dt = static_cast<float>(((double)m_first_tick.QuadPart - (double)m_last_tick.QuadPart) / m_freq.QuadPart);
 		return dt;
 	}
 
 	inline float time() {
 		LARGE_INTEGER curr_tick;
 		QueryPerformanceCounter(&curr_tick);
-		float dt = static_cast<float>((curr_tick.QuadPart - m_last_tick.QuadPart) / m_freq.QuadPart);
+		float dt = static_cast<float>(((double)curr_tick.QuadPart - (double)m_last_tick.QuadPart) / m_freq.QuadPart);
 		return dt;
 	}
 
 	inline float tick() {
 		LARGE_INTEGER curr_tick;
 		QueryPerformanceCounter(&curr_tick);
-		float dt = static_cast<float>((curr_tick.QuadPart - m_last_tick.QuadPart) / m_freq.QuadPart);
+		float dt = static_cast<float>(((double)curr_tick.QuadPart - (double)m_last_tick.QuadPart) / m_freq.QuadPart);
 		m_last_tick = curr_tick;
 		return dt;
 	}
