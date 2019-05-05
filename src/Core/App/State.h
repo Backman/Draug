@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core/Event/Event.h"
+#include "Log/Log.h"
 
 namespace Draug {
 class State;
@@ -62,10 +63,29 @@ public:
 	}
 	virtual ~State() = default;
 
-	inline virtual void onStart() {}
-	inline virtual void onStop() {}
-	inline virtual void onPause() {}
-	inline virtual void onResume() {}
+	inline virtual void onStart() {
+#ifdef DRAUG_DEBUG
+		DRAUG_LOG_CORE_DEBUG("{0}: onStart", m_name);
+#endif
+	}
+
+	inline virtual void onStop() {
+#ifdef DRAUG_DEBUG
+		DRAUG_LOG_CORE_DEBUG("{0}: onStart", m_name);
+#endif
+	}
+
+	inline virtual void onPause() {
+#ifdef DRAUG_DEBUG
+		DRAUG_LOG_CORE_DEBUG("{0}: onPause", m_name);
+#endif
+	}
+
+	inline virtual void onResume() {
+#ifdef DRAUG_DEBUG
+		DRAUG_LOG_CORE_DEBUG("{0}: onResume", m_name);
+#endif
+	}
 
 	inline virtual StateTransition onEvent(Draug::Event& event) {
 		return StateTransition::none();

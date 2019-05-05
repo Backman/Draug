@@ -8,7 +8,9 @@ World::~World() {
 
 void World::initialize(App* app) {
 	m_entity_mgr = new ECS::EntityManager();
+	m_entity_mgr->init();
 	m_system_mgr = new ECS::SystemManager();
+	m_system_mgr->init(ECS::SystemContext{ this, app });
 	m_app = app;
 }
 
@@ -24,13 +26,11 @@ void World::shutdown() {
 }
 
 void World::tick(float dt) {
-	ECS::SystemContext context{ this, m_app };
-	m_system_mgr->tick(context, dt);
+	m_system_mgr->tick(dt);
 }
 
 void World::fixedTick() {
-	ECS::SystemContext context{ this, m_app };
-	m_system_mgr->fixedTick(context);
+	m_system_mgr->fixedTick();
 }
 
 ECS::Entity World::createEntity() {

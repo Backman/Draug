@@ -60,6 +60,9 @@ public:
 	EntityManager() {
 	}
 
+	inline void init() {
+	}
+
 	inline Entity create() {
 		size_t index;
 		if (m_free_list.empty() == false) {

@@ -30,12 +30,14 @@ public:
 		}
 	}
 
-	void initialize() {
+	void init(const SystemContext& context) {
+		m_context = context;
 	}
 
 	template<typename TSystem>
 	inline void addSystem(TSystem* s) {
 		m_systems.emplace_back(s);
+		s->init(m_context);
 	}
 
 	template<typename TSystem, typename... Args>
@@ -44,19 +46,20 @@ public:
 		return addSystem(s);
 	}
 
-	void tick(SystemContext& context, float dt) {
+	void tick(float dt) {
 		for (size_t i = 0; i < m_systems.size(); i++) {
-			m_systems[i]->tick(context, dt);
+			m_systems[i]->tick(m_context, dt);
 		}
 	}
 
-	void fixedTick(SystemContext& context) {
+	void fixedTick() {
 		for (size_t i = 0; i < m_systems.size(); i++) {
-			m_systems[i]->fixedTick(context);
+			m_systems[i]->fixedTick(m_context);
 		}
 	}
 private:
 	std::vector<System*> m_systems;
+	SystemContext m_context;
 };
 }
 }
