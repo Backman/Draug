@@ -100,6 +100,7 @@ public:
 					break;
 			}
 		}
+		return Draug::State::onEvent(event);
 	}
 };
 
@@ -154,6 +155,7 @@ public:
 					break;
 			}
 		}
+		return Draug::State::onEvent(event);
 	}
 };
 
