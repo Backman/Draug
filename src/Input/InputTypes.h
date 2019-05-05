@@ -2,13 +2,12 @@
 
 #include "Draug.h"
 #include "Core/Event/Event.h"
-#include <SDL/SDL_scancode.h>
 
 namespace Draug {
 namespace Input {
 
 struct MouseButton {
-	enum Code : uint8_t {
+	enum Code {
 		Left = 0,
 		Right,
 		Middle,
@@ -158,13 +157,12 @@ struct KeyEvent : public Event {
 		Invalid = 0xFFFFFFFF,
 	};
 	KeyEvent() {}
-	KeyEvent(Type type, SDL_Scancode key) :
+	KeyEvent(Type type, Key::Code key) :
 		type(type), key(key) {
 	}
 	Type type = Type::Invalid;
 
-	//Key::Code key = Key::Invalid;
-	SDL_Scancode key = SDL_SCANCODE_UNKNOWN;
+	Key::Code key = Key::Invalid;
 
 	DRAUG_EVENT_CLASS(EventType::Key)
 };
@@ -190,24 +188,17 @@ struct MouseEvent : public Event {
 	int x_pos;
 	int y_pos;
 
-	int x_move;
-	int y_move;
-
-	inline static MouseEvent createButtonEvent(Type type, MouseButton::Code button, int x_pos, int y_pos) {
+	inline static MouseEvent createButtonEvent(Type type, MouseButton::Code button) {
 		MouseEvent e;
 		e.type = type;
 		e.button = button;
-		e.x_pos = x_pos;
-		e.y_pos = y_pos;
 
 		return e;
 	}
 
-	inline static MouseEvent createMoveEvent(int x_move, int y_move, int x_pos, int y_pos) {
+	inline static MouseEvent createMoveEvent(int x_pos, int y_pos) {
 		MouseEvent e;
 		e.type = Type::Move;
-		e.x_move = x_move;
-		e.y_move = y_move;
 		e.x_pos = x_pos;
 		e.y_pos = y_pos;
 		return e;
