@@ -1,3 +1,11 @@
+newoption {
+	trigger = "window-api",
+	description = "Choose a particular window API",
+	allowed = {
+		{ "glfw", "GLFW" },
+		{ "sdl", "SDL" }
+	}
+}
 
 ROOT_DIR = (path.getabsolute("..") .. "/")
 DRAUG_SRC_DIR = path.join(ROOT_DIR, "src/")
@@ -17,6 +25,9 @@ SDL_LIB_DIR = path.join(SDL_DIR, "lib/")
 SDL_IMAGE_DIR = path.join(DEPS_DIR, "SDL2_Image/")
 SDL_IMAGE_INCLUDE_DIR = path.join(SDL_IMAGE_DIR, "include/")
 SDL_IMAGE_LIB_DIR = path.join(SDL_IMAGE_DIR, "lib/")
+
+GLFW_DIR = path.join(DEPS_DIR, "glfw/")
+GLFW_INCLUDE_DIR = path.join(GLFW_DIR, "include/")
 
 BGFX_DIR = path.join(DEPS_DIR, "bgfx/")
 BGFX_SCRIPTS_DIR = path.join(BGFX_DIR, "scripts/")
@@ -40,7 +51,7 @@ function createProject(_name, _kind, _projectDir, _libs, _includes)
 			"NoRTTI",
 		}
 		defines {
-			"DRAUG_BGFX_RENDERER"
+			"DRAUG_BGFX_RENDERER",
 		}
 		files {
 			_projectDir .. "**.h",
@@ -56,6 +67,48 @@ function createProject(_name, _kind, _projectDir, _libs, _includes)
 		for _, _dir in ipairs(_includes) do
 			includedirs {
 				_dir
+			}
+		end
+		
+		local useSDL = false
+		local useGLFW = false
+		if _OPTIONS["window-api"] then
+			useSDL = _OPTIONS["window-api"] == "sdl"
+			useGLFW = _OPTIONS["window-api"] == "glfw"
+		else
+			useGLFW = true
+		end
+
+		if useSDL then
+			defines {
+				"DRAUG_SDL",
+			}
+			includedirs {
+				SDL_INCLUDE_DIR,
+			}
+			links {
+				"SDL2",
+				"bz2",
+				"freetype",
+				"jpeg",
+				"libpng16",
+				"lzma",
+				"SDL2_image",
+				"SDL2_ttf",
+				"tiff",
+				"tiffxx",
+				"turbojpeg",
+				"zlib",
+			}
+		elseif useGLFW then
+			defines {
+				"DRAUG_GLFW",
+			}
+			includedirs {
+				GLFW_INCLUDE_DIR,
+			}
+			links {
+				"glfw3",
 			}
 		end
 
@@ -81,6 +134,10 @@ dofile "toolchain.lua"
 draugToolchain(BUILD_DIR, PROJECT_DIR, DEPS_DIR)
 
 group "Deps"
+dofile "glfw.lua"
+glfwProject()
+
+dofile(BGFX_SCRIPTS_DIR .. "/bgfx.lua")
 dofile(BGFX_SCRIPTS_DIR .. "/bgfx.lua")
 dofile(BX_SCRIPTS_DIR .. "/bx.lua")
 dofile(BIMG_SCRIPTS_DIR .. "/bimg.lua")
@@ -97,19 +154,6 @@ project "bimg_encode"
 
 group "Draug"
 createProject("Draug", "StaticLib", DRAUG_SRC_DIR, {
-	"SDL2",
-	"bz2",
-	"freetype",
-	"jpeg",
-	"libpng16",
-	"lzma",
-	"SDL2_image",
-	"SDL2_ttf",
-	"tiff",
-	"tiffxx",
-	"turbojpeg",
-	"zlib",
-
 	"bgfx",
 	"bx",
 	"bimg",
@@ -118,8 +162,8 @@ createProject("Draug", "StaticLib", DRAUG_SRC_DIR, {
 }, {
 	DRAUG_SRC_DIR,
 	SPDLOG_INCLUDE_DIR,
-	SDL_INCLUDE_DIR,
 
+	GLFW_INCLUDE_DIR,
 	BGFX_INCLUDE_DIR,
 	BX_INCLUDE_DIR,
 	BIMG_INCLUDE_DIR,
@@ -128,18 +172,6 @@ createProject("Draug", "StaticLib", DRAUG_SRC_DIR, {
 group "Playground"
 createProject("DraugPlayground", "ConsoleApp", DRAUG_PLAYGROUND_SRC_DIR, {
 	"Draug",
-	"SDL2",
-	"bz2",
-	"freetype",
-	"jpeg",
-	"libpng16",
-	"lzma",
-	"SDL2_image",
-	"SDL2_ttf",
-	"tiff",
-	"tiffxx",
-	"turbojpeg",
-	"zlib",
 
 	"bgfx",
 	"bx",
@@ -150,7 +182,6 @@ createProject("DraugPlayground", "ConsoleApp", DRAUG_PLAYGROUND_SRC_DIR, {
 	DRAUG_PLAYGROUND_SRC_DIR,
 	DRAUG_SRC_DIR,
 	SPDLOG_INCLUDE_DIR,
-	SDL_INCLUDE_DIR,
 
 	BGFX_INCLUDE_DIR,
 	BX_INCLUDE_DIR,

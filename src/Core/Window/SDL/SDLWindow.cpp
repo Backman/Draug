@@ -1,3 +1,5 @@
+#ifdef DRAUG_SDL
+
 #include "SDLWindow.h"
 #include "Log/Log.h"
 #include "Core/Window/WindowConfig.h"
@@ -134,14 +136,16 @@ static void initKeyTable() {
 	s_key_table[SDL_SCANCODE_MENU] = Input::Key::Code::Menu;
 }
 
-//Window* Window::createWindow(const WindowConfig& config) {
-//	SDLWindow* window = new SDLWindow();
-//	if (window->init(config) == false) {
-//		delete window;
-//		return nullptr;
-//	}
-//	return window;
-//}
+#ifdef DRAUG_SDL
+Window* Window::createWindow(const WindowConfig& config) {
+	SDLWindow* window = new SDLWindow();
+	if (window->init(config) == false) {
+		delete window;
+		return nullptr;
+	}
+	return window;
+}
+#endif
 
 bool SDLWindow::init(const WindowConfig& config) {
 	if (m_window != nullptr) {
@@ -206,6 +210,14 @@ void SDLWindow::pollEvents() {
 		}
 		if (sdl_event.type == SDL_WINDOWEVENT) {
 			switch (sdl_event.window.type) {
+				case SDL_WINDOWEVENT_MOVED:
+				{
+					WindowMovedEvent event;
+					event.x_pos = sdl_event.window.data1;
+					event.y_pos = sdl_event.window.data2;
+					dispatchEvent(event);
+				}
+				break;
 				case SDL_WINDOWEVENT_RESIZED:
 				{
 					WindowResizeEvent event;
@@ -287,3 +299,5 @@ void SDLWindow::pollEvents() {
 	}
 }
 }
+
+#endif

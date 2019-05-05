@@ -1,7 +1,6 @@
 #include "bgfxRenderAPI.h"
 #include "Log/Log.h"
 #include "Core/Window/Window.h"
-#include <SDL/SDL.h>
 #include <bgfx/platform.h>
 #include <bgfx/bgfx.h>
 #include <bx/bx.h>
