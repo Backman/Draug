@@ -43,7 +43,8 @@ function createProject(_name, _kind, _projectDir, _libs, _includes)
 			"NoRTTI",
 		}
 		defines {
-			"DRAUG_BGFX_RENDERER"
+			"DRAUG_BGFX_RENDERER",
+			"DRAUG_GLFW",
 		}
 		files {
 			_projectDir .. "**.h",
