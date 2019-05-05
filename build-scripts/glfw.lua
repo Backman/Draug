@@ -1,5 +1,5 @@
 function glfwProject()
-	project "glfw"
+	project "glfw3"
 		kind "StaticLib"
 		language "C"
 		files {

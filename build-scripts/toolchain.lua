@@ -12,7 +12,6 @@ end
 
 
 function draugToolchain(_buildDir, _projDir, _libDir)
-
 	if (_ACTION == nil) then return false end
 	defines {
 		"SDL_MAIN_HANDLED",

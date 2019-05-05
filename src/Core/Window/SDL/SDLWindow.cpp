@@ -1,3 +1,5 @@
+#ifdef DRAUG_SDL
+
 #include "SDLWindow.h"
 #include "Log/Log.h"
 #include "Core/Window/WindowConfig.h"
@@ -297,3 +299,5 @@ void SDLWindow::pollEvents() {
 	}
 }
 }
+
+#endif

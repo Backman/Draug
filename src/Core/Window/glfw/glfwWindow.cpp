@@ -1,3 +1,4 @@
+#ifdef DRAUG_GLFW
 #include "glfwWindow.h"
 #include "Log/Log.h"
 #include "Core/Event/Event.h"
@@ -11,7 +12,6 @@
 
 namespace Draug {
 
-#ifdef DRAUG_GLFW
 Window* Window::createWindow(const WindowConfig& config) {
 	glfwWindow* window = new glfwWindow();
 	if (window->init(config) == false) {
@@ -21,7 +21,6 @@ Window* Window::createWindow(const WindowConfig& config) {
 	}
 	return window;
 }
-#endif
 
 static Input::Key::Code s_key_table[GLFW_KEY_LAST + 1];
 static void initKeyTable() {
@@ -282,3 +281,4 @@ void glfwWindow::endFrame() {
 
 }
 }
+#endif

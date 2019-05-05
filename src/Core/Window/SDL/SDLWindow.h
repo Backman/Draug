@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Core/Window/Window.h"
-#include <SDL/SDL.h>
+
+struct SDL_Window;
 
 namespace Draug {
 class SDLWindow : public Window {

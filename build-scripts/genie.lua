@@ -1,3 +1,11 @@
+newoption {
+	trigger = "window-api",
+	description = "Choose a particular window API",
+	allowed = {
+		{ "glfw", "GLFW" },
+		{ "sdl", "SDL" }
+	}
+}
 
 ROOT_DIR = (path.getabsolute("..") .. "/")
 DRAUG_SRC_DIR = path.join(ROOT_DIR, "src/")
@@ -44,7 +52,6 @@ function createProject(_name, _kind, _projectDir, _libs, _includes)
 		}
 		defines {
 			"DRAUG_BGFX_RENDERER",
-			"DRAUG_GLFW",
 		}
 		files {
 			_projectDir .. "**.h",
@@ -60,6 +67,48 @@ function createProject(_name, _kind, _projectDir, _libs, _includes)
 		for _, _dir in ipairs(_includes) do
 			includedirs {
 				_dir
+			}
+		end
+		
+		local useSDL = false
+		local useGLFW = false
+		if _OPTIONS["window-api"] then
+			useSDL = _OPTIONS["window-api"] == "sdl"
+			useGLFW = _OPTIONS["window-api"] == "glfw"
+		else
+			useGLFW = true
+		end
+
+		if useSDL then
+			defines {
+				"DRAUG_SDL",
+			}
+			includedirs {
+				SDL_INCLUDE_DIR,
+			}
+			links {
+				"SDL2",
+				"bz2",
+				"freetype",
+				"jpeg",
+				"libpng16",
+				"lzma",
+				"SDL2_image",
+				"SDL2_ttf",
+				"tiff",
+				"tiffxx",
+				"turbojpeg",
+				"zlib",
+			}
+		elseif useGLFW then
+			defines {
+				"DRAUG_GLFW",
+			}
+			includedirs {
+				GLFW_INCLUDE_DIR,
+			}
+			links {
+				"glfw3",
 			}
 		end
 
@@ -105,21 +154,6 @@ project "bimg_encode"
 
 group "Draug"
 createProject("Draug", "StaticLib", DRAUG_SRC_DIR, {
-	"SDL2",
-	"bz2",
-	"freetype",
-	"jpeg",
-	"libpng16",
-	"lzma",
-	"SDL2_image",
-	"SDL2_ttf",
-	"tiff",
-	"tiffxx",
-	"turbojpeg",
-	"zlib",
-
-	"glfw",
-
 	"bgfx",
 	"bx",
 	"bimg",
@@ -128,7 +162,6 @@ createProject("Draug", "StaticLib", DRAUG_SRC_DIR, {
 }, {
 	DRAUG_SRC_DIR,
 	SPDLOG_INCLUDE_DIR,
-	SDL_INCLUDE_DIR,
 
 	GLFW_INCLUDE_DIR,
 	BGFX_INCLUDE_DIR,
@@ -139,22 +172,6 @@ createProject("Draug", "StaticLib", DRAUG_SRC_DIR, {
 group "Playground"
 createProject("DraugPlayground", "ConsoleApp", DRAUG_PLAYGROUND_SRC_DIR, {
 	"Draug",
-	"glfw",
-
-	"SDL2",
-	"bz2",
-	"freetype",
-	"jpeg",
-	"libpng16",
-	"lzma",
-	"SDL2_image",
-	"SDL2_ttf",
-	"tiff",
-	"tiffxx",
-	"turbojpeg",
-	"zlib",
-
-	"glfw",
 
 	"bgfx",
 	"bx",
@@ -165,9 +182,7 @@ createProject("DraugPlayground", "ConsoleApp", DRAUG_PLAYGROUND_SRC_DIR, {
 	DRAUG_PLAYGROUND_SRC_DIR,
 	DRAUG_SRC_DIR,
 	SPDLOG_INCLUDE_DIR,
-	SDL_INCLUDE_DIR,
 
-	GLFW_INCLUDE_DIR,
 	BGFX_INCLUDE_DIR,
 	BX_INCLUDE_DIR,
 	BIMG_INCLUDE_DIR,
