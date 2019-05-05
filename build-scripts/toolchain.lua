@@ -12,7 +12,6 @@ end
 
 
 function draugToolchain(_buildDir, _projDir, _libDir)
-
 	if (_ACTION == nil) then return false end
 	defines {
 		"SDL_MAIN_HANDLED",
@@ -74,7 +73,7 @@ function draugToolchain(_buildDir, _projDir, _libDir)
             "/ignore:4199", -- LNK4199: /DELAYLOAD:*.dll ignored; no imports found from *.dll
 			"/ignore:4221", -- LNK4221: This object file does not define any previously undefined public symbols, so it will not be used by any link operation that consumes this library
 			"/ignore:4099", -- LNK4099: The linker was unable to find your .pdb file.
-        }
+		}
 
 	configuration { "x64", "vs*" }
 		defines { 

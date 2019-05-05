@@ -2,19 +2,18 @@
 
 #include "Core/Window/Window.h"
 
-struct SDL_Window;
+struct GLFWwindow;
 
 namespace Draug {
-class SDLWindow : public Window {
+class glfwWindow : public Window {
 public:
 	bool init(const WindowConfig& config) override;
 	void shutdown() override;
-
 	void beginFrame() override;
 	void render() override;
 	void endFrame() override;
+
 private:
-	void pollEvents();
-	SDL_Window* m_window;
+	GLFWwindow* m_window;
 };
 }

@@ -10,6 +10,9 @@ BUILDS_DIR_NAME = .bin
 .PHONY: all
 all: vs2017
 
+.PHONY: all
+all-sdl: vs2017-sdl
+
 .PHONY: clean-projects
 clean-projects:
 	$(call remove_folder, $(PROJECTS_DIR_NAME))
@@ -23,7 +26,9 @@ clean: clean-build clean-projects
 
 .PHONY: .projects/vs2017 
 vs2017:
-	$(call make_project, vs2017)
+	$(call make_project,vs2017,--window-api=glfw)
+vs2017-sdl:
+	$(call make_project,vs2017,--window-api=sdl)
 vs-debug64:
 	"$(subst /,\\,$(VS2019_DEVENV_DIR))\devenv" $(PROJECT_DIR)/vs2017/Draug.sln /Build "Debug|x64"
 vs-release64:
@@ -35,6 +40,6 @@ define remove_folder
 endef
 
 define make_project
-	$(GENIE) --file=build-scripts/genie.lua $(1)
+	$(GENIE) --file=build-scripts/genie.lua $(2) $(1)
 endef
 

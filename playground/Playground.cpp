@@ -33,16 +33,16 @@ public:
 		Draug::World* world = context.world;
 		for (auto e : world->entities<PositionComponent, PlayerComponent>()) {
 			auto& pos = world->getComponent<PositionComponent>(e);
-			if (Draug::Input::Input::keyboard.isKeyPressed(SDL_SCANCODE_LEFT)) {
+			if (Draug::Input::Input::keyboard.isKeyPressed(Draug::Input::Key::Left)) {
 				pos.x--;
 			}
-			if (Draug::Input::Input::keyboard.isKeyPressed(SDL_SCANCODE_RIGHT)) {
+			if (Draug::Input::Input::keyboard.isKeyPressed(Draug::Input::Key::Right)) {
 				pos.x++;
 			}
-			if (Draug::Input::Input::keyboard.isKeyPressed(SDL_SCANCODE_UP)) {
+			if (Draug::Input::Input::keyboard.isKeyPressed(Draug::Input::Key::Up)) {
 				pos.y--;
 			}
-			if (Draug::Input::Input::keyboard.isKeyPressed(SDL_SCANCODE_DOWN)) {
+			if (Draug::Input::Input::keyboard.isKeyPressed(Draug::Input::Key::Down)) {
 				pos.y++;
 			}
 			if (pos.x > 1024) {
@@ -91,7 +91,7 @@ public:
 			switch (key_event.type) {
 				case Draug::Input::KeyEvent::Down:
 				{
-					if (key_event.key == SDL_Scancode::SDL_SCANCODE_ESCAPE) {
+					if (key_event.key == Draug::Input::Key::Escape) {
 						return Draug::StateTransition::pop();
 					}
 				}
@@ -100,6 +100,7 @@ public:
 					break;
 			}
 		}
+		return Draug::State::onEvent(event);
 	}
 };
 
@@ -142,10 +143,10 @@ public:
 			switch (key_event.type) {
 				case Draug::Input::KeyEvent::Down:
 				{
-					if (key_event.key == SDL_Scancode::SDL_SCANCODE_ESCAPE) {
+					if (key_event.key == Draug::Input::Key::Escape) {
 						return Draug::StateTransition::quit();
 					}
-					else if (key_event.key == SDL_SCANCODE_P) {
+					else if (key_event.key == Draug::Input::Key::P) {
 						return Draug::StateTransition::push(new PausedState(context()));
 					}
 				}
@@ -154,6 +155,7 @@ public:
 					break;
 			}
 		}
+		return Draug::State::onEvent(event);
 	}
 };
 

@@ -37,7 +37,6 @@ public:
 
 	inline uint16_t getWindowId() const { return m_id; }
 
-protected:
 	void dispatchEvent(Event& event);
 protected:
 	void* m_native_window;
