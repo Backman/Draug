@@ -14,8 +14,14 @@ App::~App() {
 
 void App::run() {
 	initialize();
-	float dt = 0;
 	while (m_state_machine.isRunning()) {
+		float tick = m_timer.tick();
+		float unscaled_dt = tick;
+		float dt = tick * m_time_scale;
+
+		m_time += dt;
+		m_unscaled_time += unscaled_dt;
+
 		m_renderer->beginFrame();
 
 		m_state_machine.fixedTick();
@@ -46,6 +52,7 @@ void App::initialize() {
 
 	m_window->subscribeEvent(BIND_FN(App, onEvent));
 	m_world.initialize(this);
+	m_timer.reset();
 	onInitialize();
 }
 
