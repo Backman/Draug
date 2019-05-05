@@ -11,6 +11,18 @@
 
 namespace Draug {
 
+#ifdef DRAUG_GLFW
+Window* Window::createWindow(const WindowConfig& config) {
+	glfwWindow* window = new glfwWindow();
+	if (window->init(config) == false) {
+		DRAUG_LOG_CORE_ERROR("Failed to init window");
+		delete window;
+		return nullptr;
+	}
+	return window;
+}
+#endif
+
 static Input::Key::Code s_key_table[GLFW_KEY_LAST + 1];
 static void initKeyTable() {
 	for (size_t i = 0; i <= GLFW_KEY_LAST; i++) {
@@ -142,13 +154,26 @@ static void glfw_errorCallback(int error, const char* description) {
 	DRAUG_LOG_CORE_ERROR("GLFW error ({0}): {1}", error, description);
 }
 
+static glfwWindow* getWindow(GLFWwindow* window) {
+	return (glfwWindow*)glfwGetWindowUserPointer(window);
+}
+
 static void glfw_windowCloseCallback(GLFWwindow* window) {
+	getWindow(window)->dispatchEvent(WindowCloseEvent());
 }
 
 static void glfw_windowSizeCallback(GLFWwindow* window, int width, int height) {
+	WindowResizeEvent event;
+	event.width = width;
+	event.height = height;
+	getWindow(window)->dispatchEvent(event);
 }
 
 static void glfw_windowPosCallback(GLFWwindow* window, int x_pos, int y_pos) {
+	WindowMovedEvent event;
+	event.x_pos = x_pos;
+	event.y_pos = y_pos;
+	getWindow(window)->dispatchEvent(event);
 }
 
 static void glfw_keyCallback(GLFWwindow* window, int glfw_key, int scancode, int action, int mods) {
@@ -174,8 +199,7 @@ static void glfw_keyCallback(GLFWwindow* window, int glfw_key, int scancode, int
 		}
 		break;
 	}
-	glfwWindow* w = (glfwWindow*)glfwGetWindowUserPointer(window);
-	w->dispatchEvent(event);
+	getWindow(window)->dispatchEvent(event);
 }
 
 static void glfw_mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
@@ -194,28 +218,15 @@ static void glfw_mouseButtonCallback(GLFWwindow* window, int button, int action,
 		default:
 			return;
 	};
-	glfwWindow* w = (glfwWindow*)glfwGetWindowUserPointer(window);
-	w->dispatchEvent(Input::MouseEvent::createButtonEvent(type, Input::MouseButton::Code(button)));
+	getWindow(window)->dispatchEvent(Input::MouseEvent::createButtonEvent(type, Input::MouseButton::Code(button)));
 }
 
 static void glfw_cursorPosCallbac(GLFWwindow* window, double x, double y) {
-	glfwWindow* w = (glfwWindow*)glfwGetWindowUserPointer(window);
-	w->dispatchEvent(Input::MouseEvent::createMoveEvent(x, y));
+	getWindow(window)->dispatchEvent(Input::MouseEvent::createMoveEvent(x, y));
 }
 
 static void glfw_scrollCallback(GLFWwindow* window, double x_scroll, double y_scroll) {
-	glfwWindow* w = (glfwWindow*)glfwGetWindowUserPointer(window);
-	w->dispatchEvent(Input::MouseEvent::createScrollEvent(x_scroll, y_scroll));
-}
-
-Window* Window::createWindow(const WindowConfig& config) {
-	glfwWindow* window = new glfwWindow();
-	if (window->init(config) == false) {
-		DRAUG_LOG_CORE_ERROR("Failed to init window");
-		delete window;
-		return nullptr;
-	}
-	return window;
+	getWindow(window)->dispatchEvent(Input::MouseEvent::createScrollEvent(x_scroll, y_scroll));
 }
 
 bool glfwWindow::init(const WindowConfig& config) {

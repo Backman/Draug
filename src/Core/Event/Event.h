@@ -6,6 +6,7 @@
 namespace Draug {
 
 enum EventType {
+	WindowMoved,
 	WindowResized,
 	WindowClosed,
 	Key,
@@ -75,6 +76,13 @@ public:
 private:
 	static EventCallbackId s_id;
 	std::unordered_map<EventCallbackId, EventCallback> m_callbacks;
+};
+
+struct WindowMovedEvent : Event {
+	int x_pos;
+	int y_pos;
+
+	DRAUG_EVENT_CLASS(EventType::WindowMoved)
 };
 
 struct WindowResizeEvent : Event {
