@@ -13,51 +13,52 @@ App::~App() {
 }
 
 void App::run() {
-	initialize();
+	init();
 	while (m_state_machine.isRunning()) {
 		float tick = m_timer.tick();
 		float unscaled_dt = tick;
 		float dt = tick * m_time_scale;
+		float fixed_dt = 0.16;
 
 		m_time += dt;
 		m_unscaled_time += unscaled_dt;
 
-		m_renderer->beginFrame();
+		m_renderer->begin_frame();
 
-		m_state_machine.fixedTick();
+		m_state_machine.fixed_tick(fixed_dt);
 		m_state_machine.tick(dt);
-		m_world.fixedTick();
+		m_world.fixed_tick(fixed_dt);
 		m_world.tick(dt);
 		Input::Input::reset();
 
 		m_renderer->renderFrame();
-		m_renderer->endFrame();
+		m_renderer->end_frame();
 	}
 	shutdown();
 }
 
-void App::onEvent(Event& event) {
-	Event::dispatch<WindowCloseEvent>(event, BIND_FN(App, onWindowClose));
-	m_state_machine.onEvent(event);
+void App::on_event(Event& event) {
+	Event::dispatch<WindowCloseEvent>(event, BIND_FN(App, on_window_close));
+	m_state_machine.on_event(event);
 }
 
-void App::initialize() {
+void App::init() {
 	s_instance = this;
-	WindowConfig window_config = WindowConfig::createWindowed("Draug", 0, 0, 1024, 720);
+	WindowConfig window_config = WindowConfig::create_windowed("Draug", 0, 0, 1024, 720);
 	m_window = Window::createWindow(window_config);
 	m_renderer = new Renderer();
 	m_renderer->init(m_window);
 
 	Input::Input::init(m_window);
 
-	m_window->subscribeEvent(BIND_FN(App, onEvent));
-	m_world.initialize(this);
+	m_window->subscribe_event(BIND_FN(App, on_event));
+	m_world.init(this);
 	m_timer.reset();
-	onInitialize();
+	on_init();
 }
 
 void App::shutdown() {
-	onShutdown();
+	on_shutdown();
 
 	m_world.shutdown();
 	m_state_machine.transition(StateTransition::quit());
@@ -68,7 +69,7 @@ void App::shutdown() {
 	delete m_window;
 }
 
-bool App::onWindowClose(const WindowCloseEvent& event) {
+bool App::on_window_close(const WindowCloseEvent& event) {
 	m_state_machine.transition(StateTransition::quit());
 	return true;
 }

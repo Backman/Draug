@@ -21,9 +21,9 @@ public:
 	virtual void init(Window* window) override;
 	void shutdown();
 
-	void beginFrame() override;
+	void begin_frame() override;
 	void renderFrame() override;
-	void endFrame() override;
+	void end_frame() override;
 
 	inline bx::AllocatorI& getAllocator() { return m_allocator; }
 	inline bx::FileReaderI& getFileReader() { return m_file_reader; }

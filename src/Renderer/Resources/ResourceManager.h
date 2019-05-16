@@ -8,7 +8,7 @@ class ResourceManager {
 public:
 	using ResourceLoader = std::function<void(T&, const std::string&)>;
 
-	void setLoader(ResourceLoader loader);
+	void set_loader(ResourceLoader loader);
 
 	T& create(const std::string& name);
 	T* get(const std::string& name);
@@ -22,7 +22,7 @@ private:
 };
 
 template<typename T>
-inline void ResourceManager<T>::setLoader(ResourceLoader loader) {
+inline void ResourceManager<T>::set_loader(ResourceLoader loader) {
 	m_loader = loader;
 }
 

@@ -63,35 +63,35 @@ public:
 	}
 	virtual ~State() = default;
 
-	inline virtual void onStart() {
+	inline virtual void on_start() {
 #ifdef DRAUG_DEBUG
-		DRAUG_LOG_CORE_DEBUG("{0}: onStart", m_name);
+		DRAUG_LOG_CORE_DEBUG("{0}: on_start", m_name);
 #endif
 	}
 
-	inline virtual void onStop() {
+	inline virtual void on_stop() {
 #ifdef DRAUG_DEBUG
-		DRAUG_LOG_CORE_DEBUG("{0}: onStart", m_name);
+		DRAUG_LOG_CORE_DEBUG("{0}: on_stop", m_name);
 #endif
 	}
 
-	inline virtual void onPause() {
+	inline virtual void on_pause() {
 #ifdef DRAUG_DEBUG
-		DRAUG_LOG_CORE_DEBUG("{0}: onPause", m_name);
+		DRAUG_LOG_CORE_DEBUG("{0}: on_pause", m_name);
 #endif
 	}
 
-	inline virtual void onResume() {
+	inline virtual void on_resume() {
 #ifdef DRAUG_DEBUG
-		DRAUG_LOG_CORE_DEBUG("{0}: onResume", m_name);
+		DRAUG_LOG_CORE_DEBUG("{0}: on_resume", m_name);
 #endif
 	}
 
-	inline virtual StateTransition onEvent(Draug::Event& event) {
+	inline virtual StateTransition on_event(Draug::Event& event) {
 		return StateTransition::none();
 	}
 
-	inline virtual StateTransition fixedTick() {
+	inline virtual StateTransition fixed_tick(float fixed_dt) {
 		return StateTransition::none();
 	}
 
@@ -99,8 +99,8 @@ public:
 		return StateTransition::none();
 	}
 
-	inline virtual void backgroundFixedTick() {}
-	inline virtual void backgroundTick(float dt) {}
+	inline virtual void background_fixed_tick(float fixed_dt) {}
+	inline virtual void background_tick(float dt) {}
 
 	inline StateContext& context() { return m_context; }
 	inline App* app() { return m_context.app; }

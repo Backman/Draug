@@ -2,7 +2,7 @@
 #include "Renderer/bgfx/bgfxUtils.h"
 
 namespace Draug {
-void Texture::setData(const bgfx::TextureInfo& info) {
+void Texture::set_data(const bgfx::TextureInfo& info) {
 	width = info.width;
 	height = info.height;
 	format = info.format;
@@ -13,6 +13,6 @@ void Texture::load(bx::FileReaderI& reader, bx::AllocatorI& allocator, const std
 	bgfx::TextureInfo info;
 	this->path = path;
 	handle = bgfxUtils::loadTexture(reader, allocator, path, BGFX_TEXTURE_NONE, &info);
-	setData(info);
+	set_data(info);
 }
 }

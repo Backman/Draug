@@ -15,7 +15,7 @@ public:
 		m_last_tick = m_first_tick;
 	}
 
-	inline float timeSinceStart() {
+	inline float time_since_start() {
 		LARGE_INTEGER curr_tick;
 		QueryPerformanceCounter(&curr_tick);
 		float dt = static_cast<float>(((double)m_first_tick.QuadPart - (double)m_last_tick.QuadPart) / m_freq.QuadPart);

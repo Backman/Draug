@@ -13,7 +13,7 @@ public:
 	Texture() = default;
 	~Texture() = default;
 
-	void setData(const bgfx::TextureInfo& info);
+	void set_data(const bgfx::TextureInfo& info);
 	void load(bx::FileReaderI& reader, bx::AllocatorI& allocator, const std::string& path);
 
 	bgfx::TextureHandle handle;

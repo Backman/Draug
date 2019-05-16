@@ -188,7 +188,7 @@ struct MouseEvent : public Event {
 	int x_pos;
 	int y_pos;
 
-	inline static MouseEvent createButtonEvent(Type type, MouseButton::Code button) {
+	inline static MouseEvent button_event(Type type, MouseButton::Code button) {
 		MouseEvent e;
 		e.type = type;
 		e.button = button;
@@ -196,7 +196,7 @@ struct MouseEvent : public Event {
 		return e;
 	}
 
-	inline static MouseEvent createMoveEvent(int x_pos, int y_pos) {
+	inline static MouseEvent move_event(int x_pos, int y_pos) {
 		MouseEvent e;
 		e.type = Type::Move;
 		e.x_pos = x_pos;
@@ -204,7 +204,7 @@ struct MouseEvent : public Event {
 		return e;
 	}
 
-	inline static MouseEvent createScrollEvent(int x_scroll, int y_scroll) {
+	inline static MouseEvent scroll_event(int x_scroll, int y_scroll) {
 		MouseEvent e;
 		e.type = Type::Scroll;
 		x_scroll = x_scroll;
