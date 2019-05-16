@@ -32,7 +32,7 @@ public:
 	void tick(Draug::ECS::SystemContext& context, float dt) override {
 		Draug::World* world = context.world;
 		for (auto e : world->entities<PositionComponent, PlayerComponent>()) {
-			auto& pos = world->getComponent<PositionComponent>(e);
+			auto& pos = world->get_component<PositionComponent>(e);
 			if (Draug::Input::Input::keyboard.isKeyPressed(Draug::Input::Key::Left)) {
 				pos.x--;
 			}
@@ -65,8 +65,8 @@ class RenderSystem : public Draug::ECS::System {
 public:
 	void tick(Draug::ECS::SystemContext& context, float dt) override {
 		for (auto e : context.world->entities<PositionComponent, TextureComponent>()) {
-			auto& pos = context.world->getComponent<PositionComponent>(e);
-			auto& texture = context.world->getComponent<TextureComponent>(e);
+			auto& pos = context.world->get_component<PositionComponent>(e);
+			auto& texture = context.world->get_component<TextureComponent>(e);
 		}
 	}
 };
@@ -75,10 +75,10 @@ class DebugTextSystem : public Draug::ECS::System {
 
 public:
 	void init(Draug::ECS::SystemContext& context) override {
-		context.app->getWindow()->subscribeEvent([&](Draug::Event& event)
+		context.app->get_window()->subscribe_event([&](Draug::Event& event)
 			{
 				Draug::Input::KeyEvent key_event;
-				if (Draug::Event::tryCast<Draug::Input::KeyEvent>(event, &key_event) == false) {
+				if (Draug::Event::try_cast<Draug::Input::KeyEvent>(event, &key_event) == false) {
 					return;
 				}
 				if (key_event.type == Draug::Input::KeyEvent::Down && key_event.key == Draug::Input::Key::F1) {
@@ -110,9 +110,9 @@ public:
 		Draug::State(context, "paused_state") {
 	}
 
-	inline Draug::StateTransition onEvent(Draug::Event& event) override {
+	inline Draug::StateTransition on_event(Draug::Event& event) override {
 		Draug::Input::KeyEvent key_event;
-		if (Draug::Event::tryCast<Draug::Input::KeyEvent>(event, &key_event)) {
+		if (Draug::Event::try_cast<Draug::Input::KeyEvent>(event, &key_event)) {
 			switch (key_event.type) {
 				case Draug::Input::KeyEvent::Down:
 				{
@@ -125,7 +125,7 @@ public:
 					break;
 			}
 		}
-		return Draug::State::onEvent(event);
+		return Draug::State::on_event(event);
 	}
 };
 
@@ -135,21 +135,21 @@ public:
 		Draug::State(context, "game_state") {
 	}
 
-	inline void onStart() override {
-		world()->addSystem<RenderSystem>();
-		world()->addSystem<MoveSystem>();
+	inline void on_start() override {
+		world()->add_system<RenderSystem>();
+		world()->add_system<MoveSystem>();
 
-		auto e = world()->createEntity();
-		world()->addComponent<PositionComponent>(e, rand() % 1024, rand() % 720)
-			->addComponent<TextureComponent>(e, nullptr)
-			->addComponent<PlayerComponent>(e);
+		auto e = world()->create_entity();
+		world()->add_component<PositionComponent>(e, rand() % 1024, rand() % 720)
+			->add_component<TextureComponent>(e, nullptr)
+			->add_component<PlayerComponent>(e);
 
-		Draug::Texture* test = app()->getRenderer()->textures.load("D:/workspace/cpp/Draug/.projects/vs2017/Assets", "test.png");
+		Draug::Texture* test = app()->get_renderer()->textures.load("D:/workspace/cpp/Draug/.projects/vs2017/Assets", "test.png");
 	}
 
-	inline Draug::StateTransition onEvent(Draug::Event& event) override {
+	inline Draug::StateTransition on_event(Draug::Event& event) override {
 		Draug::Input::KeyEvent key_event;
-		if (Draug::Event::tryCast<Draug::Input::KeyEvent>(event, &key_event)) {
+		if (Draug::Event::try_cast<Draug::Input::KeyEvent>(event, &key_event)) {
 			switch (key_event.type) {
 				case Draug::Input::KeyEvent::Down:
 				{
@@ -165,7 +165,7 @@ public:
 					break;
 			}
 		}
-		return Draug::State::onEvent(event);
+		return Draug::State::on_event(event);
 	}
 };
 
@@ -175,8 +175,8 @@ public:
 		Draug::State(context, "debug_state") {
 	}
 
-	inline void onStart() {
-		world()->addSystem<DebugTextSystem>();
+	inline void on_start() {
+		world()->add_system<DebugTextSystem>();
 	}
 
 	inline Draug::StateTransition tick(float dt) override {
@@ -191,12 +191,12 @@ public:
 	PlaygroundApp() = default;
 	~PlaygroundApp() = default;
 
-	void onInitialize() override {
+	void on_init() override {
 		m_state_machine.init(new DebugState(Draug::StateContext{ &m_world, this }));
 		m_state_machine.start();
 	}
 
-	void onShutdown() override {
+	void on_shutdown() override {
 	}
 };
 

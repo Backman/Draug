@@ -11,7 +11,7 @@ struct WindowConfig {
 	unsigned int height = 720;
 	bool fullscreen = false;
 
-	inline static WindowConfig createWindowed(const char* title, const int x_pos, const int y_pos, const unsigned int width, const unsigned int height) {
+	inline static WindowConfig create_windowed(const char* title, const int x_pos, const int y_pos, const unsigned int width, const unsigned int height) {
 		WindowConfig config;
 		config.title = title;
 		config.x_pos = x_pos;
@@ -22,8 +22,8 @@ struct WindowConfig {
 		return config;
 	}
 
-	inline static WindowConfig createFullscreen(const char* title, const unsigned int width, const unsigned int height) {
-		WindowConfig config = createWindowed(title, 0, 0, width, height);
+	inline static WindowConfig create_fullscreen(const char* title, const unsigned int width, const unsigned int height) {
+		WindowConfig config = create_windowed(title, 0, 0, width, height);
 		config.fullscreen = true;
 		return config;
 	}

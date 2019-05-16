@@ -12,25 +12,25 @@ public:
 	World() = default;
 	~World();
 
-	inline ECS::EntityManager* getEntityMgr() const { return m_entity_mgr; }
-	inline ECS::SystemManager* getSystemMgr() const { return m_system_mgr; }
+	inline ECS::EntityManager* get_entity_mgr() const { return m_entity_mgr; }
+	inline ECS::SystemManager* get_system_mgr() const { return m_system_mgr; }
 
-	void initialize(App* app);
+	void init(App* app);
 	void shutdown();
 	void tick(float dt);
-	void fixedTick();
+	void fixed_tick(float fixed_dt);
 
-	ECS::Entity createEntity();
+	ECS::Entity create_entity();
 
 	template<typename T, typename... Args>
-	inline ECS::Entity createEntity(Args&& ... args) {
+	inline ECS::Entity create_entity(Args&& ... args) {
 		return m_entity_mgr->create<T>(args...);
 	}
 
-	void createEntities(int count);
+	void create_entities(int count);
 
 	template<typename T, typename... Args>
-	inline void createEntities(int count, Args&& ... args) {
+	inline void create_entities(int count, Args&& ... args) {
 	}
 
 	template<typename... TComponents>
@@ -39,23 +39,19 @@ public:
 	}
 
 	template<typename T, typename... Args>
-	inline World* addComponent(const ECS::Entity& e, Args&& ... args) {
-		m_entity_mgr->addComponent<T>(e, args...);
+	inline World* add_component(const ECS::Entity& e, Args&& ... args) {
+		m_entity_mgr->add_component<T>(e, args...);
 		return this;
 	}
 
 	template<typename T>
-	inline T& getComponent(const ECS::Entity& e) {
-		return m_entity_mgr->getComponent<T>(e);
+	inline T& get_component(const ECS::Entity& e) {
+		return m_entity_mgr->get_component<T>(e);
 	}
 
 	template<typename TSystem, typename... Args>
-	inline void addSystem(Args&& ... args) {
-		m_system_mgr->addSystem<TSystem, Args...>(args...);
-	};
-
-	template<typename TSystem>
-	inline void getSystem() {
+	inline void add_system(Args&& ... args) {
+		m_system_mgr->add_system<TSystem, Args...>(args...);
 	};
 private:
 	ECS::EntityManager* m_entity_mgr;

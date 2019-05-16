@@ -12,10 +12,10 @@ void bgfxRendererAPI::init(Window* window) {
 	bgfx::renderFrame();
 
 	bgfx::Init init;
-	init.platformData.nwh = m_window->getNativeWindow();
+	init.platformData.nwh = m_window->get_native_window_ptr();
 	init.type = bgfx::RendererType::OpenGL;
-	init.resolution.width = m_window->getWidth();
-	init.resolution.height = m_window->getHeight();
+	init.resolution.width = m_window->get_width();
+	init.resolution.height = m_window->get_height();
 	init.resolution.reset = BGFX_RESET_NONE;
 	if (bgfx::init(init) == false) {
 		DRAUG_LOG_CORE_ERROR("Failed to init bgfx");
@@ -31,19 +31,19 @@ void bgfxRendererAPI::shutdown() {
 	bgfx::shutdown();
 }
 
-void bgfxRendererAPI::beginFrame() {
-	bgfx::touch(m_window->getWindowId());
-	bgfx::setViewClear(m_window->getWindowId(), BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x303030ff, 1.0f, 0);
-	bgfx::setViewRect(m_window->getWindowId(), 0, 0, (uint16_t)m_window->getWidth(), (uint16_t)m_window->getHeight());
-	m_window->beginFrame();
+void bgfxRendererAPI::begin_frame() {
+	bgfx::touch(m_window->get_window_id());
+	bgfx::setViewClear(m_window->get_window_id(), BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x303030ff, 1.0f, 0);
+	bgfx::setViewRect(m_window->get_window_id(), 0, 0, (uint16_t)m_window->get_width(), (uint16_t)m_window->get_height());
+	m_window->begin_frame();
 }
 
 void bgfxRendererAPI::renderFrame() {
 	m_window->render();
 }
 
-void bgfxRendererAPI::endFrame() {
-	m_window->endFrame();
+void bgfxRendererAPI::end_frame() {
+	m_window->end_frame();
 
 	// Advance to next frame. Process submitted rendering primitives.
 	bgfx::frame();

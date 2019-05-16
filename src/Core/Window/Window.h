@@ -20,24 +20,24 @@ public:
 	}
 	virtual void shutdown() = 0;
 
-	virtual void beginFrame() = 0;
+	virtual void begin_frame() = 0;
 	virtual void render() = 0;
-	virtual void endFrame() = 0;
+	virtual void end_frame() = 0;
 
-	EventCallbackId subscribeEvent(EventCallback callback);
-	void unsubscribEvent(EventCallbackId id);
-	inline EventDispatcher* getEventDispatcher() { return &m_event_dispatcher; }
+	EventCallbackId subscribe_event(EventCallback callback);
+	void unsubscribe_event(EventCallbackId id);
+	inline EventDispatcher* get_event_dispatcher() { return &m_event_dispatcher; }
 
-	inline void* getNativeWindow() { return m_native_window; }
+	inline void* get_native_window_ptr() { return m_native_window; }
 
-	inline int getWidth() const { return m_config.width; }
-	inline int getHeight() const { return m_config.height; }
-	inline const char* getTitle() const { return m_config.title; }
-	inline bool isFullscreen() const { return m_config.fullscreen; }
+	inline int get_width() const { return m_config.width; }
+	inline int get_height() const { return m_config.height; }
+	inline const char* get_title() const { return m_config.title; }
+	inline bool is_fullscreen() const { return m_config.fullscreen; }
 
-	inline uint16_t getWindowId() const { return m_id; }
+	inline uint16_t get_window_id() const { return m_id; }
 
-	void dispatchEvent(Event& event);
+	void dispatch_event(Event& event);
 protected:
 	void* m_native_window;
 private:

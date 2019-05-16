@@ -6,7 +6,7 @@ World::~World() {
 	shutdown();
 }
 
-void World::initialize(App* app) {
+void World::init(App* app) {
 	m_entity_mgr = new ECS::EntityManager();
 	m_entity_mgr->init();
 	m_system_mgr = new ECS::SystemManager();
@@ -29,15 +29,15 @@ void World::tick(float dt) {
 	m_system_mgr->tick(dt);
 }
 
-void World::fixedTick() {
-	m_system_mgr->fixedTick();
+void World::fixed_tick(float fixed_dt) {
+	m_system_mgr->fixed_tick(fixed_dt);
 }
 
-ECS::Entity World::createEntity() {
+ECS::Entity World::create_entity() {
 	return m_entity_mgr->create();
 }
 
-void World::createEntities(int count) {
+void World::create_entities(int count) {
 	m_entity_mgr->create(count);
 }
 }

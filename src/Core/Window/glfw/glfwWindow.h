@@ -9,9 +9,9 @@ class glfwWindow : public Window {
 public:
 	bool init(const WindowConfig& config) override;
 	void shutdown() override;
-	void beginFrame() override;
+	void begin_frame() override;
 	void render() override;
-	void endFrame() override;
+	void end_frame() override;
 
 private:
 	GLFWwindow* m_window;

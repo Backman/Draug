@@ -21,20 +21,20 @@ public:
 
 	void run();
 
-	inline Window* const getWindow() { return m_window; }
-	inline Renderer* const getRenderer() { return m_renderer; }
+	inline Window* const get_window() { return m_window; }
+	inline Renderer* const get_renderer() { return m_renderer; }
 
 protected:
-	virtual void onInitialize() {}
-	virtual void onShutdown() {}
+	virtual void on_init() {}
+	virtual void on_shutdown() {}
 	World m_world;
 	StateMachine m_state_machine;
 
 private:
-	void onEvent(Event& event);
-	void initialize();
+	void on_event(Event& event);
+	void init();
 	void shutdown();
-	bool onWindowClose(const WindowCloseEvent& event);
+	bool on_window_close(const WindowCloseEvent& event);
 
 	static App* s_instance;
 
