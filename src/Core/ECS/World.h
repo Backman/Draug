@@ -28,7 +28,7 @@ public:
 
 	template<typename TSystem, typename... Args>
 	TSystem* register_system(Args&& ... args) {
-		return register_system(new TSystem(std::forward(args)...);
+		return register_system(new TSystem(std::forward<Args>(args)...));
 	}
 
 	void tick(float dt) {

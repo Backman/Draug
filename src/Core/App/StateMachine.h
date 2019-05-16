@@ -22,7 +22,7 @@ public:
 			return;
 		}
 		State* start_state = m_state_stack.back();
-		start_state->onStart();
+		start_state->on_start();
 		m_running = true;
 	}
 
@@ -35,28 +35,28 @@ public:
 		State* curr_state = m_state_stack.back();
 		StateTransition t = curr_state->tick(dt);
 		for (size_t i = 0; i < m_state_stack.size(); i++) {
-			m_state_stack[i]->backgroundTick(dt);
+			m_state_stack[i]->background_tick(dt);
 		}
 		transition(t);
 	}
 
-	inline void fixedTick() {
+	inline void fixed_tick(float fixed_dt) {
 		if (m_state_stack.empty()) {
 			return;
 		}
 		State* curr_state = m_state_stack.back();
-		StateTransition t = curr_state->fixedTick();
+		StateTransition t = curr_state->fixed_tick(fixed_dt);
 		for (size_t i = 0; i < m_state_stack.size(); i++) {
-			m_state_stack[i]->backgroundFixedTick();
+			m_state_stack[i]->background_fixed_tick(fixed_dt);
 		}
 		transition(t);
 	}
 
-	inline void onEvent(Draug::Event& event) {
+	inline void on_event(Draug::Event& event) {
 		if (m_state_stack.empty()) {
 			return;
 		}
-		StateTransition t = m_state_stack.back()->onEvent(event);
+		StateTransition t = m_state_stack.back()->on_event(event);
 		transition(t);
 	}
 
@@ -101,23 +101,23 @@ private:
 	inline void goTo(State* state) {
 		popAndDelete();
 		m_state_stack.emplace_back(state);
-		state->onStart();
+		state->on_start();
 	}
 
 	inline void push(State* state) {
 		if (m_state_stack.empty() == false) {
 			State* curr_state = m_state_stack.back();
-			curr_state->onPause();
+			curr_state->on_pause();
 		}
 		m_state_stack.emplace_back(state);
-		state->onStart();
+		state->on_start();
 	}
 
 	inline void pop() {
 		popAndDelete();
 		if (m_state_stack.empty() == false) {
 			State* curr_state = m_state_stack.back();
-			curr_state->onResume();
+			curr_state->on_resume();
 		}
 		else {
 			m_running = false;
@@ -129,7 +129,7 @@ private:
 			return;
 		}
 		State* state = m_state_stack.back();
-		state->onStop();
+		state->on_stop();
 		m_state_stack.pop_back();
 		delete state;
 	}

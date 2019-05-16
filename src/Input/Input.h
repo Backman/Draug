@@ -14,8 +14,8 @@ public:
 	using KeyEventCallback = std::function<void(const MouseEvent&)>;
 	using MouseEventCallback = std::function<void(const MouseEvent&)>;
 	inline static void init(Window* window) {
-		s_dispatcher = window->getEventDispatcher();
-		s_dispatcher->subscribe(BIND_STATIC_FN(Input, onEvent));
+		s_dispatcher = window->get_event_dispatcher();
+		s_dispatcher->subscribe(BIND_STATIC_FN(Input, on_event));
 	}
 
 	inline static void reset() {
@@ -24,12 +24,12 @@ public:
 	}
 
 private:
-	inline static void onEvent(const Event& event) {
-		Event::dispatch<KeyEvent>(event, BIND_STATIC_FN(Input, onKeyEvent));
-		Event::dispatch<MouseEvent>(event, BIND_STATIC_FN(Input, onMouseEvent));
+	inline static void on_event(const Event& event) {
+		Event::dispatch<KeyEvent>(event, BIND_STATIC_FN(Input, on_key_event));
+		Event::dispatch<MouseEvent>(event, BIND_STATIC_FN(Input, on_mouse_event));
 	}
 
-	inline static bool onKeyEvent(const KeyEvent& event) {
+	inline static bool on_key_event(const KeyEvent& event) {
 		switch (event.type) {
 			case KeyEvent::Down:
 			{
@@ -56,29 +56,29 @@ private:
 		return true;
 	}
 
-	inline static bool onMouseEvent(const MouseEvent& event) {
+	inline static bool on_mouse_event(const MouseEvent& event) {
 		switch (event.type) {
 			case MouseEvent::Down:
 			{
-				mouse.onButtonDown(event);
+				mouse.on_button_down(event);
 				break;
 			}
 			break;
 			case MouseEvent::Up:
 			{
-				mouse.onButtonUp(event);
+				mouse.on_button_up(event);
 				break;
 			}
 			break;
 			case MouseEvent::Move:
 			{
-				mouse.onMove(event);
+				mouse.on_move(event);
 				break;
 			}
 			break;
 			case MouseEvent::Scroll:
 			{
-				mouse.onScroll(event);
+				mouse.on_scroll(event);
 				break;
 			}
 			break;

@@ -15,8 +15,8 @@ enum EventType {
 	Count,
 	Invalid = 0xFFFFFFFF,
 };
-#define DRAUG_EVENT_CLASS(type) static EventType s_getType() { return type; }\
-								virtual EventType getType() const override { return s_getType(); }
+#define DRAUG_EVENT_CLASS(type) static EventType s_get_type() { return type; }\
+								virtual EventType get_type() const override { return s_get_type(); }
 #define BIND_FN(clazz, fn) std::bind(&clazz::fn, this, std::placeholders::_1)
 #define BIND_STATIC_FN(clazz, fn) std::bind(&clazz::fn, std::placeholders::_1)
 
@@ -26,20 +26,20 @@ struct Event {
 
 	template<typename T>
 	static bool dispatch(const Event& event, DispatchCallback<T> callback) {
-		if (event.getType() == T::s_getType()) {
+		if (event.get_type() == T::s_get_type()) {
 			return callback(*(T*)& event);
 		}
 		return false;
 	}
 
 	template<typename T>
-	static bool isOfType(const Event& event) {
+	static bool is_of_type(const Event& event) {
 		return event.getType() == T::s_getType();
 	}
 
 	template<typename T>
-	static bool tryCast(Event& event, T* out_event) {
-		if (event.getType() == T::s_getType()) {
+	static bool try_cast(Event& event, T* out_event) {
+		if (event.get_type() == T::s_get_type()) {
 			*out_event = *(T*)&event;
 			return true;
 		}
@@ -48,7 +48,7 @@ struct Event {
 	}
 
 
-	virtual EventType getType() const = 0;
+	virtual EventType get_type() const = 0;
 private:
 };
 

@@ -7,26 +7,26 @@ namespace Draug {
 namespace OLD_ECS {
 template<typename TComponent>
 struct DRAUG_API Component {
-	inline static ComponentId getId() {
+	inline static ComponentId get_id() {
 		static ComponentId id = s_id++;
 		return id;
 	}
 
-	static inline TComponent& getInstance(const size_t index) {
-		ComponentId id = Component<TComponent>::getId();
-		validateComponent(id, index);
+	static inline TComponent& get(const size_t index) {
+		ComponentId id = Component<TComponent>::get_id();
+		validate(id, index);
 		return s_component_pool[id][index];
 	}
 
 	template<typename... Args>
-	static inline TComponent& createInstance(const size_t index, Args&& ... args) {
-		ComponentId id = Component<TComponent>::getId();
-		validateComponent(id, index);
+	static inline TComponent& create(const size_t index, Args&& ... args) {
+		ComponentId id = Component<TComponent>::get_id();
+		validate(id, index);
 		s_component_pool[id][index] = TComponent{ std::forward<Args>(args)... };
 		return s_component_pool[id][index];
 	}
 private:
-	static inline void validateComponent(const ComponentId id, const size_t index) {
+	static inline void validate(const ComponentId id, const size_t index) {
 		if (s_component_pool.find(id) == s_component_pool.end()) {
 			s_component_pool[id] = std::vector<TComponent>();
 		}

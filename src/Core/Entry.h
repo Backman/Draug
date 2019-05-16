@@ -6,7 +6,7 @@
 #if DRAUG_WINDOWS
 #define DRAUG_ENTRY(app_class) \
 int main(int argc, const char** argv) { \
-	Draug::Log::initialize(); \
+	Draug::Log::init(); \
 	app_class* app = new app_class(); \
 	app->run(); \
 	delete app; \

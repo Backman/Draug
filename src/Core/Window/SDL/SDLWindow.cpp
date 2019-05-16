@@ -190,14 +190,14 @@ void SDLWindow::shutdown() {
 	SDL_Quit();
 }
 
-void SDLWindow::beginFrame() {
+void SDLWindow::begin_frame() {
 	pollEvents();
 }
 
 void SDLWindow::render() {
 }
 
-void SDLWindow::endFrame() {
+void SDLWindow::end_frame() {
 }
 
 void SDLWindow::pollEvents() {
@@ -205,7 +205,7 @@ void SDLWindow::pollEvents() {
 	while (SDL_PollEvent(&sdl_event)) {
 		if (sdl_event.type == SDL_QUIT) {
 			WindowCloseEvent event;
-			dispatchEvent(event);
+			dispatch_event(event);
 			break;
 		}
 		if (sdl_event.type == SDL_WINDOWEVENT) {
@@ -215,7 +215,7 @@ void SDLWindow::pollEvents() {
 					WindowMovedEvent event;
 					event.x_pos = sdl_event.window.data1;
 					event.y_pos = sdl_event.window.data2;
-					dispatchEvent(event);
+					dispatch_event(event);
 				}
 				break;
 				case SDL_WINDOWEVENT_RESIZED:
@@ -223,7 +223,7 @@ void SDLWindow::pollEvents() {
 					WindowResizeEvent event;
 					event.height = sdl_event.window.data1;
 					event.width = sdl_event.window.data2;
-					dispatchEvent(event);
+					dispatch_event(event);
 				}
 				break;
 				case SDL_WINDOWEVENT_CLOSE:
@@ -254,7 +254,7 @@ void SDLWindow::pollEvents() {
 				else {
 					event.type = Input::KeyEvent::Down;
 				}
-				dispatchEvent(event);
+				dispatch_event(event);
 			}
 			break;
 			case SDL_KEYUP:
@@ -266,31 +266,31 @@ void SDLWindow::pollEvents() {
 				Input::KeyEvent event;
 				event.key = s_key_table[scancode];
 				event.type = Input::KeyEvent::Up;
-				dispatchEvent(event);
+				dispatch_event(event);
 			}
 			break;
 			case SDL_MOUSEMOTION:
 			{
 				SDL_MouseMotionEvent motion = sdl_event.motion;
-				dispatchEvent(Input::MouseEvent::createMoveEvent(motion.x, motion.y));
+				dispatch_event(Input::MouseEvent::move_event(motion.x, motion.y));
 			}
 			break;
 			case SDL_MOUSEBUTTONDOWN:
 			{
 				SDL_MouseButtonEvent mouse = sdl_event.button;
-				dispatchEvent(Input::MouseEvent::createButtonEvent(Input::MouseEvent::Down, Input::MouseButton::Code(mouse.button)));
+				dispatch_event(Input::MouseEvent::button_event(Input::MouseEvent::Down, Input::MouseButton::Code(mouse.button)));
 			}
 			break;
 			case SDL_MOUSEBUTTONUP:
 			{
 				SDL_MouseButtonEvent mouse = sdl_event.button;
-				dispatchEvent(Input::MouseEvent::createButtonEvent(Input::MouseEvent::Up, Input::MouseButton::Code(mouse.button)));
+				dispatch_event(Input::MouseEvent::button_event(Input::MouseEvent::Up, Input::MouseButton::Code(mouse.button)));
 			}
 			break;
 			case SDL_MOUSEWHEEL:
 			{
 				SDL_MouseWheelEvent wheel = sdl_event.wheel;
-				dispatchEvent(Input::MouseEvent::createScrollEvent(wheel.x, wheel.y));
+				dispatch_event(Input::MouseEvent::scroll_event(wheel.x, wheel.y));
 			}
 			break;
 			default:

@@ -158,21 +158,21 @@ static glfwWindow* getWindow(GLFWwindow* window) {
 }
 
 static void glfw_windowCloseCallback(GLFWwindow* window) {
-	getWindow(window)->dispatchEvent(WindowCloseEvent());
+	getWindow(window)->dispatch_event(WindowCloseEvent());
 }
 
 static void glfw_windowSizeCallback(GLFWwindow* window, int width, int height) {
 	WindowResizeEvent event;
 	event.width = width;
 	event.height = height;
-	getWindow(window)->dispatchEvent(event);
+	getWindow(window)->dispatch_event(event);
 }
 
 static void glfw_windowPosCallback(GLFWwindow* window, int x_pos, int y_pos) {
 	WindowMovedEvent event;
 	event.x_pos = x_pos;
 	event.y_pos = y_pos;
-	getWindow(window)->dispatchEvent(event);
+	getWindow(window)->dispatch_event(event);
 }
 
 static void glfw_keyCallback(GLFWwindow* window, int glfw_key, int scancode, int action, int mods) {
@@ -198,7 +198,7 @@ static void glfw_keyCallback(GLFWwindow* window, int glfw_key, int scancode, int
 		}
 		break;
 	}
-	getWindow(window)->dispatchEvent(event);
+	getWindow(window)->dispatch_event(event);
 }
 
 static void glfw_mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
@@ -217,15 +217,15 @@ static void glfw_mouseButtonCallback(GLFWwindow* window, int button, int action,
 		default:
 			return;
 	};
-	getWindow(window)->dispatchEvent(Input::MouseEvent::createButtonEvent(type, Input::MouseButton::Code(button)));
+	getWindow(window)->dispatch_event(Input::MouseEvent::button_event(type, Input::MouseButton::Code(button)));
 }
 
 static void glfw_cursorPosCallbac(GLFWwindow* window, double x, double y) {
-	getWindow(window)->dispatchEvent(Input::MouseEvent::createMoveEvent(x, y));
+	getWindow(window)->dispatch_event(Input::MouseEvent::move_event(x, y));
 }
 
 static void glfw_scrollCallback(GLFWwindow* window, double x_scroll, double y_scroll) {
-	getWindow(window)->dispatchEvent(Input::MouseEvent::createScrollEvent(x_scroll, y_scroll));
+	getWindow(window)->dispatch_event(Input::MouseEvent::scroll_event(x_scroll, y_scroll));
 }
 
 bool glfwWindow::init(const WindowConfig& config) {
@@ -268,7 +268,7 @@ void glfwWindow::shutdown() {
 	glfwTerminate();
 }
 
-void glfwWindow::beginFrame() {
+void glfwWindow::begin_frame() {
 	glfwPollEvents();
 
 }
@@ -277,7 +277,7 @@ void glfwWindow::render() {
 
 }
 
-void glfwWindow::endFrame() {
+void glfwWindow::end_frame() {
 
 }
 }

@@ -16,7 +16,7 @@ class DRAUG_API System {
 public:
 	virtual void init(SystemContext& context) {}
 	virtual void tick(SystemContext& context, float dt) {}
-	virtual void fixedTick(SystemContext& context) {}
+	virtual void fixed_tick(SystemContext& context, float fixed_dt) {}
 	virtual void shutdown(SystemContext& context) {}
 };
 
@@ -35,15 +35,15 @@ public:
 	}
 
 	template<typename TSystem>
-	inline void addSystem(TSystem* s) {
+	inline void add_system(TSystem* s) {
 		m_systems.emplace_back(s);
 		s->init(m_context);
 	}
 
 	template<typename TSystem, typename... Args>
-	inline void addSystem(Args&& ... args) {
+	inline void add_system(Args&& ... args) {
 		TSystem* s = new TSystem(std::forward(args)...);
-		return addSystem(s);
+		return add_system(s);
 	}
 
 	void tick(float dt) {
@@ -52,9 +52,9 @@ public:
 		}
 	}
 
-	void fixedTick() {
+	void fixed_tick(float fixed_dt) {
 		for (size_t i = 0; i < m_systems.size(); i++) {
-			m_systems[i]->fixedTick(m_context);
+			m_systems[i]->fixed_tick(m_context, fixed_dt);
 		}
 	}
 private:
