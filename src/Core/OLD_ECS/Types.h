@@ -3,7 +3,7 @@
 #include "Draug.h"
 
 namespace Draug {
-namespace ECS {
+namespace OLD_ECS {
 namespace details {
 const unsigned int ENTITY_INDEX_BITS = 32;
 const size_t ENTITY_INDEX_MASK = (size_t(1) << ENTITY_INDEX_BITS) - 1;

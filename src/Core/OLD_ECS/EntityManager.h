@@ -5,7 +5,7 @@
 #include "Component.h"
 
 namespace Draug {
-namespace ECS {
+namespace OLD_ECS {
 struct DRAUG_API Entity {
 public:
 	EntityId id;

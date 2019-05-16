@@ -7,10 +7,10 @@ World::~World() {
 }
 
 void World::initialize(App* app) {
-	m_entity_mgr = new ECS::EntityManager();
+	m_entity_mgr = new OLD_ECS::EntityManager();
 	m_entity_mgr->init();
-	m_system_mgr = new ECS::SystemManager();
-	m_system_mgr->init(ECS::SystemContext{ this, app });
+	m_system_mgr = new OLD_ECS::SystemManager();
+	m_system_mgr->init(OLD_ECS::SystemContext{ this, app });
 	m_app = app;
 }
 
@@ -33,7 +33,7 @@ void World::fixedTick() {
 	m_system_mgr->fixedTick();
 }
 
-ECS::Entity World::createEntity() {
+OLD_ECS::Entity World::createEntity() {
 	return m_entity_mgr->create();
 }
 

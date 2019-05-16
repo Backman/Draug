@@ -6,7 +6,7 @@ namespace Draug {
 class World;
 class App;
 
-namespace ECS {
+namespace OLD_ECS {
 struct SystemContext {
 	Draug::World* world;
 	Draug::App* app;

@@ -8,10 +8,11 @@
 #include <Renderer/Resources/Texture.h>
 #include <Renderer/Renderer.h>
 #include <Core/World/World.h>
-#include <Core/ECS/System.h>
+#include <Core/OLD_ECS/System.h>
 #include <Input/Input.h>
 #include "Components/ComponentTypes.h"
 #include "Systems/SystemTypes.h"
+#include <Core/ECS/World.h>
 
 namespace Textures {
 enum Type {
@@ -27,9 +28,9 @@ struct TextureComponent {
 struct PlayerComponent {
 };
 
-class MoveSystem : public Draug::ECS::System {
+class MoveSystem : public Draug::OLD_ECS::System {
 public:
-	void tick(Draug::ECS::SystemContext& context, float dt) override {
+	void tick(Draug::OLD_ECS::SystemContext& context, float dt) override {
 		Draug::World* world = context.world;
 		for (auto e : world->entities<PositionComponent, PlayerComponent>()) {
 			auto& pos = world->getComponent<PositionComponent>(e);
@@ -61,9 +62,9 @@ public:
 	}
 };
 
-class RenderSystem : public Draug::ECS::System {
+class RenderSystem : public Draug::OLD_ECS::System {
 public:
-	void tick(Draug::ECS::SystemContext& context, float dt) override {
+	void tick(Draug::OLD_ECS::SystemContext& context, float dt) override {
 		for (auto e : context.world->entities<PositionComponent, TextureComponent>()) {
 			auto& pos = context.world->getComponent<PositionComponent>(e);
 			auto& texture = context.world->getComponent<TextureComponent>(e);
@@ -71,10 +72,10 @@ public:
 	}
 };
 
-class DebugTextSystem : public Draug::ECS::System {
+class DebugTextSystem : public Draug::OLD_ECS::System {
 
 public:
-	void init(Draug::ECS::SystemContext& context) override {
+	void init(Draug::OLD_ECS::SystemContext& context) override {
 		context.app->getWindow()->subscribeEvent([&](Draug::Event& event)
 			{
 				Draug::Input::KeyEvent key_event;
@@ -87,7 +88,7 @@ public:
 			});
 	}
 
-	void tick(Draug::ECS::SystemContext& context, float dt) override {
+	void tick(Draug::OLD_ECS::SystemContext& context, float dt) override {
 		// Use debug font to print information about this example.
 		bgfx::dbgTextClear();
 		bgfx::dbgTextPrintf(0, 0, 0x0f, "Press F1 to toggle stats.");
@@ -184,6 +185,22 @@ public:
 	}
 };
 
+class NewECS : public Draug::State {
+	struct TestComp {
+		int x;
+		int y;
+	};
+public:
+	NewECS(const Draug::StateContext& context) :
+		Draug::State(context, "new_ecs_state") {}
+
+	inline void onStart() {
+		auto e = world.create_entity();
+		world.assign<TestComp>(e);
+	}
+	Draug::ECS::World world;
+};
+
 class PlaygroundApp : public Draug::App {
 public:
 	bool running = false;
@@ -192,7 +209,8 @@ public:
 	~PlaygroundApp() = default;
 
 	void onInitialize() override {
-		m_state_machine.init(new DebugState(Draug::StateContext{ &m_world, this }));
+		//m_state_machine.init(new DebugState(Draug::StateContext{ &m_world, this }));
+		m_state_machine.init(new NewECS(Draug::StateContext{ &m_world, this }));
 		m_state_machine.start();
 	}
 

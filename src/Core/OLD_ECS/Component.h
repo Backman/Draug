@@ -4,7 +4,7 @@
 #include "Types.h"
 
 namespace Draug {
-namespace ECS {
+namespace OLD_ECS {
 template<typename TComponent>
 struct DRAUG_API Component {
 	inline static ComponentId getId() {
