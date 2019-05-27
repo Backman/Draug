@@ -4,12 +4,17 @@
 #include "Log/Log.h"
 
 namespace Draug {
+namespace ECS {
+class World;
+}
+}
+
+namespace Draug {
 class State;
 class App;
-class World;
 
 struct StateContext {
-	World* world;
+	ECS::World* world;
 	App* app;
 };
 
@@ -104,7 +109,7 @@ public:
 
 	inline StateContext& context() { return m_context; }
 	inline App* app() { return m_context.app; }
-	inline World* world() { return m_context.world; }
+	inline ECS::World* world() { return m_context.world; }
 	inline std::string& name() { return m_name; }
 
 private:
