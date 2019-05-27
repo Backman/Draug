@@ -6,8 +6,6 @@
 #include <Core/Window/Window.h>
 #include <Core/Event/Event.h>
 #include <Renderer/Renderer.h>
-#include <Core/World/World.h>
-#include <Core/OLD_ECS/System.h>
 #include <Input/Input.h>
 #include "Components/PositionComponent.h"
 #include "Systems/RenderDebugStatsSystem.h"
