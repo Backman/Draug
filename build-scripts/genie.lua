@@ -29,6 +29,10 @@ SDL_IMAGE_LIB_DIR = path.join(SDL_IMAGE_DIR, "lib/")
 GLFW_DIR = path.join(DEPS_DIR, "glfw/")
 GLFW_INCLUDE_DIR = path.join(GLFW_DIR, "include/")
 
+ENTT_DIR = path.join(DEPS_DIR, "entt/")
+ENTT_INCLUDE_DIR = path.join(ENTT_DIR, "src/")
+ENTT_SINGLE_INCLUDE_DIR = path.join(ENTT_DIR, "single_include/")
+
 BGFX_DIR = path.join(DEPS_DIR, "bgfx/")
 BGFX_SCRIPTS_DIR = path.join(BGFX_DIR, "scripts/")
 BGFX_INCLUDE_DIR = path.join(BGFX_DIR, "include/")
@@ -56,6 +60,26 @@ function createProject(_name, _kind, _projectDir, _libs, _includes)
 		files {
 			_projectDir .. "**.h",
 			_projectDir .. "**.cpp",
+		}
+
+
+
+		includedirs {
+			DRAUG_SRC_DIR,
+			SPDLOG_INCLUDE_DIR,
+			GLFW_INCLUDE_DIR,
+			BGFX_INCLUDE_DIR,
+			BX_INCLUDE_DIR,
+			BIMG_INCLUDE_DIR,
+			ENTT_INCLUDE_DIR,
+		}
+
+		links {
+			"bgfx",
+			"bx",
+			"bimg",
+			"bimg_encode",
+			"bimg_decode",
 		}
 
 		for _, _lib in ipairs(_libs) do
@@ -153,39 +177,15 @@ project "bimg_encode"
 	configuration {}
 
 group "Draug"
-createProject("Draug", "StaticLib", DRAUG_SRC_DIR, {
-	"bgfx",
-	"bx",
-	"bimg",
-	"bimg_encode",
-	"bimg_decode",
-}, {
-	DRAUG_SRC_DIR,
-	SPDLOG_INCLUDE_DIR,
-
-	GLFW_INCLUDE_DIR,
-	BGFX_INCLUDE_DIR,
-	BX_INCLUDE_DIR,
-	BIMG_INCLUDE_DIR,
-})
+createProject("Draug", "StaticLib", DRAUG_SRC_DIR, {}, {})
 
 group "Playground"
-createProject("DraugPlayground", "ConsoleApp", DRAUG_PLAYGROUND_SRC_DIR, {
+createProject("DraugPlayground", "ConsoleApp", DRAUG_PLAYGROUND_SRC_DIR,
+{
 	"Draug",
-
-	"bgfx",
-	"bx",
-	"bimg",
-	"bimg_encode",
-	"bimg_decode",
-},{
+},
+{
 	DRAUG_PLAYGROUND_SRC_DIR,
-	DRAUG_SRC_DIR,
-	SPDLOG_INCLUDE_DIR,
-
-	BGFX_INCLUDE_DIR,
-	BX_INCLUDE_DIR,
-	BIMG_INCLUDE_DIR,
 })
 
 postbuildcommands {

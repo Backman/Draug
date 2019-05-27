@@ -2,9 +2,9 @@
 
 #include "Draug.h"
 #include "State.h"
-#include "Core/World/World.h"
 #include "StateMachine.h"
 #include "Core/Timer/Timer.h"
+#include "Core/ECS/World.h"
 
 namespace Draug {
 class Renderer;
@@ -27,7 +27,7 @@ public:
 protected:
 	virtual void on_init() {}
 	virtual void on_shutdown() {}
-	World m_world;
+	ECS::World m_world;
 	StateMachine m_state_machine;
 
 private:
