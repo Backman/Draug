@@ -48,4 +48,8 @@ void bgfxRendererAPI::end_frame() {
 	// Advance to next frame. Process submitted rendering primitives.
 	bgfx::frame();
 }
+
+void bgfxRendererAPI::reset() {
+	bgfx::reset(m_window->get_width(), m_window->get_height(), BGFX_RESET_VSYNC);
+}
 }
