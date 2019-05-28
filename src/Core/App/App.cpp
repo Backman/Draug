@@ -50,8 +50,8 @@ void App::on_event(Event& event) {
 
 void App::init() {
 	s_instance = this;
-	WindowConfig window_config = WindowConfig::create_windowed("Draug", 0, 0, 1024, 720);
-	m_window = Window::createWindow(window_config);
+	WindowConfig window_config = WindowConfig::create_windowed("Draug", 1024, 720);
+	m_window = Window::create_window(window_config);
 	m_renderer = new Renderer();
 	m_renderer->init(m_window);
 
