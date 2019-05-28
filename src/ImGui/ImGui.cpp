@@ -10,17 +10,13 @@
 
 #include <GLFW/glfw3.h>
 
-#include "Shaders/vs_ocornut_imgui.bin.h"
-#include "Shaders/fs_ocornut_imgui.bin.h"
-#include "Shaders/vs_imgui_image.bin.h"
-#include "Shaders/fs_imgui_image.bin.h"
+#include "Shaders/vs_imgui.bin.h"
+#include "Shaders/fs_imgui.bin.h"
 
 static const bgfx::EmbeddedShader s_embeddedShaders[] =
 {
-	BGFX_EMBEDDED_SHADER(vs_ocornut_imgui),
-	BGFX_EMBEDDED_SHADER(fs_ocornut_imgui),
-	BGFX_EMBEDDED_SHADER(vs_imgui_image),
-	BGFX_EMBEDDED_SHADER(fs_imgui_image),
+	BGFX_EMBEDDED_SHADER(vs_imgui),
+	BGFX_EMBEDDED_SHADER(fs_imgui),
 
 	BGFX_EMBEDDED_SHADER_END()
 };
@@ -51,15 +47,14 @@ struct ImguiContext {
 		m_last_scroll = 0;
 		m_last = bx::getHPCounter();
 
-		ImGui::SetAllocatorFunctions(mem_alloc, mem_free, NULL);
+		ImGui::SetAllocatorFunctions(mem_alloc, mem_free, nullptr);
 
 		m_imgui = ImGui::CreateContext();
-
 		ImGuiIO& io = ImGui::GetIO();
 
 		io.DisplaySize = ImVec2(1280.0f, 720.0f);
 		io.DeltaTime = 1.0f / 60.0f;
-		io.IniFilename = NULL;
+		io.IniFilename = nullptr;
 
 		setup_style(true);
 
@@ -83,8 +78,8 @@ struct ImguiContext {
 		// Create shader program
 		bgfx::RendererType::Enum type = bgfx::getRendererType();
 		m_program = bgfx::createProgram(
-			bgfx::createEmbeddedShader(s_embeddedShaders, type, "vs_ocornut_imgui"),
-			bgfx::createEmbeddedShader(s_embeddedShaders, type, "fs_ocornut_imgui"),
+			bgfx::createEmbeddedShader(s_embeddedShaders, type, "vs_imgui"),
+			bgfx::createEmbeddedShader(s_embeddedShaders, type, "fs_imgui"),
 			true);
 
 		io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;         // We can honor GetMouseCursor() values (optional)
