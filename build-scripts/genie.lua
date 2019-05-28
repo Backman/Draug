@@ -45,6 +45,9 @@ BIMG_DIR = path.join(DEPS_DIR, "bimg/")
 BIMG_SCRIPTS_DIR = path.join(BIMG_DIR, "scripts/")
 BIMG_INCLUDE_DIR = path.join(BIMG_DIR, "include/")
 
+IMGUI_DIR = path.join(DEPS_DIR, "imgui/")
+IMGUI_SRC_DIR = path.join(IMGUI_DIR, "dear-imgui/")
+
 function createProject(_name, _kind, _projectDir, _libs, _includes) 
 	project (_name)
 		uuid (os.uuid(_name))
@@ -72,6 +75,7 @@ function createProject(_name, _kind, _projectDir, _libs, _includes)
 			BX_INCLUDE_DIR,
 			BIMG_INCLUDE_DIR,
 			ENTT_INCLUDE_DIR,
+			IMGUI_DIR,
 		}
 
 		links {
@@ -80,6 +84,7 @@ function createProject(_name, _kind, _projectDir, _libs, _includes)
 			"bimg",
 			"bimg_encode",
 			"bimg_decode",
+			"imgui",
 		}
 
 		for _, _lib in ipairs(_libs) do
@@ -160,6 +165,9 @@ draugToolchain(BUILD_DIR, PROJECT_DIR, DEPS_DIR)
 group "Deps"
 dofile "glfw.lua"
 glfwProject()
+
+dofile "imgui.lua"
+imguiProject()
 
 dofile(BGFX_SCRIPTS_DIR .. "/bgfx.lua")
 dofile(BGFX_SCRIPTS_DIR .. "/bgfx.lua")

@@ -182,11 +182,11 @@ struct MouseEvent : public Event {
 
 	MouseButton::Code button = MouseButton::Invalid;
 
-	int x_scroll;
-	int y_scroll;
+	float x_scroll;
+	float y_scroll;
 
-	int x_pos;
-	int y_pos;
+	float x_pos;
+	float y_pos;
 
 	inline static MouseEvent button_event(Type type, MouseButton::Code button) {
 		MouseEvent e;
@@ -196,7 +196,7 @@ struct MouseEvent : public Event {
 		return e;
 	}
 
-	inline static MouseEvent move_event(int x_pos, int y_pos) {
+	inline static MouseEvent move_event(float x_pos, float y_pos) {
 		MouseEvent e;
 		e.type = Type::Move;
 		e.x_pos = x_pos;
@@ -204,11 +204,11 @@ struct MouseEvent : public Event {
 		return e;
 	}
 
-	inline static MouseEvent scroll_event(int x_scroll, int y_scroll) {
+	inline static MouseEvent scroll_event(float x_scroll, float y_scroll) {
 		MouseEvent e;
 		e.type = Type::Scroll;
-		x_scroll = x_scroll;
-		y_scroll = y_scroll;
+		e.x_scroll = x_scroll;
+		e.y_scroll = y_scroll;
 		return e;
 	}
 

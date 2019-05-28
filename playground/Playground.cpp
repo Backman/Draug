@@ -10,6 +10,9 @@
 #include "Components/PositionComponent.h"
 #include "Systems/RenderDebugStatsSystem.h"
 #include <Core/ECS/World.h>
+#include <dear-imgui/imgui.h>
+#include <bgfx/bgfx.h>
+#include "ImGui/ImGui.h"
 
 #include "Components/TextureComponent.h"
 class PausedState : public Draug::State {
@@ -71,6 +74,24 @@ public:
 	}
 };
 
+class ImGuiState : public Draug::State {
+public:
+	ImGuiState(const Draug::StateContext& context) :
+		Draug::State(context, "imgui_state") {
+	}
+
+	inline Draug::StateTransition tick(float dt) override {
+		return Draug::StateTransition::push(new TestState(context()));
+	}
+
+	inline void background_tick(float dt) override {
+		bool show_demo_window = true;
+		if (show_demo_window) {
+			ImGui::ShowDemoWindow(&show_demo_window);
+		}
+	}
+};
+
 struct T {
 	int x, y;
 };
@@ -87,7 +108,7 @@ public:
 	}
 
 	inline Draug::StateTransition tick(float dt) override {
-		return Draug::StateTransition::to(new TestState(context()));
+		return Draug::StateTransition::to(new ImGuiState(context()));
 	}
 };
 
@@ -99,7 +120,7 @@ public:
 	~PlaygroundApp() = default;
 
 	void on_init() override {
-		m_state_machine.init(new DebugState(Draug::StateContext{ &m_world, this }));
+		m_state_machine.init(new DebugState(Draug::StateContext{ this, &m_world}));
 		m_state_machine.start();
 	}
 
