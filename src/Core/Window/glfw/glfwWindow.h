@@ -19,13 +19,13 @@ public:
 	int get_framebuffer_height() const override;
 
 private:
-	static void glfw_windowCloseCallback(GLFWwindow* window);
-	static void glfw_windowSizeCallback(GLFWwindow* window, int width, int height);
-	static void glfw_windowPosCallback(GLFWwindow* window, int x_pos, int y_pos);
-	static void glfw_keyCallback(GLFWwindow* window, int glfw_key, int scancode, int action, int mods);
-	static void glfw_mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-	static void glfw_cursorPosCallbac(GLFWwindow* window, double x, double y);
-	static void glfw_scrollCallback(GLFWwindow* window, double x_scroll, double y_scroll);
+	static void glfw_window_close_callback(GLFWwindow* window);
+	static void glfw_window_size_callback(GLFWwindow* window, int width, int height);
+	static void glfw_window_pos_callback(GLFWwindow* window, int x_pos, int y_pos);
+	static void glfw_key_callback(GLFWwindow* window, int glfw_key, int scancode, int action, int mods);
+	static void glfw_mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+	static void glfw_cursor_pos_callbac(GLFWwindow* window, double x, double y);
+	static void glfw_scroll_callback(GLFWwindow* window, double x_scroll, double y_scroll);
 
 	GLFWwindow* m_window;
 };

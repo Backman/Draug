@@ -149,38 +149,40 @@ static void initKeyTable() {
 	s_key_table[GLFW_KEY_MENU] = Input::Key::Code::Menu;
 }
 
-static void glfw_errorCallback(int error, const char* description) {
+static void glfw_error_callback(int error, const char* description) {
 	DRAUG_LOG_CORE_ERROR("GLFW error ({0}): {1}", error, description);
 }
 
-static glfwWindow* getWindow(GLFWwindow* window) {
+static glfwWindow* get_app_window(GLFWwindow* window) {
 	return (glfwWindow*)glfwGetWindowUserPointer(window);
 }
 
-void glfwWindow::glfw_windowCloseCallback(GLFWwindow* window) {
-	getWindow(window)->dispatch_event(WindowCloseEvent());
+void glfwWindow::glfw_window_close_callback(GLFWwindow* window) {
+	Window* app_window = get_app_window(window);
+	app_window ->dispatch_event(WindowCloseEvent());
 }
 
-void glfwWindow::glfw_windowSizeCallback(GLFWwindow* window, int width, int height) {
-	glfwWindow* app_window = getWindow(window);
+void glfwWindow::glfw_window_size_callback(GLFWwindow* window, int width, int height) {
+	glfwWindow* app_window = get_app_window(window);
 	WindowResizeEvent event;
 	event.width = width;
 	event.height = height;
 	app_window->dispatch_event(event);
 }
 
-void glfwWindow::glfw_windowPosCallback(GLFWwindow* window, int x_pos, int y_pos) {
-	glfwWindow* app_window = getWindow(window);
+void glfwWindow::glfw_window_pos_callback(GLFWwindow* window, int x_pos, int y_pos) {
+	glfwWindow* app_window = get_app_window(window);
 	WindowMovedEvent event;
 	event.x_pos = x_pos;
 	event.y_pos = y_pos;
 	app_window->dispatch_event(event);
 }
 
-void glfwWindow::glfw_keyCallback(GLFWwindow* window, int glfw_key, int scancode, int action, int mods) {
+void glfwWindow::glfw_key_callback(GLFWwindow* window, int glfw_key, int scancode, int action, int mods) {
 	if (glfw_key < 0 || glfw_key > GLFW_KEY_LAST) {
 		return;
 	}
+	Window* app_window = get_app_window(window);
 	Input::KeyEvent event;
 	event.key = s_key_table[glfw_key];
 	switch (action) {
@@ -200,10 +202,11 @@ void glfwWindow::glfw_keyCallback(GLFWwindow* window, int glfw_key, int scancode
 		}
 		break;
 	}
-	getWindow(window)->dispatch_event(event);
+	app_window->dispatch_event(event);
 }
 
-void glfwWindow::glfw_mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+void glfwWindow::glfw_mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
+	Window* app_window = get_app_window(window);
 	Input::MouseEvent::Type type;
 	switch (action) {
 		case GLFW_PRESS:
@@ -219,15 +222,17 @@ void glfwWindow::glfw_mouseButtonCallback(GLFWwindow* window, int button, int ac
 		default:
 			return;
 	};
-	getWindow(window)->dispatch_event(Input::MouseEvent::button_event(type, Input::MouseButton::Code(button)));
+	app_window->dispatch_event(Input::MouseEvent::button_event(type, Input::MouseButton::Code(button)));
 }
 
-void glfwWindow::glfw_cursorPosCallbac(GLFWwindow* window, double x, double y) {
-	getWindow(window)->dispatch_event(Input::MouseEvent::move_event(x, y));
+void glfwWindow::glfw_cursor_pos_callbac(GLFWwindow* window, double x, double y) {
+	Window* app_window = get_app_window(window);
+	app_window->dispatch_event(Input::MouseEvent::move_event(x, y));
 }
 
-void glfwWindow::glfw_scrollCallback(GLFWwindow* window, double x_scroll, double y_scroll) {
-	getWindow(window)->dispatch_event(Input::MouseEvent::scroll_event(x_scroll, y_scroll));
+void glfwWindow::glfw_scroll_callback(GLFWwindow* window, double x_scroll, double y_scroll) {
+	Window* app_window = get_app_window(window);
+	app_window->dispatch_event(Input::MouseEvent::scroll_event(x_scroll, y_scroll));
 }
 
 bool glfwWindow::init(const WindowConfig& config) {
@@ -236,7 +241,7 @@ bool glfwWindow::init(const WindowConfig& config) {
 		return false;
 	}
 
-	glfwSetErrorCallback(glfw_errorCallback);
+	glfwSetErrorCallback(glfw_error_callback);
 	if (glfwInit() == false) {
 		DRAUG_LOG_CORE_ERROR("Failed to initialzie GLFW");
 		return false;
@@ -252,13 +257,13 @@ bool glfwWindow::init(const WindowConfig& config) {
 	initKeyTable();
 
 	glfwSetWindowUserPointer(m_window, this);
-	glfwSetWindowSizeCallback(m_window, glfw_windowSizeCallback);
-	glfwSetWindowCloseCallback(m_window, glfw_windowCloseCallback);
-	glfwSetWindowPosCallback(m_window, glfw_windowPosCallback);
-	glfwSetKeyCallback(m_window, glfw_keyCallback);
-	glfwSetMouseButtonCallback(m_window, glfw_mouseButtonCallback);
-	glfwSetCursorPosCallback(m_window, glfw_cursorPosCallbac);
-	glfwSetScrollCallback(m_window, glfw_scrollCallback);
+	glfwSetWindowSizeCallback(m_window, glfw_window_size_callback);
+	glfwSetWindowCloseCallback(m_window, glfw_window_close_callback);
+	glfwSetWindowPosCallback(m_window, glfw_window_pos_callback);
+	glfwSetKeyCallback(m_window, glfw_key_callback);
+	glfwSetMouseButtonCallback(m_window, glfw_mouse_button_callback);
+	glfwSetCursorPosCallback(m_window, glfw_cursor_pos_callbac);
+	glfwSetScrollCallback(m_window, glfw_scroll_callback);
 
 	m_native_window = glfwGetWin32Window(m_window);
 
