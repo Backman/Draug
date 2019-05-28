@@ -44,7 +44,6 @@ struct ImguiContext {
 		}
 
 		m_view_id = 255;
-		m_last_scroll = 0;
 		m_last = bx::getHPCounter();
 
 		ImGui::SetAllocatorFunctions(mem_alloc, mem_free, nullptr);
@@ -58,9 +57,6 @@ struct ImguiContext {
 
 		setup_style(true);
 
-
-		unsigned char* data;
-		int width, height;
 		// Setup vertex declaration
 		m_vert_decl
 			.begin()
@@ -69,11 +65,15 @@ struct ImguiContext {
 			.add(bgfx::Attrib::Color0, 4, bgfx::AttribType::Uint8, true)
 			.end();
 
-		// Create font
-		io.Fonts->AddFontDefault();
-		io.Fonts->GetTexDataAsRGBA32(&data, &width, &height);
-		m_font_texture = bgfx::createTexture2D((uint16_t)width, (uint16_t)height, false, 1, bgfx::TextureFormat::BGRA8, 0, bgfx::copy(data, width * height * 4));
-		m_font_uniform = bgfx::createUniform("s_tex", bgfx::UniformType::Sampler);
+		unsigned char* font_data;
+		int32_t font_width, font_height;
+		ImFontConfig font_config = ImFontConfig();
+		font_config.SizePixels = font_size;
+		io.Fonts->AddFontDefault(&font_config);
+		io.Fonts->GetTexDataAsRGBA32(&font_data, &font_width, &font_height);
+		m_font_texture = bgfx::createTexture2D((uint16_t)font_width, (uint16_t)font_height,
+			false, 1, bgfx::TextureFormat::BGRA8, 0, bgfx::copy(font_data, font_width * font_height * 4));
+		u_font_texture = bgfx::createUniform("s_tex", bgfx::UniformType::Sampler);
 
 		// Create shader program
 		bgfx::RendererType::Enum type = bgfx::getRendererType();
@@ -84,6 +84,7 @@ struct ImguiContext {
 
 		io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;         // We can honor GetMouseCursor() values (optional)
 		io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;          // We can honor io.WantSetMousePos requests (optional, rarely used)
+		io.ConfigFlags |= 0 | ImGuiConfigFlags_NavEnableKeyboard;
 		io.BackendPlatformName = "draug_imgui";
 
 		io.KeyMap[ImGuiKey_Tab] = Draug::Input::Key::Tab;
@@ -114,25 +115,28 @@ struct ImguiContext {
 	void destroy() {
 		ImGui::DestroyContext(m_imgui);
 
-		bgfx::destroy(m_font_uniform);
+		bgfx::destroy(u_font_texture);
 		bgfx::destroy(m_font_texture);
-
-		//bgfx::destroy(u_imageLodEnabled);
-		//bgfx::destroy(m_imageProgram);
 		bgfx::destroy(m_program);
 
 		m_allocator = NULL;
 	}
 
-	void begin_frame(int width, int height, bgfx::ViewId view_id) {
-		m_view_id = view_id;
+	void begin_frame(Window* window) {
+		m_view_id = window->get_window_id();
 
 		ImGuiIO& io = ImGui::GetIO();
 		//if (_inputChar >= 0) {
 		//	io.AddInputCharacter(_inputChar);
 		//}
 
-		io.DisplaySize = ImVec2((float)width, (float)height);
+		int w = window->get_width();
+		int h = window->get_height();
+		int dw = window->get_framebuffer_width();
+		int dh = window->get_framebuffer_height();
+
+		io.DisplaySize = ImVec2((float)w, (float)h);
+		io.DisplayFramebufferScale = ImVec2(w > 0 ? ((float)dw / w) : 0, h > 0 ? ((float)dh / h) : 0);
 
 		const int64_t now = bx::getHPCounter();
 		const int64_t frame_time = now - m_last;
@@ -140,14 +144,13 @@ struct ImguiContext {
 		const double freq = double(bx::getHPFrequency());
 		io.DeltaTime = float(frame_time / freq);
 
-		int scroll = Draug::Input::Input::mouse.y_scroll();
+		float scroll = Draug::Input::Input::mouse.y_scroll();
 
 		io.MousePos = ImVec2((float)Draug::Input::Input::mouse.x_pos(), (float)Draug::Input::Input::mouse.y_pos());
 		io.MouseDown[0] = Draug::Input::Input::mouse.is_button_pressed(Draug::Input::MouseButton::Left);
 		io.MouseDown[1] = Draug::Input::Input::mouse.is_button_pressed(Draug::Input::MouseButton::Right);
 		io.MouseDown[2] = Draug::Input::Input::mouse.is_button_pressed(Draug::Input::MouseButton::Middle);
-		io.MouseWheel = (float)(scroll - m_last_scroll);
-		m_last_scroll = scroll;
+		io.MouseWheel = (float)scroll;
 
 		io.KeyShift = Draug::Input::Input::keyboard.isKeyPressed(Draug::Input::Key::LeftShift) || Draug::Input::Input::keyboard.isKeyPressed(Draug::Input::Key::RightShift);
 		io.KeyCtrl = Draug::Input::Input::keyboard.isKeyPressed(Draug::Input::Key::LeftControl) || Draug::Input::Input::keyboard.isKeyPressed(Draug::Input::Key::RightControl);
@@ -156,6 +159,10 @@ struct ImguiContext {
 		for (int32_t ii = 0; ii < (int32_t)Draug::Input::Key::Count; ++ii) {
 			io.KeysDown[ii] = Draug::Input::Input::keyboard.isKeyPressed(Draug::Input::Key::Code(ii));
 		}
+
+#ifdef _WIN32
+		io.ImeWindowHandle = window->get_native_window_ptr();
+#endif
 
 		ImGui::NewFrame();
 	}
@@ -166,22 +173,6 @@ struct ImguiContext {
 	}
 
 	void render(ImDrawData* draw_data) {
-		const ImGuiIO& io = ImGui::GetIO();
-		const float width = io.DisplaySize.x;
-		const float height = io.DisplaySize.y;
-
-		bgfx::setViewName(m_view_id, "ImGui");
-		bgfx::setViewMode(m_view_id, bgfx::ViewMode::Sequential);
-
-		const bgfx::Caps* caps = bgfx::getCaps();
-		{
-			float ortho[16];
-			bx::mtxOrtho(ortho, 0.0f, width, height, 0.0f, 0.0f, 1000.0f, 0.0f, caps->homogeneousDepth);
-			bgfx::setViewTransform(m_view_id, NULL, ortho);
-			bgfx::setViewRect(m_view_id, 0, 0, uint16_t(width), uint16_t(height));
-		}
-
-		// Render command lists
 		for (int32_t ii = 0, num = draw_data->CmdListsCount; ii < num; ++ii) {
 			bgfx::TransientVertexBuffer tvb;
 			bgfx::TransientIndexBuffer tib;
@@ -190,7 +181,7 @@ struct ImguiContext {
 			uint32_t numVertices = (uint32_t)drawList->VtxBuffer.size();
 			uint32_t numIndices = (uint32_t)drawList->IdxBuffer.size();
 
-			if (!check_available_transient_buffers(numVertices, m_vert_decl, numIndices)) {
+			if (bgfx::getAvailTransientVertexBuffer(numVertices, m_vert_decl) == false || bgfx::getAvailTransientIndexBuffer(numIndices) == false) {
 				// not enough space in transient buffer just quit drawing the rest...
 				break;
 			}
@@ -210,33 +201,21 @@ struct ImguiContext {
 					cmd->UserCallback(drawList, cmd);
 				}
 				else if (0 != cmd->ElemCount) {
-					uint64_t state = 0
-						| BGFX_STATE_WRITE_RGB
-						| BGFX_STATE_WRITE_A
-						| BGFX_STATE_MSAA
-						;
+					uint64_t state = BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A | BGFX_STATE_MSAA;
 
 					bgfx::TextureHandle th = m_font_texture;
 					bgfx::ProgramHandle program = m_program;
 
-					if (NULL != cmd->TextureId) {
-						union { ImTextureID ptr; struct { bgfx::TextureHandle handle; uint8_t flags; uint8_t mip; } s; } texture = { cmd->TextureId };
-						state |= 0 != (IMGUI_FLAGS_ALPHA_BLEND & texture.s.flags)
-							? BGFX_STATE_BLEND_FUNC(BGFX_STATE_BLEND_SRC_ALPHA, BGFX_STATE_BLEND_INV_SRC_ALPHA)
-							: BGFX_STATE_NONE
-							;
-						th = texture.s.handle;
+					if (cmd->TextureId != NULL) {
+						th.idx = uint16_t(uintptr_t(cmd->TextureId));
 					}
-					else {
-						state |= BGFX_STATE_BLEND_FUNC(BGFX_STATE_BLEND_SRC_ALPHA, BGFX_STATE_BLEND_INV_SRC_ALPHA);
-					}
+					state |= BGFX_STATE_BLEND_FUNC(BGFX_STATE_BLEND_SRC_ALPHA, BGFX_STATE_BLEND_INV_SRC_ALPHA);
 
 					const uint16_t xx = uint16_t(bx::max(cmd->ClipRect.x, 0.0f));
 					const uint16_t yy = uint16_t(bx::max(cmd->ClipRect.y, 0.0f));
 					bgfx::setScissor(xx, yy, uint16_t(bx::min(cmd->ClipRect.z, 65535.0f) - xx), uint16_t(bx::min(cmd->ClipRect.w, 65535.0f) - yy));
-
 					bgfx::setState(state);
-					bgfx::setTexture(0, m_font_uniform, th);
+					bgfx::setTexture(0, u_font_texture, th);
 					bgfx::setVertexBuffer(0, &tvb, 0, numVertices);
 					bgfx::setIndexBuffer(&tib, offset, cmd->ElemCount);
 					bgfx::submit(m_view_id, program);
@@ -267,9 +246,8 @@ struct ImguiContext {
 	bgfx::VertexDecl m_vert_decl;
 	bgfx::ProgramHandle m_program;
 	bgfx::TextureHandle m_font_texture;
-	bgfx::UniformHandle m_font_uniform;
+	bgfx::UniformHandle u_font_texture;
 	int64_t m_last;
-	int32_t m_last_scroll;
 	bgfx::ViewId m_view_id;
 };
 
@@ -289,8 +267,8 @@ void imgui_init(float font_size, bx::AllocatorI* allocator) {
 	s_ctx.create(font_size, allocator);
 }
 
-void imgui_begin_frame(int width, int height, bgfx::ViewId view_id) {
-	s_ctx.begin_frame(width, height, view_id);
+void imgui_begin_frame(Window* window) {
+	s_ctx.begin_frame(window);
 }
 
 void imgui_end_frame() {
