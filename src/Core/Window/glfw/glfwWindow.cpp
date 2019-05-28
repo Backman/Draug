@@ -12,7 +12,7 @@
 
 namespace Draug {
 
-Window* Window::createWindow(const WindowConfig& config) {
+Window* Window::create_window(const WindowConfig& config) {
 	glfwWindow* window = new glfwWindow();
 	if (window->init(config) == false) {
 		DRAUG_LOG_CORE_ERROR("Failed to init window");
@@ -157,25 +157,27 @@ static glfwWindow* getWindow(GLFWwindow* window) {
 	return (glfwWindow*)glfwGetWindowUserPointer(window);
 }
 
-static void glfw_windowCloseCallback(GLFWwindow* window) {
+void glfwWindow::glfw_windowCloseCallback(GLFWwindow* window) {
 	getWindow(window)->dispatch_event(WindowCloseEvent());
 }
 
-static void glfw_windowSizeCallback(GLFWwindow* window, int width, int height) {
+void glfwWindow::glfw_windowSizeCallback(GLFWwindow* window, int width, int height) {
+	glfwWindow* app_window = getWindow(window);
 	WindowResizeEvent event;
 	event.width = width;
 	event.height = height;
-	getWindow(window)->dispatch_event(event);
+	app_window->dispatch_event(event);
 }
 
-static void glfw_windowPosCallback(GLFWwindow* window, int x_pos, int y_pos) {
+void glfwWindow::glfw_windowPosCallback(GLFWwindow* window, int x_pos, int y_pos) {
+	glfwWindow* app_window = getWindow(window);
 	WindowMovedEvent event;
 	event.x_pos = x_pos;
 	event.y_pos = y_pos;
-	getWindow(window)->dispatch_event(event);
+	app_window->dispatch_event(event);
 }
 
-static void glfw_keyCallback(GLFWwindow* window, int glfw_key, int scancode, int action, int mods) {
+void glfwWindow::glfw_keyCallback(GLFWwindow* window, int glfw_key, int scancode, int action, int mods) {
 	if (glfw_key < 0 || glfw_key > GLFW_KEY_LAST) {
 		return;
 	}
@@ -201,7 +203,7 @@ static void glfw_keyCallback(GLFWwindow* window, int glfw_key, int scancode, int
 	getWindow(window)->dispatch_event(event);
 }
 
-static void glfw_mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+void glfwWindow::glfw_mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
 	Input::MouseEvent::Type type;
 	switch (action) {
 		case GLFW_PRESS:
@@ -220,11 +222,11 @@ static void glfw_mouseButtonCallback(GLFWwindow* window, int button, int action,
 	getWindow(window)->dispatch_event(Input::MouseEvent::button_event(type, Input::MouseButton::Code(button)));
 }
 
-static void glfw_cursorPosCallbac(GLFWwindow* window, double x, double y) {
+void glfwWindow::glfw_cursorPosCallbac(GLFWwindow* window, double x, double y) {
 	getWindow(window)->dispatch_event(Input::MouseEvent::move_event(x, y));
 }
 
-static void glfw_scrollCallback(GLFWwindow* window, double x_scroll, double y_scroll) {
+void glfwWindow::glfw_scrollCallback(GLFWwindow* window, double x_scroll, double y_scroll) {
 	getWindow(window)->dispatch_event(Input::MouseEvent::scroll_event(x_scroll, y_scroll));
 }
 
@@ -279,6 +281,30 @@ void glfwWindow::render() {
 
 void glfwWindow::end_frame() {
 
+}
+
+int glfwWindow::get_width() const {
+	int width;
+	glfwGetWindowSize(m_window, &width, nullptr);
+	return width;
+}
+
+int glfwWindow::get_height() const {
+	int height;
+	glfwGetWindowSize(m_window, nullptr, &height);
+	return height;
+}
+
+int glfwWindow::get_framebuffer_width() const {
+	int width;
+	glfwGetFramebufferSize(m_window, &width, nullptr);
+	return width;
+}
+
+int glfwWindow::get_framebuffer_height() const {
+	int height;
+	glfwGetFramebufferSize(m_window, nullptr, &height);
+	return height;
 }
 }
 #endif

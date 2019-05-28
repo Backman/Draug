@@ -14,5 +14,7 @@ public:
 	virtual void begin_frame() = 0;
 	virtual void renderFrame() = 0;
 	virtual void end_frame() = 0;
+
+	virtual void reset() = 0;
 };
 }

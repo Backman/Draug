@@ -5,6 +5,7 @@
 #include "StateMachine.h"
 #include "Core/Timer/Timer.h"
 #include "Core/ECS/World.h"
+#include "Input/Input.h"
 
 namespace Draug {
 class Renderer;
@@ -35,6 +36,7 @@ private:
 	void init();
 	void shutdown();
 	bool on_window_close(const WindowCloseEvent& event);
+	bool on_window_resize(const WindowResizeEvent& event);
 
 	static App* s_instance;
 

@@ -10,12 +10,12 @@ class World;
 }
 
 namespace Draug {
-class State;
 class App;
+class State;
 
 struct StateContext {
+	Draug::App* app;
 	ECS::World* world;
-	App* app;
 };
 
 class StateTransition {

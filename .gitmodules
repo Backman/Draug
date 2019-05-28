@@ -16,3 +16,6 @@
 [submodule "deps/entt"]
 	path = deps/entt
 	url = https://github.com/skypjack/entt
+[submodule "deps/imgui/imgui"]
+	path = deps/imgui/dear-imgui
+	url = https://github.com/ocornut/imgui
