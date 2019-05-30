@@ -28,3 +28,7 @@
 #include <bitset>
 #include <tuple>
 #include <unordered_map>
+
+#include <bgfx/bgfx.h>
+#include <bx/file.h>
+#include <bx/allocator.h>

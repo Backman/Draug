@@ -13,8 +13,10 @@
 #include <dear-imgui/imgui.h>
 #include <bgfx/bgfx.h>
 #include "ImGui/ImGui.h"
+#include <Graphics/Gfx.h>
 
 #include "Components/TextureComponent.h"
+#include "Systems/RenderSystem.h"
 class PausedState : public Draug::State {
 public:
 	PausedState(const Draug::StateContext& context) :
@@ -47,9 +49,10 @@ public:
 	}
 
 	inline void on_start() override {
-		auto e = world()->create_entity<TextureComponent>();
+		world()->register_system<RenderSystem>();
+		auto e = world()->create_entity<TextureComponent, PositionComponent>();
 		auto& texture = std::get<1>(e);
-		texture.texture = app()->get_renderer()->textures.load("./Assets", "test.png");
+		texture.texture = Draug::Gfx::get().textures().load("test.png");
 	}
 
 	inline Draug::StateTransition on_event(Draug::Event& event) override {
@@ -120,6 +123,9 @@ public:
 	~PlaygroundApp() = default;
 
 	void on_init() override {
+		Draug::Gfx& gfx = Draug::Gfx::get();
+		gfx.init(DRAUG_RESOURCE_PATH);
+		gfx.add_resource_path("playground", true);
 		m_state_machine.init(new DebugState(Draug::StateContext{ this, &m_world}));
 		m_state_machine.start();
 	}

@@ -11,9 +11,8 @@ class RenderSystem : public ISystem {
 		auto view = world->ecs.view<PositionComponent, TextureComponent>();
 		Draug::Renderer* rendere = world->app->get_renderer();
 		for (auto e : view) {
-			PositionComponent& position = view.get<PositionComponent>(e);
 			TextureComponent& texture = view.get<TextureComponent>(e);
-
+			PositionComponent& position = view.get<PositionComponent>(e);
 		}
 	}
 };

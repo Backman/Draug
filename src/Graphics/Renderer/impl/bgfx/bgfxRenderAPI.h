@@ -27,16 +27,6 @@ public:
 	void end_frame() override;
 
 	void reset() override;
-
-	inline bx::AllocatorI& getAllocator() { return m_allocator; }
-	inline bx::FileReaderI& getFileReader() { return m_file_reader; }
-	inline bx::FileWriterI& getFileWriter() { return m_file_writer; }
-
-protected:
-	bx::DefaultAllocator m_allocator;
-	bx::FileReader m_file_reader;
-	bx::FileWriter m_file_writer;
-
 private:
 	Window* m_window;
 };
