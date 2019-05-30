@@ -5,6 +5,7 @@
 struct SDL_Window;
 
 namespace Draug {
+namespace impl {
 class SDLWindow : public Window {
 public:
 	bool init(const WindowConfig& config) override;
@@ -17,4 +18,5 @@ private:
 	void pollEvents();
 	SDL_Window* m_window;
 };
+}
 }

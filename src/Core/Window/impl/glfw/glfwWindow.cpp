@@ -11,9 +11,8 @@
 #include <GLFW/glfw3native.h>
 
 namespace Draug {
-
 Window* Window::create_window(const WindowConfig& config) {
-	glfwWindow* window = new glfwWindow();
+	impl::glfwWindow* window = new impl::glfwWindow();
 	if (window->init(config) == false) {
 		DRAUG_LOG_CORE_ERROR("Failed to init window");
 		delete window;
@@ -22,6 +21,7 @@ Window* Window::create_window(const WindowConfig& config) {
 	return window;
 }
 
+namespace impl {
 static Input::Key::Code s_key_table[GLFW_KEY_LAST + 1];
 static void initKeyTable() {
 	for (size_t i = 0; i <= GLFW_KEY_LAST; i++) {
@@ -159,7 +159,7 @@ static glfwWindow* get_app_window(GLFWwindow* window) {
 
 void glfwWindow::glfw_window_close_callback(GLFWwindow* window) {
 	Window* app_window = get_app_window(window);
-	app_window ->dispatch_event(WindowCloseEvent());
+	app_window->dispatch_event(WindowCloseEvent());
 }
 
 void glfwWindow::glfw_window_size_callback(GLFWwindow* window, int width, int height) {
@@ -310,6 +310,7 @@ int glfwWindow::get_framebuffer_height() const {
 	int height;
 	glfwGetFramebufferSize(m_window, nullptr, &height);
 	return height;
+}
 }
 }
 #endif

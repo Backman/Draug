@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Draug.h"
-#include "Renderer/BaseRenderAPI.h"
+#include "Graphics/Renderer/BaseRenderAPI.h"
 #include <bgfx/bgfx.h>
 #include <bx/allocator.h>
 #include <bx/file.h>
@@ -14,6 +14,7 @@ class Texture;
 class Window;
 struct TextureData;
 
+namespace impl {
 class bgfxRendererAPI : public BaseRenderAPI {
 public:
 	bgfxRendererAPI() = default;
@@ -39,4 +40,5 @@ protected:
 private:
 	Window* m_window;
 };
+}
 }

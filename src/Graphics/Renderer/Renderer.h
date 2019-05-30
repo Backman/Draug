@@ -1,7 +1,7 @@
 #pragma once
 
 #include "RenderAPI.h"
-#include "Resources/Texture.h"
+#include "Graphics/Resources/Texture.h"
 
 namespace Draug {
 class Renderer : public RenderAPI {

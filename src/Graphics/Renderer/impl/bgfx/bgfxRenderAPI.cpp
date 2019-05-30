@@ -6,7 +6,7 @@
 #include <bx/bx.h>
 
 namespace Draug {
-
+namespace impl {
 void bgfxRendererAPI::init(Window* window) {
 	m_window = window;
 	bgfx::renderFrame();
@@ -50,5 +50,6 @@ void bgfxRendererAPI::end_frame() {
 
 void bgfxRendererAPI::reset() {
 	bgfx::reset(m_window->get_width(), m_window->get_height(), BGFX_RESET_VSYNC);
+}
 }
 }

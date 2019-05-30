@@ -5,7 +5,7 @@
 #include <Core/App/App.h>
 #include <Core/Window/Window.h>
 #include <Core/Event/Event.h>
-#include <Renderer/Renderer.h>
+#include <Graphics/Renderer/Renderer.h>
 #include <Input/Input.h>
 #include "Components/PositionComponent.h"
 #include "Systems/RenderDebugStatsSystem.h"

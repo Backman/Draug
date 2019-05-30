@@ -1,5 +1,5 @@
 #include "App.h"
-#include "Renderer/Renderer.h"
+#include "Graphics/Renderer/Renderer.h"
 #include "Core/Window/Window.h"
 #include "Core/Window/WindowConfig.h"
 #include "Input/Input.h"

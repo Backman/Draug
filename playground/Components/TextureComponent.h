@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Renderer/Resources/Texture.h>
-#include <Renderer/Renderer.h>
+#include <Graphics/Resources/Texture.h>
+#include <Graphics/Renderer/Renderer.h>
 
 struct TextureComponent {
 	Draug::Texture* texture;

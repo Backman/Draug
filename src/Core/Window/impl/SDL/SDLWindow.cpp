@@ -9,7 +9,16 @@
 #include <SDL/SDL_syswm.h>
 
 namespace Draug {
+Window* Window::createWindow(const WindowConfig& config) {
+	impl::SDLWindow* window = new impl::SDLWindow();
+	if (window->init(config) == false) {
+		delete window;
+		return nullptr;
+	}
+	return window;
+}
 
+namespace impl {
 static Input::Key::Code s_key_table[SDL_NUM_SCANCODES + 1];
 static void initKeyTable() {
 	for (size_t i = 0; i <= SDL_NUM_SCANCODES; i++) {
@@ -135,17 +144,6 @@ static void initKeyTable() {
 	s_key_table[SDL_SCANCODE_RGUI] = Input::Key::Code::RightSuper;
 	s_key_table[SDL_SCANCODE_MENU] = Input::Key::Code::Menu;
 }
-
-#ifdef DRAUG_SDL
-Window* Window::createWindow(const WindowConfig& config) {
-	SDLWindow* window = new SDLWindow();
-	if (window->init(config) == false) {
-		delete window;
-		return nullptr;
-	}
-	return window;
-}
-#endif
 
 bool SDLWindow::init(const WindowConfig& config) {
 	if (m_window != nullptr) {
@@ -297,6 +295,7 @@ void SDLWindow::pollEvents() {
 				break;
 		}
 	}
+}
 }
 }
 

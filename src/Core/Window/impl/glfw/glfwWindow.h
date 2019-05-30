@@ -5,6 +5,7 @@
 struct GLFWwindow;
 
 namespace Draug {
+namespace impl {
 class glfwWindow : public Window {
 public:
 	bool init(const WindowConfig& config) override;
@@ -29,4 +30,5 @@ private:
 
 	GLFWwindow* m_window;
 };
+}
 }

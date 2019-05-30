@@ -1,5 +1,5 @@
 #include "Texture.h"
-#include "Renderer/bgfx/bgfxUtils.h"
+#include "Graphics/Renderer/bgfx/bgfxUtils.h"
 
 namespace Draug {
 void Texture::set_data(const bgfx::TextureInfo& info) {
