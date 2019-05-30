@@ -124,5 +124,37 @@ bool file_exists(const std::string& path) {
 	return stat(path.c_str(), &info) == 0 && (info.st_mode & S_IFMT) != 0;
 #endif
 }
+
+ShaderHandle load_shader(bx::FileReaderI* reader, const std::string& path) {
+	if (file_exists(path))
+		return bgfx::createShader(load_mem(reader, path));
+	else
+		return BGFX_INVALID_HANDLE;
+}
+
+ProgramHandle load_shader_program(bx::FileReaderI* reader, const std::string& path) {
+	const std::string vs_path = path + "_vs";
+	const std::string fs_path = path + "_fs";
+
+	bgfx::ShaderHandle vertex_shader = load_shader(reader, vs_path.c_str());
+	bgfx::ShaderHandle fragment_shader = load_shader(reader, fs_path.c_str());
+
+	bgfx::ProgramHandle handle = bgfx::createProgram(vertex_shader, fragment_shader, true);
+
+	if (bgfx::isValid(handle)) {
+		DRAUG_LOG_CORE_ERROR("Failed to load shader program - {0}", path);
+	}
+	return handle;
+}
+UniformHandle create_uniform(const std::string& name, UniformType type, uint16_t num) {
+	UniformHandle handle = bgfx::createUniform(name.c_str(), type, num);
+	
+	if (bgfx::isValid(handle)) {
+		DRAUG_LOG_CORE_ERROR("Failed to create uniform - {0}", name);
+	}
+	return handle;
+}
+void get_uniform_info(UniformHandle handle, UniformInfo& info) {
+	bgfx::getUniformInfo(handle, info);
 }
 }
