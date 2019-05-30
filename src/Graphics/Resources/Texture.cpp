@@ -1,5 +1,5 @@
 #include "Texture.h"
-#include "Graphics/Renderer/bgfx/bgfxUtils.h"
+#include "ResourceUtils.h"
 
 namespace Draug {
 void Texture::set_data(const bgfx::TextureInfo& info) {
@@ -12,7 +12,7 @@ void Texture::set_data(const bgfx::TextureInfo& info) {
 void Texture::load(bx::FileReaderI& reader, bx::AllocatorI& allocator, const std::string& path) {
 	bgfx::TextureInfo info;
 	this->path = path;
-	handle = bgfxUtils::loadTexture(reader, allocator, path, BGFX_TEXTURE_NONE, &info);
+	handle = load_texture(reader, allocator, path, BGFX_TEXTURE_NONE, &info);
 	set_data(info);
 }
 }

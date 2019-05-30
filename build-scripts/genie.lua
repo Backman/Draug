@@ -8,6 +8,7 @@ newoption {
 }
 
 ROOT_DIR = (path.getabsolute("..") .. "/")
+DRAUG_RESOURCE_DIR = path.join(ROOT_DIR, "data")
 DRAUG_SRC_DIR = path.join(ROOT_DIR, "src/")
 DRAUG_PLAYGROUND_SRC_DIR = path.join(ROOT_DIR, "playground/")
 
@@ -140,6 +141,11 @@ function createProject(_name, _kind, _projectDir, _libs, _includes)
 				"glfw3",
 			}
 		end
+
+		configuration { "not osx", "not asmjs" }
+			defines {
+				"DRAUG_RESOURCE_PATH=\"" .. DRAUG_RESOURCE_DIR .. "\"",
+			}
 
 		configuration {}
 end

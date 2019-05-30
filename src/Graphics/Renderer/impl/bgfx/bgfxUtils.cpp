@@ -40,22 +40,22 @@ void unload(bx::AllocatorI* allocator, void* data) {
 	BX_FREE(allocator, data);
 }
 
-void releaseBgfxImage(void* ptr, void* data) {
+void release_bgfx_image(void* ptr, void* data) {
 	BX_UNUSED(ptr);
 	bimg::ImageContainer* image = (bimg::ImageContainer*)data;
 	bimg::imageFree(image);
 }
 
-bgfx::TextureHandle loadTexture(bx::FileReaderI& reader, bx::AllocatorI& allocator, const std::string& path, uint64_t flags, bgfx::TextureInfo* info) {
+bgfx::TextureHandle load_texture(bx::FileReaderI& reader, bx::AllocatorI& allocator, const std::string& path, uint64_t flags, bgfx::TextureInfo* info) {
 	uint32_t size;
 	void* data = bgfxUtils::load(&reader, &allocator, path, &size);
 	if (data == nullptr) {
 		return BGFX_INVALID_HANDLE;
 	}
-	return loadTexture(allocator, path, data, size, flags, info);
+	return load_texture(allocator, path, data, size, flags, info);
 }
 
-bgfx::TextureHandle loadTexture(bx::AllocatorI& allocator, const std::string& name, void* data, uint32_t size, uint64_t flags, bgfx::TextureInfo* info) {
+bgfx::TextureHandle load_texture(bx::AllocatorI& allocator, const std::string& name, void* data, uint32_t size, uint64_t flags, bgfx::TextureInfo* info) {
 	bx::Error error;
 	bimg::ImageContainer* image = bimg::imageParse(&allocator, data, size);
 	bgfxUtils::unload(&allocator, data);
@@ -64,7 +64,7 @@ bgfx::TextureHandle loadTexture(bx::AllocatorI& allocator, const std::string& na
 		return BGFX_INVALID_HANDLE;
 	}
 
-	const bgfx::Memory* mem = bgfx::makeRef(image->m_data, image->m_size, bgfxUtils::releaseBgfxImage, image);
+	const bgfx::Memory* mem = bgfx::makeRef(image->m_data, image->m_size, release_bgfx_image, image);
 
 	bgfx::TextureHandle handle;
 	if (image->m_cubeMap) {
