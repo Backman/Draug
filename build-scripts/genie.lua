@@ -8,12 +8,13 @@ newoption {
 }
 
 ROOT_DIR = (path.getabsolute("..") .. "/")
-DRAUG_RESOURCE_DIR = path.join(ROOT_DIR, "data")
+DRAUG_RESOURCE_DIR = path.join(ROOT_DIR, "resources/")
 DRAUG_SRC_DIR = path.join(ROOT_DIR, "src/")
 DRAUG_PLAYGROUND_SRC_DIR = path.join(ROOT_DIR, "playground/")
 
-BUILD_DIR = path.join(ROOT_DIR, ".bin/")
-PROJECT_DIR = path.join(ROOT_DIR, ".projects/")
+BUILD_DIR = path.join(ROOT_DIR, ".build/")
+OUTPUT_DIR = path.join(BUILD_DIR, "bin/")
+PROJECT_DIR = path.join(BUILD_DIR, "projects/")
 DEPS_DIR = path.join(ROOT_DIR, "deps/")
 
 SPDLOG_DIR = path.join(DEPS_DIR, "spdlog/")
@@ -166,7 +167,7 @@ solution "Draug"
 	startproject "DraugPlayground"
 
 dofile "toolchain.lua"
-draugToolchain(BUILD_DIR, PROJECT_DIR, DEPS_DIR)
+draugToolchain(BUILD_DIR, PROJECT_DIR, OUTPUT_DIR, DEPS_DIR)
 
 group "Deps"
 dofile "glfw.lua"
@@ -201,16 +202,3 @@ createProject("DraugPlayground", "ConsoleApp", DRAUG_PLAYGROUND_SRC_DIR,
 {
 	DRAUG_PLAYGROUND_SRC_DIR,
 })
-
-postbuildcommands {
-	"robocopy \"" .. DRAUG_PLAYGROUND_SRC_DIR .. "/Assets\" \"" .. path.join(PROJECT_DIR, _ACTION, "Assets") .. "\" /S /XO",
-}
-
-configuration { "Debug" }
-	postbuildcommands {
-		"robocopy \"" .. DRAUG_PLAYGROUND_SRC_DIR .. "/Assets\" \"" .. path.join(BUILD_DIR, "x64_" .. _ACTION, "Debug/bin/Assets") .. "\" /S /XO"
-	}
-configuration { "Release" }
-	postbuildcommands {
-		"robocopy \"" .. DRAUG_PLAYGROUND_SRC_DIR .. "/Assets\" \"" .. path.join(BUILD_DIR, "x64_" .. _ACTION, "Release/bin/Assets") .. "\" /S /XO"
-	}

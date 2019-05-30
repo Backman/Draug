@@ -454,6 +454,8 @@ _bin
 .bin
 _builds
 .builds
+.build
+_build
 _projects
 .projects
 

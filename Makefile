@@ -5,8 +5,7 @@ ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 GENIE = ./tools/bin/genie.exe
 SHADERC = ./tools/bin/shaderc.exe
 
-PROJECTS_DIR_NAME = .projects
-BUILDS_DIR_NAME = .bin
+BUILD_DIR = .build
 
 .PHONY: all
 all: vs2017
@@ -14,16 +13,9 @@ all: vs2017
 .PHONY: all
 all-sdl: vs2017-sdl
 
-.PHONY: clean-projects
-clean-projects:
-	$(call remove_folder, $(PROJECTS_DIR_NAME))
-
-.PHONY: clean-build
-clean-build:
-	$(call remove_folder, $(BUILDS_DIR_NAME))
-
 .PHONY: clean
-clean: clean-build clean-projects
+clean:
+	$(call remove_folder, $(BUILD_DIR))
 
 .PHONY: .projects/vs2017 
 vs2017:

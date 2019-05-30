@@ -11,8 +11,15 @@ function setBxCompat()
 end
 
 
-function draugToolchain(_buildDir, _projDir, _libDir)
+function draugToolchain(_buildDir, _projDir, _outputDir, _libDir)
 	if (_ACTION == nil) then return false end
+
+	if _ACTION == "clean" then
+		os.rmdir(_buildDir)
+		os.mkdir(_buildDir)
+		os.exit(1)
+	end
+
 	defines {
 		"SDL_MAIN_HANDLED",
 		"__STDC_LIMIT_MACROS",
@@ -42,7 +49,7 @@ function draugToolchain(_buildDir, _projDir, _libDir)
 		}
 
 	configuration { "Debug", "x64" }
-		local output_dir = path.join(_buildDir, "x64_" .. _ACTION, "Debug")
+		local output_dir = path.join(_outputDir, "x64_" .. _ACTION, "Debug")
         targetdir (path.join(output_dir, "bin"))
         objdir (path.join(output_dir, "obj"))
         libdirs {
@@ -50,7 +57,7 @@ function draugToolchain(_buildDir, _projDir, _libDir)
 			path.join(SDL_IMAGE_LIB_DIR, "x64", "Debug"),
 		}
 	configuration { "Release", "x64" }
-		local output_dir = path.join(_buildDir, "x64_" .. _ACTION, "Release")
+		local output_dir = path.join(_outputDir, "x64_" .. _ACTION, "Release")
         targetdir (path.join(output_dir, "bin"))
         objdir (path.join(output_dir, "obj"))
         libdirs {
