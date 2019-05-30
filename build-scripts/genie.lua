@@ -170,11 +170,11 @@ dofile "imgui.lua"
 imguiProject()
 
 dofile(BGFX_SCRIPTS_DIR .. "/bgfx.lua")
-dofile(BGFX_SCRIPTS_DIR .. "/bgfx.lua")
 dofile(BX_SCRIPTS_DIR .. "/bx.lua")
 dofile(BIMG_SCRIPTS_DIR .. "/bimg.lua")
 dofile(BIMG_SCRIPTS_DIR .. "/bimg_encode.lua")
 dofile(BIMG_SCRIPTS_DIR .. "/bimg_decode.lua")
+
 bgfxProject("", "StaticLib", {})
 project "bimg_encode"
 	configuration { "vs*", "not asmjs" }
