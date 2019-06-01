@@ -19,3 +19,6 @@
 [submodule "deps/imgui/imgui"]
 	path = deps/imgui/dear-imgui
 	url = https://github.com/ocornut/imgui
+[submodule "deps/glm"]
+	path = deps/glm
+	url = https://github.com/g-truc/glm.git
