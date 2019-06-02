@@ -50,6 +50,9 @@ BIMG_INCLUDE_DIR = path.join(BIMG_DIR, "include/")
 IMGUI_DIR = path.join(DEPS_DIR, "imgui/")
 IMGUI_SRC_DIR = path.join(IMGUI_DIR, "dear-imgui/")
 
+GLM_DIR = path.join(DEPS_DIR, "glm/")
+GLM_INCLUDE_DIR = path.join(GLM_DIR)
+
 function createProject(_name, _kind, _projectDir, _libs, _includes) 
 	project (_name)
 		uuid (os.uuid(_name))
@@ -78,6 +81,7 @@ function createProject(_name, _kind, _projectDir, _libs, _includes)
 			BIMG_INCLUDE_DIR,
 			ENTT_INCLUDE_DIR,
 			IMGUI_DIR,
+			GLM_DIR,
 		}
 
 		links {
