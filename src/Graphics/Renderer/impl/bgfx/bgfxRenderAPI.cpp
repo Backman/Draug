@@ -32,8 +32,9 @@ void bgfxRendererAPI::shutdown() {
 }
 
 void bgfxRendererAPI::begin_frame() {
-	bgfx::setViewRect(m_window->get_window_id(), 0, 0, (uint16_t)m_window->get_width(), (uint16_t)m_window->get_height());
-	bgfx::setViewClear(m_window->get_window_id(), BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x303030ff, 1.0f, 0);
+	bgfx::setViewRect(m_window->get_id(), 0, 0, (uint16_t)m_window->get_width(), (uint16_t)m_window->get_height());
+	bgfx::setViewClear(m_window->get_id(), BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x303030ff, 1.0f, 0);
+	bgfx::touch(0);
 	m_window->begin_frame();
 }
 
@@ -44,7 +45,6 @@ void bgfxRendererAPI::render_frame() {
 void bgfxRendererAPI::end_frame() {
 	m_window->end_frame();
 
-	// Advance to next frame. Process submitted rendering primitives.
 	bgfx::frame();
 }
 

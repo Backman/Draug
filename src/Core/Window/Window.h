@@ -36,7 +36,7 @@ public:
 	inline const char* get_title() const { return m_title; }
 	inline bool is_fullscreen() const { return m_fullscreen; }
 
-	inline uint16_t get_window_id() const { return m_id; }
+	inline uint16_t get_id() const { return m_id; }
 
 	void dispatch_event(Event& event);
 protected:
