@@ -128,20 +128,20 @@ bool file_exists(const std::string& path) {
 ShaderHandle load_shader(bx::FileReaderI* reader, const std::string& path) {
 	if (file_exists(path))
 		return bgfx::createShader(load_mem(reader, path));
-	else
-		return BGFX_INVALID_HANDLE;
+	DRAUG_LOG_CORE_ERROR("Shader at path {0} does not exist", path);
+	return BGFX_INVALID_HANDLE;
 }
 
 ProgramHandle load_shader_program(bx::FileReaderI* reader, const std::string& path) {
-	const std::string vs_path = path + "_vs";
-	const std::string fs_path = path + "_fs";
+	const std::string vs_path = path + "_vs.bin";
+	const std::string fs_path = path + "_fs.bin";
 
 	bgfx::ShaderHandle vertex_shader = load_shader(reader, vs_path.c_str());
 	bgfx::ShaderHandle fragment_shader = load_shader(reader, fs_path.c_str());
 
 	bgfx::ProgramHandle handle = bgfx::createProgram(vertex_shader, fragment_shader, true);
 
-	if (bgfx::isValid(handle)) {
+	if (bgfx::isValid(handle) == false) {
 		DRAUG_LOG_CORE_ERROR("Failed to load shader program - {0}", path);
 	}
 	return handle;

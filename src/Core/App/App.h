@@ -31,6 +31,10 @@ protected:
 	ECS::World m_world;
 	StateMachine m_state_machine;
 
+	StateContext create_state_context() {
+		return { this, &m_world };
+	};
+
 private:
 	void on_event(Event& event);
 	void init();

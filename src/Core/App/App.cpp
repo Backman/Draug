@@ -2,6 +2,9 @@
 #include "Graphics/Renderer/Renderer.h"
 #include "Core/Window/Window.h"
 #include "Core/Window/WindowConfig.h"
+#include "Core/ECS/Components/RenderStateComponent.h"
+#include "../ECS/Systems/RenderSystem.h"
+#include "../ECS/Systems/MeshRenderSystem.h"
 #include "Input/Input.h"
 #include "ImGui/ImGui.h"
 
@@ -15,6 +18,15 @@ App::~App() {
 
 void App::run() {
 	init();
+
+	m_world.register_system<ECS::RenderSystem>();
+	m_world.register_system<ECS::MeshRenderSystem>();
+	auto e = m_world.create_entity();
+	auto& render_state = m_world.assign<ECS::RenderStateComponent>(e,
+		bgfx::createUniform("lightDir", bgfx::UniformType::Vec4),
+		bgfx::createUniform("CameraPos", bgfx::UniformType::Vec4),
+		0);
+
 	while (m_state_machine.isRunning()) {
 		float tick = m_timer.tick();
 		float unscaled_dt = tick;
@@ -33,7 +45,7 @@ void App::run() {
 		m_world.tick(dt);
 		imgui_end_frame();
 
-		m_renderer->renderFrame();
+		m_renderer->render_frame();
 		m_renderer->end_frame();
 
 		Input::Input::reset();
@@ -55,7 +67,7 @@ void App::init() {
 	m_renderer = new Renderer();
 	m_renderer->init(m_window);
 
-	imgui_init(13.0, nullptr);
+	imgui_init();
 	Input::Input::init(m_window);
 
 	m_window->subscribe_event(BIND_FN(App, on_event));
