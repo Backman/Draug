@@ -1,5 +1,6 @@
 #include "Gfx.h"
 #include "Resources/ResourceUtils.h"
+#include "Resources/Mesh.h"
 
 namespace Draug {
 void Gfx::init(const std::string& resource_path) {
@@ -9,6 +10,8 @@ void Gfx::init(const std::string& resource_path) {
 		{
 			Texture::load(texture, file_reader(), allocator(), path);
 		});
+
+	Mesh::init();
 }
 
 void Gfx::add_resource_path(const std::string& resource_path, bool relative) {
