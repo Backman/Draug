@@ -4,8 +4,6 @@
 #include <entt/entity/registry.hpp>
 #include <entt/signal/dispatcher.hpp>
 
-#include "ISystem.h";
-
 namespace Draug {
 namespace ECS {
 using entity = entt::entity;
