@@ -23,7 +23,7 @@ public:
 	void shutdown();
 
 	void begin_frame() override;
-	void renderFrame() override;
+	void render_frame() override;
 	void end_frame() override;
 
 	void reset() override;

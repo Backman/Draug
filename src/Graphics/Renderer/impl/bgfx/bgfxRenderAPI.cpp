@@ -37,7 +37,7 @@ void bgfxRendererAPI::begin_frame() {
 	m_window->begin_frame();
 }
 
-void bgfxRendererAPI::renderFrame() {
+void bgfxRendererAPI::render_frame() {
 	m_window->render();
 }
 
