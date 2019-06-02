@@ -1,4 +1,3 @@
-
 #include <Core/Entry.h>
 #include <iostream>
 #include <Log/Log.h>
@@ -7,16 +6,17 @@
 #include <Core/Event/Event.h>
 #include <Graphics/Renderer/Renderer.h>
 #include <Input/Input.h>
-#include "Components/PositionComponent.h"
 #include "Systems/RenderDebugStatsSystem.h"
 #include <Core/ECS/World.h>
 #include <dear-imgui/imgui.h>
 #include <bgfx/bgfx.h>
 #include "ImGui/ImGui.h"
 #include <Graphics/Gfx.h>
+#include <Core/ECS/Components/PositionComponent.h>
+#include <Core/ECS/Components/RenderComponent.h>
+#include <Core/ECS/Systems/RenderSystem.h>
+#include "../src/Core/ECS/Systems/MeshRenderSystem.h"
 
-#include "Components/TextureComponent.h"
-#include "Systems/RenderSystem.h"
 class PausedState : public Draug::State {
 public:
 	PausedState(const Draug::StateContext& context) :
@@ -42,6 +42,27 @@ public:
 	}
 };
 
+struct FollowMouseComponent {
+	bool follow;
+};
+
+class FollowMouseSystem : public Draug::ECS::ISystem {
+public:
+	virtual void tick(float dt, World* world) override {
+		auto view = world->ecs.view<PositionComponent, FollowMouseComponent>();
+		for (auto e : view) {
+			auto& follow_mouse = view.get<FollowMouseComponent>(e);
+			if (follow_mouse.follow == false) {
+				break;
+			}
+			auto& pos = view.get<PositionComponent>(e);
+			Draug::Input::Mouse& mouse = Draug::Input::Input::mouse;
+			pos.x = mouse.x_pos();
+			pos.y = mouse.y_pos();
+		}
+	}
+};
+
 class TestState : public Draug::State {
 public:
 	TestState(const Draug::StateContext& context) :
@@ -49,10 +70,12 @@ public:
 	}
 
 	inline void on_start() override {
-		world()->register_system<RenderSystem>();
-		auto e = world()->create_entity<TextureComponent, PositionComponent>();
-		auto& texture = std::get<1>(e);
-		texture.texture = Draug::Gfx::get().textures().load("test.png");
+		world()->register_system<FollowMouseSystem>();
+		auto e = world()->create_entity<MeshComponent, PositionComponent, FollowMouseComponent>();
+		auto& mesh = std::get<1>(e);
+		auto& follow_mouse = std::get<3>(e);
+		follow_mouse.follow = true;
+		mesh.instance = Draug::Mesh::s_triangle;
 	}
 
 	inline Draug::StateTransition on_event(Draug::Event& event) override {
@@ -77,44 +100,6 @@ public:
 	}
 };
 
-class ImGuiState : public Draug::State {
-public:
-	ImGuiState(const Draug::StateContext& context) :
-		Draug::State(context, "imgui_state") {
-	}
-
-	inline Draug::StateTransition tick(float dt) override {
-		return Draug::StateTransition::push(new TestState(context()));
-	}
-
-	inline void background_tick(float dt) override {
-		bool show_demo_window = true;
-		if (show_demo_window) {
-			ImGui::ShowDemoWindow(&show_demo_window);
-		}
-	}
-};
-
-struct T {
-	int x, y;
-};
-
-class DebugState : public Draug::State {
-public:
-	DebugState(const Draug::StateContext& context) :
-		Draug::State(context, "debug_state") {
-	}
-
-	inline void on_start() {
-		world()->register_system<DebugTextSystem>();
-		world()->create_entity<DebugStatsComponent, T>();
-	}
-
-	inline Draug::StateTransition tick(float dt) override {
-		return Draug::StateTransition::to(new ImGuiState(context()));
-	}
-};
-
 class PlaygroundApp : public Draug::App {
 public:
 	bool running = false;
@@ -126,7 +111,7 @@ public:
 		Draug::Gfx& gfx = Draug::Gfx::get();
 		gfx.init(DRAUG_RESOURCE_PATH);
 		gfx.add_resource_path("playground", true);
-		m_state_machine.init(new DebugState(Draug::StateContext{ this, &m_world}));
+		m_state_machine.init(new TestState(create_state_context()));
 		m_state_machine.start();
 	}
 
