@@ -463,3 +463,6 @@ _projects
 !tools/bin/*.exe
 !deps/SDL2/lib/**
 !deps/SDL2_Image/lib/**
+
+# Compiled shaders
+**/shaders/compiled/*.bin
