@@ -38,7 +38,7 @@ struct ImguiContext {
 	void create(float font_size, bx::AllocatorI* _allocator) {
 		m_allocator = _allocator;
 
-		if (NULL == _allocator) {
+		if (_allocator == nullptr) {
 			static bx::DefaultAllocator allocator;
 			m_allocator = &allocator;
 		}
@@ -82,9 +82,11 @@ struct ImguiContext {
 			bgfx::createEmbeddedShader(s_embeddedShaders, type, "fs_imgui"),
 			true);
 
-		io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;         // We can honor GetMouseCursor() values (optional)
-		io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;          // We can honor io.WantSetMousePos requests (optional, rarely used)
-		io.ConfigFlags |= 0 | ImGuiConfigFlags_NavEnableKeyboard;
+		io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors
+			| ImGuiBackendFlags_HasSetMousePos;
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard
+			| ImGuiConfigFlags_DockingEnable;
+
 		io.BackendPlatformName = "draug_imgui";
 
 		io.KeyMap[ImGuiKey_Tab] = Draug::Input::Key::Tab;
@@ -123,7 +125,7 @@ struct ImguiContext {
 	}
 
 	void begin_frame(Window* window) {
-		m_view_id = window->get_window_id();
+		m_view_id = window->get_id();
 
 		ImGuiIO& io = ImGui::GetIO();
 		//if (_inputChar >= 0) {
@@ -160,9 +162,9 @@ struct ImguiContext {
 			io.KeysDown[ii] = Draug::Input::Input::keyboard.isKeyPressed(Draug::Input::Key::Code(ii));
 		}
 
-#ifdef _WIN32
-		io.ImeWindowHandle = window->get_native_window_ptr();
-#endif
+//#ifdef _WIN32
+//		io.ImeWindowHandle = window->get_native_window_ptr();
+//#endif
 
 		ImGui::NewFrame();
 	}

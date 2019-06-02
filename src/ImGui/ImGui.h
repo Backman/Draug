@@ -9,7 +9,7 @@ namespace bx { struct AllocatorI; }
 namespace Draug {
 class Window;
 
-void imgui_init(float font_size, bx::AllocatorI* allocator);
+void imgui_init(float font_size = 13.0f, bx::AllocatorI* allocator = nullptr);
 void imgui_shutdown();
 
 void imgui_begin_frame(Window* window);
