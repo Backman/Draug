@@ -4,6 +4,8 @@
 #include <bgfx/platform.h>
 #include <bgfx/bgfx.h>
 #include <bx/bx.h>
+#include <bx/debug.h>
+#include <bimg/bimg.h>
 
 namespace Draug {
 namespace impl {
@@ -12,11 +14,12 @@ void bgfxRendererAPI::init(Window* window) {
 	bgfx::renderFrame();
 
 	bgfx::Init init;
+	init.type = bgfx::RendererType::Vulkan;
 	init.platformData.nwh = m_window->get_native_window_ptr();
-	init.type = bgfx::RendererType::OpenGL;
 	init.resolution.width = m_window->get_width();
 	init.resolution.height = m_window->get_height();
 	init.resolution.reset = BGFX_RESET_VSYNC;
+
 	if (bgfx::init(init) == false) {
 		DRAUG_LOG_CORE_ERROR("Failed to init bgfx");
 		return;

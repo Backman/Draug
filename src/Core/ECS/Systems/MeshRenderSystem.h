@@ -15,8 +15,7 @@ public:
 	bx::FileReader m_reader;
 
 	virtual void init(World* world) override {
-		Gfx& gfx = Gfx::get();
-		m_program = load_shader_program(&m_reader, gfx.resource_path() + "/shaders/compiled/simple");
+		m_program = load_shader_program(&m_reader, "simple");
 	}
 
 	virtual void tick(float dt, World * world) {
@@ -72,8 +71,10 @@ public:
 			// Set render states.
 			bgfx::setState(BGFX_STATE_DEFAULT);
 
-			// Submit primitive for rendering to view 0.
-			bgfx::submit(window->get_id(), m_program);
+			if (bgfx::isValid(m_program)) {
+				// Submit primitive for rendering to view 0.
+				bgfx::submit(window->get_id(), m_program);
+			}
 
 		}
 	}

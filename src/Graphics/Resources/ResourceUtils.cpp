@@ -1,5 +1,6 @@
 #include "ResourceUtils.h"
 #include "Log/Log.h"
+#include "Graphics/Gfx.h"
 #include <bimg/bimg.h>
 #include <bimg/decode.h>
 
@@ -132,9 +133,27 @@ ShaderHandle load_shader(bx::FileReaderI* reader, const std::string& path) {
 	return BGFX_INVALID_HANDLE;
 }
 
-ProgramHandle load_shader_program(bx::FileReaderI* reader, const std::string& path) {
-	const std::string vs_path = path + "_vs.bin";
-	const std::string fs_path = path + "_fs.bin";
+ProgramHandle load_shader_program(bx::FileReaderI* reader, const std::string& name) {
+	std::string shader_path;
+	switch (bgfx::getRendererType()) {
+		case bgfx::RendererType::Noop:
+		case bgfx::RendererType::Direct3D9:  shader_path = "/shaders/dx9/";   break;
+		case bgfx::RendererType::Direct3D11:
+		case bgfx::RendererType::Direct3D12: shader_path = "/shaders/dx11/";  break;
+		case bgfx::RendererType::Gnm:        shader_path = "/shaders/pssl/";  break;
+		case bgfx::RendererType::Metal:      shader_path = "/shaders/metal/"; break;
+		case bgfx::RendererType::Nvn:        shader_path = "/shaders/nvn/";   break;
+		case bgfx::RendererType::OpenGL:     shader_path = "/shaders/glsl/";  break;
+		case bgfx::RendererType::OpenGLES:   shader_path = "/shaders/essl/";  break;
+		case bgfx::RendererType::Vulkan:     shader_path = "/shaders/spirv/"; break;
+
+		case bgfx::RendererType::Count:
+			BX_CHECK(false, "You should not be here!");
+			break;
+	}
+
+	const std::string vs_path = Gfx::get().get_full_path(shader_path + "vs_" + name + ".bin");
+	const std::string fs_path = Gfx::get().get_full_path(shader_path + "fs_" + name + ".bin");
 
 	bgfx::ShaderHandle vertex_shader = load_shader(reader, vs_path.c_str());
 	bgfx::ShaderHandle fragment_shader = load_shader(reader, fs_path.c_str());
@@ -142,7 +161,7 @@ ProgramHandle load_shader_program(bx::FileReaderI* reader, const std::string& pa
 	bgfx::ProgramHandle handle = bgfx::createProgram(vertex_shader, fragment_shader, true);
 
 	if (bgfx::isValid(handle) == false) {
-		DRAUG_LOG_CORE_ERROR("Failed to load shader program - {0}", path);
+		DRAUG_LOG_CORE_ERROR("Failed to load shader program - {0}", shader_path + name);
 	}
 	return handle;
 }

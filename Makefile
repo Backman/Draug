@@ -27,6 +27,10 @@ vs-debug64:
 vs-release64:
 	"$(subst /,\\,$(VS2019_DEVENV_DIR))\devenv" $(PROJECT_DIR)/vs2017/Draug.sln /Build "Release|x64"
 
+.PHONY: build-shaders
+build-shaders:
+	@make -s --no-print-directory rebuild -C resources
+
 define remove_folder
 	@echo Removing $(1) folder
 	-@rm -rf $(1)

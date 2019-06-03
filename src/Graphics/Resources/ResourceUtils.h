@@ -13,7 +13,7 @@ TextureHandle load_texture(bx::FileReaderI* reader, bx::AllocatorI* allocator, c
 TextureHandle load_texture(bx::AllocatorI* allocator, const std::string& name, void* data, uint32_t size, uint64_t flags, bgfx::TextureInfo* info);
 
 ShaderHandle load_shader(bx::FileReaderI* reader, const std::string& path);
-ProgramHandle load_shader_program(bx::FileReaderI* reader, const std::string& path);
+ProgramHandle load_shader_program(bx::FileReaderI* reader, const std::string& name);
 
 UniformHandle create_uniform(const std::string& name, UniformType type, uint16_t num);
 void get_uniform_info(UniformHandle handle, UniformInfo& info);
